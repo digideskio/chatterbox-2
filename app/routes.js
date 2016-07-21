@@ -6,7 +6,8 @@ import MainPage from 'containers/MainPage'
 
 
 export default (
-  <Route path="/" component={App}>
-    <IndexRoute component={MainPage} />
+  <Route path='/' component={App}>
+    <IndexRoute component={LoadingPage} />
+    <Route path='/main' component={MainPage} />
   </Route>
 )
