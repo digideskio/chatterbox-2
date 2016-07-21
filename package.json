@@ -67,6 +67,7 @@
     "classnames": "^2.2.5",
     "css-modules-require-hook": "^4.0.0",
     "electron-debug": "^1.0.1",
+    "electron-window-state": "^3.0.3",
     "postcss": "^5.0.21",
     "react": "^15.1.0",
     "react-desktop": "^0.2.5",

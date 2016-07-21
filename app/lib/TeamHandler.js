@@ -28,7 +28,7 @@ export default class TeamHandler extends EventEmitter {
 
     _connection.on('connected', ({ team, name, teamType }) => console.log(`Connected to ${_connection.type} team: ${team} via ${name}`))
 
-    _connection.on('newMessage', message => {
+    _connection.on('message', message => {
       const { text, channel, user } = this._getMessageContents(message)
       process.env.lastTeamID = this._teamID
       this._lastChannel = channel

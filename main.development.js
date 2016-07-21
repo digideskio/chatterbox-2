@@ -1,4 +1,5 @@
-import { app, BrowserWindow, Menu } from 'electron'
+import { app, BrowserWindow, Menu, screen } from 'electron'
+import windowStateKeeper from 'electron-window-state'
 let mainWindow = null
 
 if (process.env.NODE_ENV === 'development') {
@@ -23,13 +24,20 @@ const installExtensions = async() => {
 app.on('ready', async() => {
   await installExtensions()
 
+  const workAreaSize = screen.getPrimaryDisplay()
+  const { manage, ...mainWindowState } = windowStateKeeper({
+    defaultWidth: workAreaSize.width * 0.7,
+    defaultHeight: workAreaSize.height * 0.7
+  })
+
   mainWindow = new BrowserWindow({
+    ...mainWindowState,
     show: false,
-    width: 1024,
-    height: 728,
     frame: false,
     transparent: true
   })
+
+  manage(mainWindow)
 
   mainWindow.loadURL(`file://${__dirname}/app/app.html`)
 

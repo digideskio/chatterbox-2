@@ -42,7 +42,9 @@ export default class SlackHandler extends EventEmitter {
 
     this._slack.on(CLIENT_EVENTS.RTM.RTM_CONNECTION_OPENED, () => this._canSend = true)
 
-    this._slack.on(RTM_EVENTS.MESSAGE, ({ text, user, channel }) => text && user && channel && this.emit('newMessage', { text, user, channel }))
+    this._slack.on(RTM_EVENTS.MESSAGE, ({ text, user, channel }) => {
+      this.emit('message', { text, user, channel })
+    })
 
     this._slack.on(RTM_EVENTS.CHANNEL_CREATED, (message) => {
       //logic to join the new channel here
