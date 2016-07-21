@@ -31,7 +31,7 @@ export default class TitleBarComponent extends Component {
     return (
       <div onDoubleClick={::this._toggleMaximize} className={styles.titlebar}>
         <TitleBar
-          title=' '
+          title='Chatterbox'
           controls
           onMinimizeClick={::this._minimize}
           onRestoreDownClick={::this._toggleMaximize}
