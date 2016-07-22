@@ -4,20 +4,36 @@
   height: 100vh;
   background-color: #fafafa;
 }
+
 .login .sidebar {
   display: inline-block;
   width: 50%;
   height: 100%;
 }
+
+.login .sidebar.full {
+  width: 100%;
+}
+
+.login .sidebar .slack {
+  height: 80vh;
+  display: block;
+  margin: auto;
+  margin-top: 10vh;
+}
+
 .login .webview {
   opacity: 0;
-  display: inline-flex;
+  display: none;
   flex: 1;
   transition: opacity 300ms ease-in-out;
 }
+
 .login .webview.show {
+  display: inline-flex;
   opacity: 1;
 }
+
 .login .webview> webview {
   flex: 1;
 }
