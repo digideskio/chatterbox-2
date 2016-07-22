@@ -13,6 +13,7 @@
   opacity: 0;
   display: inline-flex;
   flex: 1;
+  transition: opacity 300ms ease-in-out;
 }
 .login .webview.show {
   opacity: 1;
