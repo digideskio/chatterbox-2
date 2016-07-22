@@ -1,3 +1,8 @@
-nav.top {
+footer, nav.top.persistent, #page_contents div.align_center:last-of-type {
   display: none;
+}
+#page_contents h1:not('#signin_header'):before {
+  content: "Sign into your Slack Team";
+  position: absolute;
+  background-color: white;
 }
