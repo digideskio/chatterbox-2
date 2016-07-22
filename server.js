@@ -11,7 +11,11 @@ const PORT = 3000
 
 const wdm = webpackDevMiddleware(compiler, {
   publicPath: config.output.publicPath,
-  stats: { colors: true }
+  stats: {
+    colors: true,
+    reasons: true,
+    errorDetails: true
+  }
 })
 
 app.use(wdm)
