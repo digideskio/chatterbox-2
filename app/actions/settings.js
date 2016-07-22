@@ -1,4 +1,6 @@
 import Database from 'lib/database'
+import * as LoadingActions from 'actions/loading'
+import { bindActionCreators } from 'redux'
 
 export const CHANGE = 'CHANGE'
 export const SET = 'SET'
@@ -13,14 +15,15 @@ export function changeSetting(setting, value) {
   }
 }
 
-export function updateSettingsloaded(percent) {
-  return { type: CHANGE, percent }
-}
-
 export function loadSettings() {
   return (dispatch, getState) => {
+    const { setLoadedPercent, setTask } = bindActionCreators(LoadingActions, dispatch)
+    setTask('Loading settings')
     const loader = new Database.settings.Loader()
-    loader.on('loaded', ({ setting, value }, percent) => dispatch({ type: SET, [setting]: value, percent }))
+    loader.on('loaded', ({ setting, value }, percent) => {
+      dispatch({ type: SET, [setting]: value })
+      setLoadedPercent(percent)
+    })
     loader.once('finnished', () => dispatch({ type: SET, percent: 100 }))
   }
 }

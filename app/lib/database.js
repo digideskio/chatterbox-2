@@ -20,8 +20,16 @@ class Teams {
 
   }
 
-  static get all() {
+  static getAll() {
+    const total = TeamsInstance.keys(successCallback)
 
+    localforage.keys().then(keys => {
+      const total = keys.length
+
+      console.log(keys, total)
+    }).catch((err) => {
+      console.error(err)
+    })
   }
 }
 
