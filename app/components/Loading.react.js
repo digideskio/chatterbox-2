@@ -1,17 +1,24 @@
 import React, { Component, PropTypes } from 'react'
 import { Link } from 'react-router'
+import { defer } from 'lodash'
 import styles from 'styles/loading.css'
 
 export default class Loading extends Component {
+  static contextTypes = {
+    router: PropTypes.object.isRequired
+  }
+
   static propTypes = {
     settings: PropTypes.object.isRequired,
     loadSettings: PropTypes.func.isRequired,
     loaded: PropTypes.number.isRequired,
-    task: PropTypes.string.isRequired
+    task: PropTypes.string.isRequired,
+    done: PropTypes.array.isRequired
   }
 
   state = {
-    dots: ''
+    dots: '',
+    hasStartedLoading: []
   }
 
   componentDidMount() {
@@ -25,8 +32,20 @@ export default class Loading extends Component {
     clearInterval(this.dotDotDotInterval)
   }
 
+  componentDidUpdate() {
+    const { hasStartedLoading } = this.state
+    const { done } = this.props
+
+    if (!hasStartedLoading.includes('teams') && done.includes('settings') && !done.includes('teams')) {
+      this.setState({ hasStartedLoading: [...this.state.hasStartedLoading, 'teams'] })
+      console.log('START THE TEAM LOAD')
+      defer(() => this.context.router.replace('/login/slack'))
+    }
+  }
+
   _loadSettings() {
     this.props.loadSettings()
+    this.setState({ hasStartedLoading: [...this.state.hasStartedLoading, 'settings'] })
   }
 
   render() {

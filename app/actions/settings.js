@@ -17,13 +17,16 @@ export function changeSetting(setting, value) {
 
 export function loadSettings() {
   return (dispatch, getState) => {
-    const { setLoadedPercent, setTask } = bindActionCreators(LoadingActions, dispatch)
+    const { setLoadedPercent, setTask, setTaskDone } = bindActionCreators(LoadingActions, dispatch)
     setTask('Loading settings')
     const loader = new Database.settings.Loader()
     loader.on('loaded', ({ setting, value }, percent) => {
       dispatch({ type: SET, [setting]: value })
       setLoadedPercent(percent)
     })
-    loader.once('finnished', () => dispatch({ type: SET, percent: 100 }))
+    loader.once('finnished', () => {
+      dispatch({ type: SET, percent: 100 })
+      setTaskDone('settings')
+    })
   }
 }
