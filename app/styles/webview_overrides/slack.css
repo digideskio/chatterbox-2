@@ -1,4 +1,4 @@
-footer, nav.top.persistent, #page_contents div.align_center:last-of-type, .alert.alert_info, #signin_form p:nth-of-type(5) {
+footer, nav.top.persistent, #page_contents div.align_center:last-of-type, #page_contents> div:first-of-type, .alert.alert_info, #signin_form p:nth-of-type(5) {
   display: none;
 }
 #page_contents h1:not('#signin_header'):before {
