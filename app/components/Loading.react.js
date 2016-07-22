@@ -15,7 +15,6 @@ export default class Loading extends Component {
   }
 
   componentDidMount() {
-    console.log(this.props)
     this.mounted = true
     this.dotDotDotInterval = setInterval(() => this.mounted && this.setState({ dots: this.state.dots.length > 2 ? '' : `${this.state.dots}.` }), 1000)
     this._loadSettings()
