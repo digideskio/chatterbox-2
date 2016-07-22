@@ -3,11 +3,12 @@ import { Route, IndexRoute } from 'react-router'
 import App from 'containers/App'
 import LoadingPage from 'containers/LoadingPage'
 import MainPage from 'containers/MainPage'
+import Login from 'components/LoginSlack.react'
 
 
 export default (
   <Route path='/' component={App}>
-    <IndexRoute component={LoadingPage} />
+    <IndexRoute component={Login} />
     <Route path='/main' component={MainPage} />
   </Route>
 )

@@ -1,0 +1,18 @@
+.login {
+  display: flex;
+  flex: 1;
+  height: 100vh;
+  background-color: #fafafa;
+}
+.loading .sidebar {
+  display: inline-block;
+  width: 50%;
+  height: 100%;
+}
+.loading .webview {
+  display: inline-flex;
+  flex: 1;
+}
+.loading .webview> webview {
+  flex: 1;
+}
