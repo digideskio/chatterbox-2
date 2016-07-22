@@ -1,5 +1,6 @@
 import React, { Component, PropTypes } from 'react'
 import classnames from 'classnames'
+import { shell } from 'electron'
 import styles from 'styles/login.css'
 
 
@@ -15,8 +16,16 @@ export default class Login extends Component {
     webview.addEventListener('dom-ready', () => {
       if (!this.mounted) return
       webview.insertCSS(require('!raw!styles/webview_overrides/slack.css'))
-      webview.openDevTools()
       setTimeout(() => this.setState({ webviewShown: true }), 500)
+    })
+
+    webview.addEventListener('will-navigate', (event) => {
+      if (!this.mounted) return
+
+      if (event.url.endsWith('/forgot')) {
+        shell.openExternal(event.url)
+        webview.stop()
+      }
     })
   }
 
