@@ -64,6 +64,7 @@
   },
   "dependencies": {
     "@slack/client": "^3.5.1",
+    "async": "^2.0.0",
     "classnames": "^2.2.5",
     "css-modules-require-hook": "^4.0.0",
     "electron-debug": "^1.0.1",

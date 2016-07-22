@@ -27,7 +27,6 @@ export default class Loading extends Component {
   }
 
   _loadSettings() {
-    console.log(this.props.settings)
     this.props.loadSettings()
   }
 
