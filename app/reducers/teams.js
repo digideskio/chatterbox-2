@@ -9,8 +9,29 @@ import {
 } from 'actions/teams'
 
 const DEFAULT_STATE = {
-  teams: [],
-  activeTeamID: null
+  teams: {
+    id: {
+      users: [],
+      channels: [],
+      dms: [],
+      message: {
+        send() {},
+        edit() {},
+        remove() {},
+      },
+      history: {
+        channels: {
+          id: []
+        },
+        dms: {}
+      }
+    }
+  },
+  activeTeam: {
+    id: null,
+    channel: null,
+    dm: null
+  }
 }
 
 export default function settings(state = DEFAULT_STATE, { type, ...action }) {
