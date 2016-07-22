@@ -35,7 +35,10 @@ app.on('ready', async() => {
     show: false,
     frame: false,
     transparent: true,
-    thickFrame: true
+    thickFrame: true,
+    center: true,
+    minWidth: 1060,
+    minHeight: 600
   })
 
   manage(mainWindow)

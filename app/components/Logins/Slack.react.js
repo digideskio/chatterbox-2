@@ -17,7 +17,8 @@ export default class SlackLogin extends Component {
     webview.addEventListener('dom-ready', () => {
       if (!this.mounted) return
       webview.insertCSS(require('!raw!styles/webview_overrides/slack.css'))
-        //setTimeout(() => this.setState({ webviewShown: true }), 500)
+      webview.openDevTools()
+      this.setState({ webviewShown: true })
     })
 
     webview.addEventListener('will-navigate', (event) => {

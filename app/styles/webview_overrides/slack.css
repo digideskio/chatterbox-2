@@ -7,6 +7,5 @@ footer, nav.top.persistent, #page_contents div.align_center:last-of-type, #page_
   background-color: white;
 }
 #page_contents {
-  padding: 0;
-  margin: 0 auto;
+  margin: 0 auto !important;
 }
