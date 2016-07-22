@@ -4,7 +4,7 @@ import { shell } from 'electron'
 import styles from 'styles/login.css'
 
 
-export default class Login extends Component {
+export default class SlackLogin extends Component {
 
   state = {
     webviewShown: false
@@ -13,6 +13,7 @@ export default class Login extends Component {
   componentDidMount() {
     this.mounted = true
     const { webview } = this.refs
+
     webview.addEventListener('dom-ready', () => {
       if (!this.mounted) return
       webview.insertCSS(require('!raw!styles/webview_overrides/slack.css'))
@@ -21,7 +22,7 @@ export default class Login extends Component {
 
     webview.addEventListener('will-navigate', (event) => {
       if (!this.mounted) return
-
+      console.log(event)
       if (event.url.endsWith('/forgot')) {
         shell.openExternal(event.url)
         webview.stop()
