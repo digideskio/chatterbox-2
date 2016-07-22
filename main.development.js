@@ -34,7 +34,8 @@ app.on('ready', async() => {
     ...mainWindowState,
     show: false,
     frame: false,
-    transparent: true
+    transparent: true,
+    thickFrame: true
   })
 
   manage(mainWindow)

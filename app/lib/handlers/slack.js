@@ -83,7 +83,7 @@ export default class SlackHandler extends EventEmitter {
 
   getUserById(userID) {
     const { id, name, profile } = this._slack.dataStore.getUserById(userID)
-    return { id, name, email: profile.email }
+    return { id, name, meta: { email: profile.email } }
   }
 
   get channels() {
@@ -111,11 +111,11 @@ export default class SlackHandler extends EventEmitter {
       name: 'luigiplr',
       handle: 'luigiplr',
       id: 'U72152',
-      avatar: 'photo'
+      avatar: 'photo',
+      meta: {
+        email: 'a@b.com'
+      }
     }]
-
-
-    // this._slack.dataStore.users
   }
 
   get type() {
