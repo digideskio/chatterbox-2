@@ -12,19 +12,13 @@
 .login .sidebar .slack {
   width: 80%;
   margin-left: 10%;
-  display: block;
-  position: relative;
-  margin-top: 80px;
 }
 .login .webview {
   display: inline-flex;
   opacity: 0;
-  height: 500px;
   flex: 1;
   transition: opacity 300ms ease-in-out;
   position: relative;
-  top: 50%;
-  transform: translateY(-50%);
 }
 .login .webview.show {
   opacity: 1;
