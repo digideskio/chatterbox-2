@@ -4,15 +4,19 @@
   height: 100vh;
   background-color: #fafafa;
 }
-.loading .sidebar {
+.login .sidebar {
   display: inline-block;
   width: 50%;
   height: 100%;
 }
-.loading .webview {
+.login .webview {
+  opacity: 0;
   display: inline-flex;
   flex: 1;
 }
-.loading .webview> webview {
+.login .webview.show {
+  opacity: 1;
+}
+.login .webview> webview {
   flex: 1;
 }

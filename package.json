@@ -54,6 +54,7 @@
     "minimist": "^1.2.0",
     "mocha": "^2.5.3",
     "node-libs-browser": "^1.0.0",
+    "raw-loader": "^0.5.1",
     "redux-logger": "^2.6.1",
     "sinon": "^1.17.4",
     "spectron": "^3.2.4",
