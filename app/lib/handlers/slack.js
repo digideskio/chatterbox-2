@@ -38,6 +38,7 @@ export default class SlackHandler extends EventEmitter {
 
     this._slack.on(CLIENT_EVENTS.RTM.DISCONNECT, () => {
       console.info('slack disconnected')
+      this._canSend = false
       this.emit('disconnected')
     })
 
@@ -49,8 +50,7 @@ export default class SlackHandler extends EventEmitter {
     this._slack.on(CLIENT_EVENTS.RTM.RTM_CONNECTION_OPENED, () => {
       console.info('slack connected')
       this._canSend = true
-      const { channels, users } = this
-      this.emit('connected', { channels, users })
+      this.emit('connected', _.pick(this, ['channels', 'users', 'team']))
     })
 
     this._slack.on(RTM_EVENTS.MESSAGE, ({ type, channel, user, text, ts }) => {
@@ -105,28 +105,17 @@ export default class SlackHandler extends EventEmitter {
         id,
         main: is_general,
         members: members || [],
-        meta: {
-          topic: selectn('value', topic),
-          purpose: selectn('value', purpose),
-        }
+        meta: { topic: selectn('value', topic), purpose: selectn('value', purpose) }
       })
       .filter(Boolean)
   }
 
-  get DMs() {
-    // same as users
-  }
-
   get team() {
-    return [{
-      name: 'Magics',
-      id: 'T72561',
-      icon: ''
-    }]
+    const { name, icon, id } = this._slack.dataStore.teams[Object.keys(this._slack.dataStore.teams)[0]]
+    return { name, id, photo: icon.image_original }
   }
 
   get users() {
-    console.log(this)
     return Object.keys(this._slack.dataStore.users)
       .map(user => this._slack.dataStore.users[user])
       .map(({ tz, id, deleted, profile, name, presence }) => deleted ? false : {
@@ -138,14 +127,5 @@ export default class SlackHandler extends EventEmitter {
         meta: { timezone: tz, email: profile.email }
       })
       .filter(Boolean)
-    return [{
-      name: 'luigiplr',
-      handle: 'luigiplr',
-      id: 'U72152',
-      avatar: 'photo',
-      meta: {
-        email: 'a@b.com'
-      }
-    }]
   }
 }
