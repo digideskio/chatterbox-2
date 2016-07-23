@@ -85,13 +85,7 @@ export default class SlackLogin extends Component {
   getOAuthQuery(repick = 0) {
     return qs.stringify({
       client_id: this.client_id,
-      scope: [
-        'team:read',
-        'channels:history', 'channels:read',
-        'im:history', 'im:read', 'im:write',
-        'chat:write:user',
-        'users:read', 'users:write', 'users.profile:read'
-      ].join(','),
+      scope: 'client',
       redirect_uri: this.redirect_uri,
       repick
     })

@@ -39,7 +39,7 @@ export default {
           ],
           exclude: path.resolve('app/styles/vender')
         }
-      ]
+      ],
     },
     plugins: [
       ...baseConfig.plugins,
@@ -47,6 +47,8 @@ export default {
       new webpack.NoErrorsPlugin(),
       new webpack.DefinePlugin({ 'process.env.NODE_ENV': JSON.stringify('development') })
     ],
-    externals: ['@slack/client', 'request'],
-    target: 'electron-renderer'
+    externals: [
+      'electron', 'fs', 'tls', 'net', 'os', 'process',
+      'url', 'request', 'ws'
+    ]
 }

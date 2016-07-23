@@ -68,7 +68,7 @@
     "webpack-hot-middleware": "^2.10.0"
   },
   "dependencies": {
-    "@slack/client": "^3.5.1",
+    "@slack/client": "luigiplr/node-slack-sdk",
     "async": "^2.0.0",
     "classnames": "^2.2.5",
     "electron-window-state": "^3.0.3",
