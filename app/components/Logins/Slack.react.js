@@ -72,8 +72,9 @@ export default class SlackLogin extends Component {
         request.post('https://slack.com/api/oauth.access', {
           form: { client_secret: this.client_secret, client_id: this.client_id, code, redirect_uri: this.redirect_uri },
           json: true
-        }, (err, res, body) => {
-          console.log(body)
+        }, (err, res, { access_token }) => {
+          const slackHandler = new SlackTeamhandler(access_token)
+          console.log(slackHandler)
         })
       }
     })

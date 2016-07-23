@@ -2,26 +2,15 @@ import { EventEmitter } from 'events'
 import _ from 'lodash'
 import HistoryManager from './history'
 
-/**
- *
- * @param {EventEmitter} connectionHandler - A valid connection handler
- * @param {object} config - Connection config
- * @param {array} plugins - Array of available plugins
- * @return {EventEmitter}
- */
 
 export default class TeamHandler extends EventEmitter {
-  constructor(Handler, handlerOpts) {
+  constructor(Handler) {
     super()
-    this._history = new HistoryManager(connectionHandler, config)
-    this._connection = new Handler(handlerOpts)
+      //this._history = new HistoryManager(connectionHandler, config)
+    this._connection = Handler
 
     this._initEvents()
   }
-
-  _lastError = null
-  _lastChannel = null
-  _enabled = true
 
   _initEvents() {
     const { _connection } = this

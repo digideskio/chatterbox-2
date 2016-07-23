@@ -1,15 +1,8 @@
 import { EventEmitter } from 'events'
 import { RtmClient, MemoryDataStore, CLIENT_EVENTS, RTM_EVENTS } from '@slack/client'
 
-/**
- * Slack  Team connection handler
- * @param {object} connectionConfig - A valid connection config
- * @param {object} connectionConfig.token - Slack bot connection token
- * @param {object} connectionConfig.options - Options object for connection
- * @return {EventEmitter}
- */
 
-export const DEFAULT_OPTIONS = {
+const DEFAULT_OPTIONS = {
   logLevel: 'error',
   dataStore: new MemoryDataStore(),
   autoReconnect: true,
@@ -17,13 +10,15 @@ export const DEFAULT_OPTIONS = {
 }
 
 export default class SlackHandler extends EventEmitter {
-  constructor({ token, options = {} }) {
+  constructor(token) {
     super()
 
-    this._slack = new RtmClient(token, Object.assign(DEFAULT_OPTIONS, options))
+    this._slack = new RtmClient(token, DEFAULT_OPTIONS)
     this._initEvents()
     this._slack.start()
   }
+
+  _canSend = false
 
   reconnect() {
     this._slack = null
@@ -33,16 +28,29 @@ export default class SlackHandler extends EventEmitter {
   }
 
   _initEvents() {
-    this._slack.on(CLIENT_EVENTS.RTM.AUTHENTICATED, ({ self, team }) => this.emit('connected', { name: self.name, team: team.name }))
+    this._slack.on(CLIENT_EVENTS.RTM.AUTHENTICATED, () => {
+      console.info('slack authenticated')
+      this.emit('authenticated')
+    })
 
-    this._slack.on(CLIENT_EVENTS.RTM.DISCONNECT, () => this.emit('disconnected'))
+    this._slack.on(CLIENT_EVENTS.RTM.DISCONNECT, () => {
+      console.info('slack disconnected')
+      this.emit('disconnected')
+    })
 
-    this._slack.on(CLIENT_EVENTS.RTM.UNABLE_TO_RTM_START, () => this.emit('disconnected'))
+    this._slack.on(CLIENT_EVENTS.RTM.UNABLE_TO_RTM_START, () => {
+      console.error('o shit')
+      this.emit('catastrophic_failure')
+    })
 
-    this._slack.on(CLIENT_EVENTS.RTM.RTM_CONNECTION_OPENED, () => this._canSend = true)
+    this._slack.on(CLIENT_EVENTS.RTM.RTM_CONNECTION_OPENED, () => {
+      console.log('slack connected')
+      this._canSend = true
+      this.emit('connected')
+    })
 
-    this._slack.on(RTM_EVENTS.MESSAGE, ({ text, user, channel }) => {
-      this.emit('message', { text, user, channel })
+    this._slack.on(RTM_EVENTS.MESSAGE, (message) => {
+      console.log(message)
     })
 
     this._slack.on(RTM_EVENTS.CHANNEL_CREATED, (message) => {
