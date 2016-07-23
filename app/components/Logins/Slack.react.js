@@ -29,19 +29,42 @@ export default class SlackLogin extends Component {
 
   _initWebviewEvents() {
     const { webview } = this.refs
+    let checked = false
+    let checking = false
+    webview.addEventListener('ipc-message', ({ channel, args }) => {
+      if (!this.mounted) return
+
+      if (channel === 'repick-needed' && !checked) {
+        const [repickNeeded] = args
+        if (repickNeeded) {
+          webview.loadURL(`https://slack.com/oauth/pick_reflow?${::this.getOAuthQuery(1)}`)
+        }
+        checked = true
+      }
+    })
 
     webview.addEventListener('dom-ready', () => {
       if (!this.mounted) return
+
       webview.insertCSS(require('!raw!styles/webview_overrides/slack.css'))
-      if (!this.state.webviewShown)
+        //webview.openDevTools()
+
+      if (!checking) {
+        checking = true
+        webview.getWebContents().send('check-repick')
+      }
+
+      if (!this.state.webviewShown && checked) {
         this.setState({ webviewShown: true })
+      }
     })
 
     webview.addEventListener('will-navigate', (event) => {
       if (!this.mounted) return
+
       if (event.url.endsWith('/forgot')) {
-        shell.openExternal(event.url)
         webview.stop()
+        shell.openExternal(event.url)
       }
       if (event.url.startsWith('http://localhost')) {
         const { code } = qs.parse(url.parse(event.url).query)
@@ -56,7 +79,7 @@ export default class SlackLogin extends Component {
     })
   }
 
-  get oAuthQuery() {
+  getOAuthQuery(repick = 0) {
     return qs.stringify({
       client_id: this.client_id,
       scope: [
@@ -67,7 +90,7 @@ export default class SlackLogin extends Component {
         'users:read', 'users:write', 'users.profile:read'
       ].join(','),
       redirect_uri: this.redirect_uri,
-      repick: 1
+      repick
     })
   }
 
@@ -79,7 +102,7 @@ export default class SlackLogin extends Component {
           <object className={styles.slack} data='images/logins/slack.svg' type='image/svg+xml'/>
         </div>
         <div className={classnames(styles.webview, {[styles.show]: webviewShown})}>
-          <webview ref='webview' src={`https://slack.com/oauth/pick_reflow?${this.oAuthQuery}`}/>
+          <webview nodeintegration preload='components/Logins/slack.injected.js' ref='webview' src={`https://slack.com/oauth/pick_reflow?${::this.getOAuthQuery()}`}/>
         </div>
       </div>
     )
