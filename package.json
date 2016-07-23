@@ -73,6 +73,8 @@
     "classnames": "^2.2.5",
     "electron-window-state": "^3.0.3",
     "localforage": "^1.4.2",
+    "lodash": "^4.13.1",
+    "moment": "^2.14.1",
     "qs": "^6.2.1",
     "react": "^15.1.0",
     "react-desktop": "^0.2.5",
@@ -82,7 +84,8 @@
     "react-router-redux": "^4.0.4",
     "redux": "^3.5.2",
     "redux-thunk": "^2.1.0",
-    "request": "^2.74.0"
+    "request": "^2.74.0",
+    "selectn": "^1.0.22"
   },
   "devEngines": {
     "node": "4.x || 5.x || 6.x",

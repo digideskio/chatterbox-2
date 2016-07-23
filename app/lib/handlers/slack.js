@@ -1,4 +1,7 @@
 import { EventEmitter } from 'events'
+import moment from 'moment'
+import _ from 'lodash'
+import selectn from 'selectn'
 import { RtmClient, MemoryDataStore, CLIENT_EVENTS, RTM_EVENTS } from '@slack/client'
 
 
@@ -39,24 +42,25 @@ export default class SlackHandler extends EventEmitter {
     })
 
     this._slack.on(CLIENT_EVENTS.RTM.UNABLE_TO_RTM_START, () => {
-      console.error('o shit')
+      console.error('o shit dawg, slack suffered some fuckin catastrophic error')
       this.emit('catastrophic_failure')
     })
 
     this._slack.on(CLIENT_EVENTS.RTM.RTM_CONNECTION_OPENED, () => {
-      console.log('slack connected')
+      console.info('slack connected')
       this._canSend = true
-      this.emit('connected')
+      const { channels, users } = this
+      this.emit('connected', { channels, users })
     })
 
-    this._slack.on(RTM_EVENTS.MESSAGE, (message) => {
-      console.log(message)
+    this._slack.on(RTM_EVENTS.MESSAGE, ({ type, channel, user, text, ts }) => {
+      switch (type) {
+        case 'message':
+          this.emit('message', { channel, user, text, timestamp: ts })
+          break
+        default:
+      }
     })
-
-    this._slack.on(RTM_EVENTS.CHANNEL_CREATED, (message) => {
-      //logic to join the new channel here
-    })
-
   }
 
   sendMessage(text, channelID) {
@@ -94,11 +98,19 @@ export default class SlackHandler extends EventEmitter {
   }
 
   get channels() {
-    return [{
-      name: '# general',
-      id: 'lalala',
-      userIDs: ['Uas1231']
-    }]
+    return Object.keys(this._slack.dataStore.channels)
+      .map(channel => this._slack.dataStore.channels[channel])
+      .map(({ is_archived, name, is_general, id, members, topic, purpose }) => is_archived ? false : {
+        name,
+        id,
+        main: is_general,
+        members: members || [],
+        meta: {
+          topic: selectn('value', topic),
+          purpose: selectn('value', purpose),
+        }
+      })
+      .filter(Boolean)
   }
 
   get DMs() {
@@ -114,6 +126,18 @@ export default class SlackHandler extends EventEmitter {
   }
 
   get users() {
+    console.log(this)
+    return Object.keys(this._slack.dataStore.users)
+      .map(user => this._slack.dataStore.users[user])
+      .map(({ tz, id, deleted, profile, name, presence }) => deleted ? false : {
+        handle: name,
+        name: profile.real_name_normalized.length > 0 ? profile.real_name_normalized : null,
+        id,
+        presence,
+        images: _.filter(profile, (data, key) => key.includes('image')),
+        meta: { timezone: tz, email: profile.email }
+      })
+      .filter(Boolean)
     return [{
       name: 'luigiplr',
       handle: 'luigiplr',
@@ -123,9 +147,5 @@ export default class SlackHandler extends EventEmitter {
         email: 'a@b.com'
       }
     }]
-  }
-
-  get type() {
-    return 'slack'
   }
 }

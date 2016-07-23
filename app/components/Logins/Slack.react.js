@@ -76,7 +76,9 @@ export default class SlackLogin extends Component {
           json: true
         }, (err, res, { access_token }) => {
           const slackHandler = new SlackTeamhandler(access_token)
-          console.log(slackHandler)
+          slackHandler.once('connected', ({ users, channels }) => {
+            console.log(users, channels)
+          })
         })
       }
     })
