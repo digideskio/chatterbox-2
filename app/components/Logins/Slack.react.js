@@ -100,7 +100,7 @@ export default class SlackLogin extends Component {
   render() {
     const { webviewShown } = this.state
     return (
-      <div className={styles.login}>
+      <div className={styles.logininner}>
         <div className={classnames(styles.sidebar, styles.full)}>
           <object className={styles.slack} data='images/logins/slack.svg' type='image/svg+xml'/>
         </div>

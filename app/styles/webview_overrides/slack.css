@@ -1,10 +1,29 @@
 footer, nav.top.persistent, #page_contents div.align_center:last-of-type, #page_contents> div:first-of-type, .alert.alert_info, #signin_form p:nth-of-type(5) {
   display: none;
 }
-#page_contents h1:not('#signin_header'):before {
+
+#page_contents h1 {
+  font-size: 1.75rem !important;
+  line-height: 2rem !important;
+}
+
+#page_contents h1:not(#signin_header):before {
+  content: "Sign into your Slack Team";
   position: absolute;
   background-color: white;
 }
+
 #page_contents {
   margin: 0 auto !important;
+  padding: 0 !important;
+}
+
+#page_contents form:not(#signin_form), #page_contents .card {
+  padding: 1rem !important;
+  width: 80% !important;
+}
+
+#page_contents .col {
+  width: 80% !important;
+  padding-right: 0;
 }
