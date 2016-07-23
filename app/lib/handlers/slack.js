@@ -1,6 +1,5 @@
 import { EventEmitter } from 'events'
 import { RtmClient, MemoryDataStore, CLIENT_EVENTS, RTM_EVENTS } from '@slack/client'
-import request from 'request'
 
 /**
  * Slack  Team connection handler

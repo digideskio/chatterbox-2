@@ -8,36 +8,43 @@ import {
   REMOVE_MESSAGE
 } from 'actions/teams'
 
-const DEFAULT_STATE = {
-  teams: {
-    id: {
-      users: [],
-      channels: [],
-      dms: [],
-      message: {
-        send() {},
-        edit() {},
-        remove() {},
-      },
-      history: {
-        channels: {
-          id: []
-        },
-        dms: {}
-      }
-    }
+/*
+
+team: {
+  users: [],
+  channels: [],
+  dms: [],
+  message: {
+    send() {},
+    edit() {},
+    remove() {},
   },
-  activeTeam: {
-    id: null,
-    channel: null,
-    dm: null
+  history: {
+    channels: {
+      id: []
+    },
+    dms: {}
   }
+}
+
+activeTeam: {
+  id: null,
+  channel: null,
+  dm: null
+}
+
+*/
+
+
+const DEFAULT_STATE = {
+  teams: {},
+  activeTeam: {}
 }
 
 export default function settings(state = DEFAULT_STATE, { type, ...action }) {
   switch (type) {
     case ACTIVE_TEAM_CHANGE:
-      return {...state, activeTeamID: action.activeTeamID }
+      return {...state, activeTeam: {...state.activeTeam, ...action.activeTeam } }
     case NEW_MESSAGE:
       return {...state }
     case EDIT_MESSAGE:

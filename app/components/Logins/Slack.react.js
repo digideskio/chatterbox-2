@@ -3,6 +3,8 @@ import classnames from 'classnames'
 import url from 'url'
 import qs from 'qs'
 import { shell } from 'electron'
+import needle from 'needle'
+//import SlackTeamhandler from 'lib/handlers/slack'
 import styles from 'styles/login.css'
 
 
@@ -20,6 +22,10 @@ export default class SlackLogin extends Component {
   componentWillUnmount() {
     this.mounted = false
   }
+
+  client_id = '8772351907.62016425399'
+  client_secret = '240c89a8e4b306e7455c7f1b78e63f66'
+  redirect_uri = 'http://localhost'
 
   _initWebviewEvents() {
     const { webview } = this.refs
@@ -39,15 +45,23 @@ export default class SlackLogin extends Component {
       }
       if (event.url.startsWith('http://localhost')) {
         const { code } = qs.parse(url.parse(event.url).query)
-        console.log(code)
         webview.stop()
+
+        needle.post('https://slack.com/api/oauth.access', {
+          client_secret: this.client_secret,
+          client_id: this.client_id,
+          code,
+          redirect_uri: this.redirect_uri
+        }, (err, res, body) => {
+          console.log(body)
+        })
       }
     })
   }
 
   get oAuthQuery() {
     return qs.stringify({
-      client_id: '8772351907.62016425399',
+      client_id: this.client_id,
       scope: [
         'team:read',
         'channels:history', 'channels:read',
@@ -55,7 +69,7 @@ export default class SlackLogin extends Component {
         'chat:write:user',
         'users:read', 'users:write', 'users.profile:read'
       ].join(','),
-      redirect_uri: 'http://localhost',
+      redirect_uri: this.redirect_uri,
       repick: 1
     })
   }

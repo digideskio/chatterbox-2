@@ -19,9 +19,9 @@ export default class Login extends Component {
   _renderTeamLogin() {
     switch (this.props.routeParams.teamType) {
       case 'slack':
-        return <SlackLogin />
+        return <SlackLogin  />
       default:
-        return <div />
+        return null
     }
   }
 
