@@ -38,6 +38,8 @@ export default class SlackLogin extends Component {
         const [repickNeeded] = args
         if (repickNeeded) {
           webview.loadURL(`https://slack.com/oauth/pick_reflow?${::this.getOAuthQuery(1)}`)
+        } else {
+          this.setState({ webviewShown: true })
         }
         checked = true
       }
