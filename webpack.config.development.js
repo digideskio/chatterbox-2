@@ -47,5 +47,6 @@ export default {
       new webpack.NoErrorsPlugin(),
       new webpack.DefinePlugin({ 'process.env.NODE_ENV': JSON.stringify('development') })
     ],
+    externals: ['@slack/client', 'request'],
     target: 'electron-renderer'
 }

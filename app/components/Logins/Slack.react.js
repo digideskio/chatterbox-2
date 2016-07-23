@@ -3,8 +3,8 @@ import classnames from 'classnames'
 import url from 'url'
 import qs from 'qs'
 import { shell } from 'electron'
-import needle from 'needle'
-//import SlackTeamhandler from 'lib/handlers/slack'
+import request from 'request'
+import SlackTeamhandler from 'lib/handlers/slack'
 import styles from 'styles/login.css'
 
 
@@ -46,12 +46,9 @@ export default class SlackLogin extends Component {
       if (event.url.startsWith('http://localhost')) {
         const { code } = qs.parse(url.parse(event.url).query)
         webview.stop()
-
-        needle.post('https://slack.com/api/oauth.access', {
-          client_secret: this.client_secret,
-          client_id: this.client_id,
-          code,
-          redirect_uri: this.redirect_uri
+        request.post('https://slack.com/api/oauth.access', {
+          form: { client_secret: this.client_secret, client_id: this.client_id, code, redirect_uri: this.redirect_uri },
+          json: true
         }, (err, res, body) => {
           console.log(body)
         })
