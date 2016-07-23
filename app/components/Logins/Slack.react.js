@@ -29,8 +29,8 @@ export default class SlackLogin extends Component {
 
   _initWebviewEvents() {
     const { webview } = this.refs
-    let checked = false
-    let checking = false
+    let [checked, checking] = []
+    
     webview.addEventListener('ipc-message', ({ channel, args }) => {
       if (!this.mounted) return
 
