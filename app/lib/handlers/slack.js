@@ -13,7 +13,7 @@ const DEFAULT_OPTIONS = {
 }
 
 export default class SlackHandler extends EventEmitter {
-  constructor(token) {
+  constructor({ token }) {
     super()
 
     this._slack = new RtmClient(token, DEFAULT_OPTIONS)
