@@ -4,9 +4,6 @@ import url from 'url'
 import qs from 'qs'
 import { shell } from 'electron'
 import request from 'request'
-
-import SlackTeamhandler from 'lib/handlers/slack'
-import TeamHandler from 'lib/teamHandler'
 import styles from 'styles/login.css'
 
 
@@ -77,12 +74,7 @@ export default class SlackLogin extends Component {
           form: { client_secret: this.client_secret, client_id: this.client_id, code, redirect_uri: this.redirect_uri },
           json: true
         }, (err, res, { access_token }) => {
-
-          const Team = new TeamHandler(new SlackTeamhandler(access_token))
-
-          Team.once('connected', (teamData) => {
-            console.log(teamData)
-          })
+          this.props.addTeam('slack', { token: access_token })
         })
       }
     })

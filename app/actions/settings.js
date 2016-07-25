@@ -1,5 +1,5 @@
 import Database from 'lib/database'
-import * as LoadingActions from 'actions/loading'
+import * as LoadingActions from './loading'
 import { bindActionCreators } from 'redux'
 
 export const CHANGE = 'CHANGE'

@@ -5,7 +5,10 @@ import SlackLogin from './Logins/Slack.react'
 
 export default class Login extends Component {
   static propTypes = {
-    routeParams: PropTypes.object.isRequired
+    routeParams: PropTypes.object.isRequired,
+    provider: PropTypes.shape({ loaded: PropTypes.bool, name: PropTypes.string }),
+    providers: PropTypes.array.isRequired,
+    addTeam: PropTypes.func.isRequired
   }
 
   componentDidMount() {
@@ -19,7 +22,7 @@ export default class Login extends Component {
   _renderTeamLogin() {
     switch (this.props.routeParams.teamType) {
       case 'slack':
-        return <SlackLogin  />
+        return <SlackLogin addTeam={::this.props.addTeam} />
       default:
         return null
     }

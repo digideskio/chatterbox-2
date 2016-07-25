@@ -3,7 +3,7 @@ import { Route, IndexRoute } from 'react-router'
 import App from 'containers/App'
 import LoadingPage from 'containers/LoadingPage'
 import MainPage from 'containers/MainPage'
-import LoginPage from 'components/Login.react'
+import LoginPage from 'containers/LoginPage'
 
 
 export default (
