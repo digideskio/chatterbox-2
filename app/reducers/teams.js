@@ -24,27 +24,24 @@ team: {
       id: []
     },
     dms: {}
-  }
+  },
+  activeChannelorDMID: 'id'
 }
 
-activeTeam: {
-  id: null,
-  channel: null,
-  dm: null
-}
+activeTeamID: 'id'
 
 */
 
 
 const DEFAULT_STATE = {
   teams: {},
-  activeTeam: {}
+  activeTeamID: null
 }
 
 export default function settings(state = DEFAULT_STATE, { type, ...action }) {
   switch (type) {
     case ACTIVE_TEAM_CHANGE:
-      return {...state, activeTeam: {...state.activeTeam, ...action.activeTeam } }
+      return {...state, activeTeamID: action.activeTeamID }
     case NEW_MESSAGE:
       return {...state }
     case EDIT_MESSAGE:
