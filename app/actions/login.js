@@ -10,14 +10,7 @@ export const PROVIDER_CHANGE = 'PROVIDER_CHANGE'
 export function addTeam(provider, opts = {}) {
   return (dispatch, getState) => {
     const TeamActions = bindActionCreators(TeamsActions, dispatch)
-
-    let ProviderHandler = null
-    switch (provider) {
-      case 'slack':
-        ProviderHandler = require('lib/handlers/slack')
-        break
-    }
-
+    const ProviderHandler = require(`lib/handlers/${provider}`)
     const Team = new TeamHandler(new ProviderHandler(opts))
 
     Team.once('connected', (teamData) => {
