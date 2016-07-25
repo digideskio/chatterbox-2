@@ -2,7 +2,7 @@ import { EventEmitter } from 'events'
 import moment from 'moment'
 import _ from 'lodash'
 import selectn from 'selectn'
-import { RtmClient, MemoryDataStore, CLIENT_EVENTS, RTM_EVENTS } from '@slack/client'
+import { WebClient, RtmClient, MemoryDataStore, CLIENT_EVENTS, RTM_EVENTS } from '@slack/client'
 
 
 const DEFAULT_OPTIONS = {
@@ -22,6 +22,7 @@ export default class SlackHandler extends EventEmitter {
   }
 
   _canSend = false
+  _connected = false
 
   reconnect() {
     this._slack = null
@@ -32,25 +33,27 @@ export default class SlackHandler extends EventEmitter {
 
   _initEvents() {
     this._slack.on(CLIENT_EVENTS.RTM.AUTHENTICATED, () => {
-      console.info('slack authenticated')
-      this.emit('authenticated')
+      this._connected = true
+      this._slackWeb = new WebClient(this._slack._token)
+      this.emit('authenticated', _.pick(this, ['team']))
     })
 
     this._slack.on(CLIENT_EVENTS.RTM.DISCONNECT, () => {
-      console.info('slack disconnected')
       this._canSend = false
-      this.emit('disconnected')
+      this._connected = false
+      this.emit('disconnected', _.pick(this, ['team']))
     })
 
     this._slack.on(CLIENT_EVENTS.RTM.UNABLE_TO_RTM_START, () => {
+      this._canSend = false
+      this._connected = false
       console.error('o shit dawg, slack suffered some fuckin catastrophic error')
       this.emit('catastrophic_failure')
     })
 
     this._slack.on(CLIENT_EVENTS.RTM.RTM_CONNECTION_OPENED, () => {
-      console.info('slack connected')
       this._canSend = true
-      this.emit('connected', _.pick(this, ['channels', 'users', 'team']))
+      this.emit('connected', _.pick(this, ['channels', 'users', 'team', 'user']))
     })
 
     this._slack.on(RTM_EVENTS.MESSAGE, ({ type, channel, user, text, ts }) => {
@@ -63,38 +66,23 @@ export default class SlackHandler extends EventEmitter {
     })
   }
 
-  sendMessage(text, channelID) {
-    if (channelID.startsWith('U')) {
-      const user = this._slack.dataStore.getUserById(channelID)
-      this._slack.sendMessage(text, this.dataStore.getDMByName(user.name).id)
-    } else {
-      this._slack.sendMessage(text, channelID)
-    }
-  }
-
-  sendCustomMessage({ text }, channelID) {
-    request.post('https://slack.com/api/chat.postMessage', {
-      channel: channelID,
-      token: this._slack._token,
-      link_names: 1,
-      as_user: true,
-      ...message,
-      text: text.trim(),
-      json: true
-    }, (err, resp, { error }) => {
-      if (err || error) {
-        console.error(error)
-      }
-    })
+  message = {
+    send(channelID, message, custom = false) {
+      return new Promise((resolve, reject) => {
+        if (channelID.startsWith('U')) {
+          const { name } = this._slack.dataStore.getUserById(channelID)
+          this._slack.sendMessage(message, this._slack.dataStore.getDMByName(name).id)
+        } else {
+          this._slack.sendMessage(message, channelID)
+        }
+      })
+    },
+    edit(channelID, messageID, editedMessage, custom = false) {},
+    remove(channelID, messageID) {}
   }
 
   getChannelHistoryByID(channelID, start = 0, end = 100) {
 
-  }
-
-  getUserById(userID) {
-    const { id, name, profile } = this._slack.dataStore.getUserById(userID)
-    return { id, name, meta: { email: profile.email } }
   }
 
   get channels() {
@@ -112,7 +100,7 @@ export default class SlackHandler extends EventEmitter {
 
   get team() {
     const { name, icon, id } = this._slack.dataStore.teams[Object.keys(this._slack.dataStore.teams)[0]]
-    return { name, id, photo: icon.image_original }
+    return { name, id, photo: icon.image_original, type: 'slack' }
   }
 
   get users() {
@@ -127,5 +115,17 @@ export default class SlackHandler extends EventEmitter {
         meta: { timezone: tz, email: profile.email }
       })
       .filter(Boolean)
+  }
+
+  get user() {
+    const { tz, id, deleted, profile, name, presence } = this._slack.dataStore.users[this._slack.activeUserId]
+    return {
+      handle: name,
+      name: profile.real_name_normalized.length > 0 ? profile.real_name_normalized : null,
+      id,
+      presence,
+      images: _.filter(profile, (data, key) => key.includes('image')),
+      meta: { timezone: tz, email: profile.email }
+    }
   }
 }
