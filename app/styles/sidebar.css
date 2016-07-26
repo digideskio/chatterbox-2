@@ -113,6 +113,12 @@
 .sidebar .teamInfo .team .status.online {
   background-color: #7fd421;
 }
+.sidebar .teamInfo .team .status.offline {
+  background-color: gray;
+}
+.sidebar .teamInfo .team .status.away {
+  background-color: yellow;
+}
 .sidebar .teamInfo .team .handle {
   margin-left: 4px;
   position: relative;

@@ -108,7 +108,7 @@ export default class SlackHandler extends EventEmitter {
         handle: name,
         name: profile.real_name_normalized.length > 0 ? profile.real_name_normalized : null,
         id,
-        presence,
+        presence: presence === 'active' ? 'online' : 'offline',
         images: _.filter(profile, (data, key) => key.includes('image')),
         meta: { timezone: tz, email: profile.email }
       })

@@ -6,21 +6,23 @@ export default class TeamInfo extends Component {
 
   static propTypes = {
     channels: PropTypes.array,
-    username: PropTypes.string,
-    name: PropTypes.string,
+    team: PropTypes.object,
+    user: PropTypes.object
   }
 
   static defaultProps = {
-    channels: []
+    channels: [],
+    team: {},
+    user: {}
   }
 
   render() {
     return (
       <div className={styles.teamInfo}>
         <div className={styles.team}>
-          <div className={styles.name}>Magics™</div>
-          <div className={classnames(styles.status, styles.online)} />
-          <span className={styles.handle}>luigiplr</span>
+          <div className={styles.name}>{this.props.team.name}</div>
+          <div className={classnames(styles.status, this.props.user.presence)} />
+          <span className={styles.handle}>{this.props.user.handle}</span>
         </div>
         <div className={styles.channels}>
           {

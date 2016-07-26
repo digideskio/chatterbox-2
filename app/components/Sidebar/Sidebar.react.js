@@ -8,6 +8,7 @@ export default class Sidebar extends Component {
   static propTypes = {
     team: PropTypes.object.isRequired,
     users: PropTypes.array.isRequired,
+    user: PropTypes.array.isRequired,
     channels: PropTypes.array.isRequired
   }
 
@@ -18,10 +19,7 @@ export default class Sidebar extends Component {
         <Providers
           currentTeam={this.props.team}
         />
-        <TeamInfo
-          channels={this.props.channels}
-          users={this.props.users}
-        />
+        <TeamInfo {...this.props} />
       </div>
     )
   }
