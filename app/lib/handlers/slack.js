@@ -84,16 +84,18 @@ export default class SlackHandler extends EventEmitter {
   }
 
   get channels() {
-    return Object.keys(this._slack.dataStore.channels)
-      .map(channel => this._slack.dataStore.channels[channel])
-      .map(({ is_archived, name, is_general, id, members, topic, purpose }) => is_archived ? false : {
+    const channels = {}
+    _.forEach(this._slack.dataStore.channels, ({ is_archived, name, is_general, id, members, topic, purpose }) => {
+      if (is_archived) return
+      channels[id] = ({
         name: `# ${name}`,
         id,
         main: is_general,
         members: members || [],
         meta: { topic: selectn('value', topic), purpose: selectn('value', purpose) }
       })
-      .filter(Boolean)
+    })
+    return channels
   }
 
   get team() {
@@ -102,9 +104,10 @@ export default class SlackHandler extends EventEmitter {
   }
 
   get users() {
-    return Object.keys(this._slack.dataStore.users)
-      .map(user => this._slack.dataStore.users[user])
-      .map(({ tz, id, deleted, profile, name, presence }) => deleted ? false : {
+    const users = {}
+    _.forEach(this._slack.dataStore.users, ({ tz, id, deleted, profile, name, presence }) => {
+      if (deleted) return
+      users[id] = ({
         handle: name,
         name: profile.real_name_normalized.length > 0 ? profile.real_name_normalized : null,
         id,
@@ -112,7 +115,8 @@ export default class SlackHandler extends EventEmitter {
         images: _.filter(profile, (data, key) => key.includes('image')),
         meta: { timezone: tz, email: profile.email }
       })
-      .filter(Boolean)
+    })
+    return users
   }
 
   get user() {

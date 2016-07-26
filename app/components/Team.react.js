@@ -7,13 +7,18 @@ export default class Team extends Component {
   static propTypes = {
     routeParams: PropTypes.object.isRequired,
 
-    teams: PropTypes.shape({ activeTeamID: PropTypes.string.isRequired, teams: PropTypes.object.isRequired }),
+    activeTeamID: PropTypes.string.isRequired,
+    teams: PropTypes.object.isRequired,
     changeTeam: PropTypes.func.isRequired,
     removeTeam: PropTypes.func.isRequired,
     changeActiveTeam: PropTypes.func.isRequired,
 
     changeSetting: PropTypes.func.isRequired,
     settings: PropTypes.object.isRequired,
+  }
+
+  static defaultProps = {
+    teams: {}
   }
 
   componentDidMount() {
@@ -24,19 +29,39 @@ export default class Team extends Component {
     this.mounted = false
   }
 
-  get team() {
-    return this.props.teams.teams[this.props.teams.activeTeamID]
+  get _team() {
+    return this.props.teams[this.props.activeTeamID]
+  }
+
+  get _messages() {
+    const { messages, activeChannelorDMID } = this._team
+    return messages[activeChannelorDMID]
+  }
+
+  get _usersOnCurrentChannelorDM() {
+    const { channels, dms, activeChannelorDMID } = this._team
+
+    if (channels[activeChannelorDMID]) {
+      return channels[activeChannelorDMID].members
+    } else if (dms[activeChannelorDMID]) {
+      return dms[activeChannelorDMID].members
+    } else {
+      return []
+    }
   }
 
   render() {
-    console.log(this.team)
+    console.log(this._team)
     return (
       <div>
         <Sidebar
           {..._.pick(this.props, ['changeActiveTeam', 'settings', 'changeSetting', 'removeTeam'])}
-          {..._.pick(this.team, ['channels', 'users', 'user', 'team'])}
+          {..._.pick(this._team, ['channels', 'users', 'user', 'team'])}
         />
-        <Chat />
+        <Chat
+          users={this._usersOnCurrentChannelorDM}
+          messages={this._messages}
+        />
       </div>
     )
   }

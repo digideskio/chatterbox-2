@@ -5,7 +5,7 @@ import * as SettingsActions from 'actions/settings'
 import * as TeamsActions from 'actions/teams'
 
 function mapStateToProps({ settings, teams }) {
-  return { settings, teams }
+  return { settings, ...teams }
 }
 
 function mapDispatchToProps(dispatch) {

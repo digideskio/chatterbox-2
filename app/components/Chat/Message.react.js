@@ -11,7 +11,6 @@ export default class Message extends Component {
 
   render() {
     const { timestamp, user, text, attachments } = this.props
-    console.log(user)
     return (
       <div className={styles.message}>
         <div className={styles.aside}>

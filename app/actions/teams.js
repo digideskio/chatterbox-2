@@ -15,11 +15,12 @@ export const REMOVE_MESSAGE = 'REMOVE_MESSAGE'
 
 export function addTeam(Handler) {
   return (dispatch) => {
-    const mainChannelID = _.find(Handler.channels, 'main').id
+    const mainChannelID = Handler.channels[_.findKey(Handler.channels, 'main')].id
     Handler.loadHistoryByID(mainChannelID).then(messages => {
       dispatch({
         type: TEAM_ADD,
         team: Object.assign(Handler, {
+          activeChannelorDMID: mainChannelID,
           messages: {
             [mainChannelID]: messages
           }

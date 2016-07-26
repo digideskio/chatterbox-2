@@ -5,7 +5,7 @@ import styles from 'styles/sidebar.css'
 export default class TeamInfo extends Component {
 
   static propTypes = {
-    channels: PropTypes.array,
+    channels: PropTypes.object,
     team: PropTypes.object,
     user: PropTypes.object
   }
@@ -26,8 +26,8 @@ export default class TeamInfo extends Component {
         </div>
         <div className={styles.channels}>
           {
-            this.props.channels.map(({id, name}) => (
-              <Channel key={id} name={name} active={false} missedPings={false} />
+            Object.keys(this.props.channels).map(channelID => (
+              <Channel key={channelID} {...this.props.channels[channelID]} />
             ))
           }
         </div>

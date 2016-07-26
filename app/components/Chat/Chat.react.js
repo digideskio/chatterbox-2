@@ -4,7 +4,13 @@ import Sender from './Sender.react'
 import styles from 'styles/chat.css'
 
 export default class Chat extends Component {
-  static propTypes = {}
+  static propTypes = {
+    messages: PropTypes.array
+  }
+
+  static defaultProps = {
+    messages: []
+  }
 
   render() {
     return (
@@ -18,12 +24,16 @@ export default class Chat extends Component {
           </div>
         </header>
         <section className={styles.messages}>
+          {
+            this.props.messages.map(message => (
+              <Message
+                user={{name: 'luigiplr', avatar: 'https://avatars.slack-edge.com/2016-02-10/20910217602_0d43ac764daac4f67918_48.jpg'}}
+                text='pizzatime is here again.'
+                timestamp='12:00 PM'
+              />
+            ))
+          }
           <DaySeparator timestamp='June 12' />
-          <Message
-            user={{name: 'luigiplr', avatar: 'https://avatars.slack-edge.com/2016-02-10/20910217602_0d43ac764daac4f67918_48.jpg'}}
-            text='pizzatime is here again.'
-            timestamp='12:00 PM'
-          />
         </section>
         <Sender />
       </div>
