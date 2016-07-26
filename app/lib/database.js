@@ -24,7 +24,7 @@ class Teams {
     const total = TeamsInstance.keys(successCallback)
 
     localforage.keys().then(keys => {
-      const total = keys.length
+      const { length: total } = keys
 
       console.log(keys, total)
     }).catch((err) => {
@@ -42,7 +42,7 @@ class Settings {
   static Loader = class settingsEmitter extends EventEmitter {
     constructor() {
       super()
-      const total = Object.keys(defaultSettings).length
+      const { length: total } = Object.keys(defaultSettings)
 
       const settingsLoader = async.queue(({ setting, defaultValue, index }, next) => SettingsInstance.getItem(setting)
         .then(loadedSetting => this.emit('loaded', { setting, value: loadedSetting !== null ? loadedSetting : defaultValue }, ((index + 1) / total) * 100))
