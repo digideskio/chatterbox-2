@@ -18,19 +18,13 @@ export const REMOVE_MESSAGE = 'TEAMS_REMOVE_MESSAGE'
 export function addTeam(Handler) {
   return (dispatch) => {
     const mainChannelID = Handler.channels[_.findKey(Handler.channels, 'main')].id
-    Handler.loadHistoryByID(mainChannelID).then(messages => {
-      Database.teams.add(Handler.persistence)
-      dispatch({
-        type: TEAM_ADD,
-        team: Object.assign(Handler, {
-          activeChannelorDMID: mainChannelID,
-          messages: {
-            [mainChannelID]: messages
-          }
-        })
-      })
-      dispatch(locationPush(`/chat/${Handler.team.id}`))
+    Handler.initHistory()
+    Database.teams.add(Handler.persistence)
+    dispatch({
+      type: TEAM_ADD,
+      team: Object.assign(Handler, { activeChannelorDMID: mainChannelID })
     })
+    dispatch(locationPush(`/chat/${Handler.team.id}`))
   }
 }
 
@@ -54,9 +48,8 @@ export function changeActiveTeamChannelOrDM(channel_or_dm_id, teamID) {
   return { type: ACTIVE_CHANNEL_OR_DM_CHANGE, channel_or_dm_id, team: teamID }
 }
 
-
-export function addHistory(channel, messages) {
-  return { type: ADD_HISTORY, message }
+export function addHistory(team, channel, messages = []) {
+  return { type: ADD_HISTORY, team, channel, messages }
 }
 
 export function newMessage(message) {

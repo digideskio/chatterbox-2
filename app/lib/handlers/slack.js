@@ -91,7 +91,9 @@ export default class SlackHandler extends EventEmitter {
     _.forEach(this._slack.dataStore.channels, ({ is_archived, name, is_general: main, id, members, topic, purpose }) => {
       if (is_archived) return
       channels[id] = ({
-        name: `# ${name}`, id, main,
+        name: `# ${name}`,
+        id,
+        main,
         members: members != undefined ? members.map(id => !this._slack.dataStore.users[id].deleted ? id : false).filter(Boolean) || [] : [],
         meta: { topic: _.get(topic, 'value', null), purpose: _.get(purpose, 'value', null) }
       })

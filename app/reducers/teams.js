@@ -4,6 +4,7 @@ import {
   TEAM_ADD,
   TEAM_REMOVE,
 
+  ADD_HISTORY,
   NEW_MESSAGE,
   MODIFY_MESSAGE,
   EDIT_MESSAGE,
@@ -41,6 +42,23 @@ export default function teams(state = DEFAULT_STATE, { type, ...action }) {
         }
 
         return {...state, teams: {...teams, [messageTeam]: team } }
+      })()
+    case ADD_HISTORY:
+      return (() => {
+        const { messages, team: messagesTeam, channel: messagesChannel } = action
+        const { teams, team } = extractTeamfromTeams(messagesTeam, state.teams)
+
+        if (!team.messages) {
+          team.messages = {}
+        }
+
+        if (!team.messages[messagesChannel]) {
+          team.messages[messagesChannel] = messages
+        } else {
+          team.messages[messagesChannel] = [...team.messages[messagesChannel], ...messages]
+        }
+
+        return {...state, teams: {...teams, [messagesTeam]: team } }
       })()
     case EDIT_MESSAGE:
       return {...state }
