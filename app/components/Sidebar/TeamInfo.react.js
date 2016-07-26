@@ -5,6 +5,7 @@ import styles from 'styles/sidebar.css'
 export default class TeamInfo extends Component {
 
   static propTypes = {
+    activeChannelorDMID: PropTypes.string,
     changeActiveTeamChannelOrDM: PropTypes.func,
     channels: PropTypes.object,
     team: PropTypes.object,
@@ -30,7 +31,7 @@ export default class TeamInfo extends Component {
         <div className={styles.channels}>
           {
             Object.keys(this.props.channels).map(channelID => (
-              <Channel onClick={this.handleChannelorDMClick} select={::this.props.changeActiveTeamChannelOrDM} key={channelID} id={channelID} {...this.props.channels[channelID]} />
+              <Channel active={this.props.activeChannelorDMID === channelID} onClick={this.handleChannelorDMClick} select={::this.props.changeActiveTeamChannelOrDM} key={channelID} id={channelID} {...this.props.channels[channelID]} />
             ))
           }
         </div>

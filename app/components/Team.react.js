@@ -55,7 +55,7 @@ export default class Team extends Component {
       <div>
         <Sidebar
           {..._.pick(this.props, ['changeActiveTeam', 'changeActiveTeamChannelOrDM', 'settings', 'changeSetting', 'removeTeam'])}
-          {..._.pick(this._team, ['channels', 'users', 'user', 'team'])}
+          {..._.pick(this._team, ['channels', 'users', 'user', 'team', 'activeChannelorDMID'])}
         />
 
         <Chat
