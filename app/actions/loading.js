@@ -1,6 +1,6 @@
-export const LOADED_CHANGE = 'LOADED_CHANGE'
-export const TASK_CHANGE = 'TASK_CHANGE'
-export const TASK_DONE = 'TASK_DONE'
+export const LOADED_CHANGE = 'LOADING_LOADED_CHANGE'
+export const TASK_CHANGE = 'LOADING_TASK_CHANGE'
+export const TASK_DONE = 'LOADING_TASK_DONE'
 
 export function setTask(task) {
   return { type: TASK_CHANGE, task }

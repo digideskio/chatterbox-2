@@ -2,9 +2,9 @@ import * as TeamsActions from './teams'
 import { bindActionCreators } from 'redux'
 import createTeamHandler from 'lib/teamHandler'
 
-export const TEAM_ADD = 'TEAM_ADD'
-export const PROVIDER_ERROR = 'PROVIDER_ERROR'
-export const PROVIDER_CHANGE = 'PROVIDER_CHANGE'
+export const TEAM_ADD = 'LOGIN_TEAM_ADD'
+export const PROVIDER_ERROR = 'LOGIN_PROVIDER_ERROR'
+export const PROVIDER_CHANGE = 'LOGIN_PROVIDER_CHANGE'
 
 
 export function addTeam(provider, opts = {}) {

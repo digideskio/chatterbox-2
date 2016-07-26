@@ -1,12 +1,12 @@
 import { remote } from 'electron'
 
-export const RESTORE = 'RESTORE'
-export const CLOSE = 'CLOSE'
-export const QUIT = 'QUIT'
-export const MINIMIZE = 'MAXIMIZE'
-export const MAXIMIZE = 'MAXIMIZE'
-export const UNMAXIMIZE = 'UNMAXIMIZE'
-export const TITLE_CHANGE = 'TITLE_CHANGE'
+export const RESTORE = 'TITLEBAR_RESTORE'
+export const CLOSE = 'TITLEBAR_CLOSE'
+export const QUIT = 'TITLEBAR_QUIT'
+export const MINIMIZE = 'TITLEBAR_MAXIMIZE'
+export const MAXIMIZE = 'TITLEBAR_MAXIMIZE'
+export const UNMAXIMIZE = 'TITLEBAR_UNMAXIMIZE'
+export const TITLE_CHANGE = 'TITLEBAR_TITLE_CHANGE'
 
 
 export function toggleMaximize(maximize) {

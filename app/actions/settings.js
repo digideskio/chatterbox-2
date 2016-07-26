@@ -2,9 +2,9 @@ import Database from 'lib/database'
 import * as LoadingActions from './loading'
 import { bindActionCreators } from 'redux'
 
-export const CHANGE = 'CHANGE'
-export const SET = 'SET'
-export const RESET = 'RESET'
+export const CHANGE = 'SETTINGS_CHANGE'
+export const SET = 'SETTINGS_SET'
+export const RESET = 'SETTINGS_RESET'
 
 
 export function changeSetting(setting, value) {

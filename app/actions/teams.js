@@ -1,16 +1,16 @@
 import _ from 'lodash'
 import { push as locationPush } from 'react-router-redux'
 
-export const ACTIVE_TEAM_CHANGE = 'ACTIVE_TEAM_CHANGE'
-export const TEAM_LOAD = 'TEAM_LOAD'
-export const TEAM_ADD = 'TEAM_ADD'
-export const TEAM_CHANGE = 'TEAM_CHANGE'
-export const TEAM_REMOVE = 'TEAM_REMOVE'
+export const ACTIVE_TEAM_CHANGE = 'TEAMS_ACTIVE_TEAM_CHANGE'
+export const TEAM_LOAD = 'TEAMS_TEAM_LOAD'
+export const TEAM_ADD = 'TEAMS_TEAM_ADD'
+export const TEAM_CHANGE = 'TEAMS_TEAM_CHANGE'
+export const TEAM_REMOVE = 'TEAMS_TEAM_REMOVE'
 
-export const ADD_HISTORY = 'ADD_HISTORY'
-export const NEW_MESSAGE = 'NEW_MESSAGE'
-export const EDIT_MESSAGE = 'EDIT_MESSAGE'
-export const REMOVE_MESSAGE = 'REMOVE_MESSAGE'
+export const ADD_HISTORY = 'TEAMS_ADD_HISTORY'
+export const NEW_MESSAGE = 'TEAMS_NEW_MESSAGE'
+export const EDIT_MESSAGE = 'TEAMS_EDIT_MESSAGE'
+export const REMOVE_MESSAGE = 'TEAMS_REMOVE_MESSAGE'
 
 
 export function addTeam(Handler) {
