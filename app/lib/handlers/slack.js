@@ -39,7 +39,7 @@ export default class SlackHandler extends EventEmitter {
 
     this._slack.on(CLIENT_EVENTS.RTM.RTM_CONNECTION_OPENED, () => {
       this._canSend = true
-      this.emit('connected', _.pick(this, ['channels', 'users', 'team', 'user']))
+      this.emit('connected')
     })
 
     this._slack.on(RTM_EVENTS.MESSAGE, ({ type, ...message }) => {
@@ -59,8 +59,6 @@ export default class SlackHandler extends EventEmitter {
   _canSend = false
   _connected = false
 
-  history = {}
-
   message = {
     send(channelID, message, custom = false) {
       return new Promise((resolve, reject) => {
@@ -76,7 +74,7 @@ export default class SlackHandler extends EventEmitter {
     remove(channelID, messageID) {}
   }
 
-  _getHistoryByID({ channel_or_dm_id, count = 100, latest = null, oldest = 0 }) {
+  _getHistoryByID({ channel_or_dm_id, count = 50, latest = null, oldest = 0 }) {
     return new Promise((resolve, reject) => {
       this._slack._webClient.channels.history(channel_or_dm_id, { count, latest, oldest, unreads: true }, (a, { has_more, messages = [], ok, unread_count_display }) => {
         if (!ok) return reject()
