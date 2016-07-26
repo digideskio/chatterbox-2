@@ -33,13 +33,13 @@ export default class SlackHandler extends EventEmitter {
     this._slack.on(CLIENT_EVENTS.RTM.AUTHENTICATED, () => {
       this._connected = true
       this._slack._webClient = new WebClient(this._slack._token)
-      this.emit('authenticated', _.pick(this, ['team']))
+      this.emit('authenticated')
     })
 
     this._slack.on(CLIENT_EVENTS.RTM.DISCONNECT, () => {
       this._canSend = false
       this._connected = false
-      this.emit('disconnected', _.pick(this, ['team']))
+      this.emit('disconnected')
     })
 
     this._slack.on(CLIENT_EVENTS.RTM.UNABLE_TO_RTM_START, () => {
@@ -51,6 +51,7 @@ export default class SlackHandler extends EventEmitter {
 
     this._slack.on(CLIENT_EVENTS.RTM.RTM_CONNECTION_OPENED, () => {
       this._canSend = true
+      this._activeChannelorDMID = this.channels[_.findKey(this.channels, 'main')].id
       this.emit('connected')
     })
 

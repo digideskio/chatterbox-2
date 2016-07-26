@@ -17,13 +17,9 @@ export const REMOVE_MESSAGE = 'TEAMS_REMOVE_MESSAGE'
 
 export function addTeam(Handler) {
   return (dispatch) => {
-    const mainChannelID = Handler.channels[_.findKey(Handler.channels, 'main')].id
     Handler.initHistory()
     Database.teams.add(Handler.persistence)
-    dispatch({
-      type: TEAM_ADD,
-      team: Object.assign(Handler, { activeChannelorDMID: mainChannelID })
-    })
+    dispatch({ type: TEAM_ADD, team: Object.assign(Handler, { activeChannelorDMID: Handler.initialActiveChannelorDMID }) })
     dispatch(locationPush(`/chat/${Handler.team.id}`))
   }
 }

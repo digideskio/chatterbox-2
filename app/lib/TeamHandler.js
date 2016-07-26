@@ -1,5 +1,5 @@
 import _ from 'lodash'
-import { priorityQueue } from 'async'
+import { queue } from 'async'
 import { ADD_HISTORY, NEW_MESSAGE, EDIT_MESSAGE, REMOVE_MESSAGE } from 'actions/teams'
 
 export default function createTeamHandler(provider) {
@@ -14,7 +14,7 @@ export default function createTeamHandler(provider) {
       this._initTeamEvents()
     }
 
-    _historyRequestQueue = priorityQueue(({ channel, args }, next) => {
+    _historyRequestQueue = queue(({ channel, args }, next) => {
       this._getHistoryByID({ channel_or_dm_id: channel, ...args })
         .then(messages => this.emit('history:loaded', { channel, messages }))
         .then(next)
@@ -22,9 +22,16 @@ export default function createTeamHandler(provider) {
     })
 
     initHistory() {
-      _.forEach(this.channels, ({ id, main }) => {
-        this._historyRequestQueue.push({ channel: id }, main ? 10 : 1)
-      })
+      const {
+        [this.initialActiveChannelorDMID]: { id: mainChannelID }, ...channels
+      } = this.channels
+
+      this._historyRequestQueue.push({ channel: mainChannelID })
+      _.forEach(channels, ({ id }) => this._historyRequestQueue.push({ channel: id }))
+    }
+
+    get initialActiveChannelorDMID() {
+      return this._activeChannelorDMID
     }
 
     _initTeamEvents() {
