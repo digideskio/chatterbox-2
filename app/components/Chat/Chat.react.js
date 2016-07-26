@@ -37,6 +37,7 @@ export default class Chat extends Component {
           {
             this.props.messages.map(({text, user, timestamp, friendlyTimestamp}) => (
               <Message
+                key={`${user}-${timestamp}`}
                 user={::this._mapUserIDtoData(user)}
                 text={text}
                 timestamp={friendlyTimestamp || timestamp.toString()}
