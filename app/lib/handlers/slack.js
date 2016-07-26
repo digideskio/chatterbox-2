@@ -140,4 +140,11 @@ export default class SlackHandler extends EventEmitter {
       meta: { timezone: tz, email: profile.email }
     }
   }
+
+  get persistence() {
+    return {
+      id: this.team.id,
+      args: { token: this._slack._token }
+    }
+  }
 }

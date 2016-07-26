@@ -12,7 +12,7 @@ const router = routerMiddleware(hashHistory)
 const enhancer = compose(
   applyMiddleware(thunk, router, logger),
   window.devToolsExtension ? window.devToolsExtension() : noop => noop
-);
+)
 
 export default function configureStore(initialState) {
   const store = createStore(rootReducer, initialState, enhancer)

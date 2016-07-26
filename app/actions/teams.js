@@ -1,4 +1,5 @@
 import _ from 'lodash'
+import Database from 'lib/database'
 import { push as locationPush } from 'react-router-redux'
 
 export const ACTIVE_TEAM_CHANGE = 'TEAMS_ACTIVE_TEAM_CHANGE'
@@ -17,6 +18,7 @@ export function addTeam(Handler) {
   return (dispatch) => {
     const mainChannelID = Handler.channels[_.findKey(Handler.channels, 'main')].id
     Handler.loadHistoryByID(mainChannelID).then(messages => {
+      Database.teams.add(Handler.persistence)
       dispatch({
         type: TEAM_ADD,
         team: Object.assign(Handler, {

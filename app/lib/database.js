@@ -8,11 +8,11 @@ const SettingsInstance = localforage.createInstance({ name: 'teams', version: 1.
 
 
 class Teams {
-  static addTeam() {
-
+  static add(teamData) {
+    console.log(teamData)
   }
 
-  static removeTeamByID() {
+  static remove() {
 
   }
 
