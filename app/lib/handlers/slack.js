@@ -17,24 +17,10 @@ export default class SlackHandler extends EventEmitter {
     super()
 
     this._slack = new RtmClient(token, DEFAULT_OPTIONS)
-    this._initProviderEvents()
-    this._slack.start()
-  }
 
-  _canSend = false
-  _connected = false
-
-  reconnect() {
-    this._slack = null
-    this._slack = new RtmClient(token, Object.assign(DEFAULT_OPTIONS, options))
-    this._initProviderEvents()
-    this._slack.start()
-  }
-
-  _initProviderEvents() {
     this._slack.on(CLIENT_EVENTS.RTM.AUTHENTICATED, () => {
       this._connected = true
-      this._slackWeb = new WebClient(this._slack._token)
+      this._slack._webClient = new WebClient(this._slack._token)
       this.emit('authenticated', _.pick(this, ['team']))
     })
 
@@ -56,15 +42,24 @@ export default class SlackHandler extends EventEmitter {
       this.emit('connected', _.pick(this, ['channels', 'users', 'team', 'user']))
     })
 
-    this._slack.on(RTM_EVENTS.MESSAGE, ({ type, channel, user, text, ts }) => {
+    this._slack.on(RTM_EVENTS.MESSAGE, ({ type, ...message }) => {
       switch (type) {
         case 'message':
-          this.emit('message', { channel, user, text, timestamp: ts })
+          const { channel, user, text, ts } = message
+          this.emit('message', { channel, user, text, timestamp: parseInt(ts) })
           break
         default:
+          console.log(message)
       }
     })
+
+    this._slack.start()
   }
+
+  _canSend = false
+  _connected = false
+
+  history = {}
 
   message = {
     send(channelID, message, custom = false) {
@@ -81,8 +76,13 @@ export default class SlackHandler extends EventEmitter {
     remove(channelID, messageID) {}
   }
 
-  getChannelHistoryByID(channelID, start = 0, end = 100) {
-
+  _getHistoryByID({ channel_or_dm_id, count = 100, latest = null, oldest = 0 }) {
+    return new Promise((resolve, reject) => {
+      this._slack._webClient.channels.history(channel_or_dm_id, { count, latest, oldest, unreads: true }, (a, { has_more, messages = [], ok, unread_count_display }) => {
+        if (!ok) return reject()
+        resolve(messages.map(({ user, text, ts }) => ({ user, text, timestamp: parseInt(ts) })))
+      })
+    })
   }
 
   get channels() {

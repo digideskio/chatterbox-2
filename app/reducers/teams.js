@@ -13,6 +13,9 @@ import {
 team: {
   users: [],
   channels: [],
+  messages: {
+    channelID: []
+  },
   dms: [],
   message: {
     send() {},

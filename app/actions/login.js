@@ -12,9 +12,9 @@ export function addTeam(provider, opts = {}) {
     //dispatch({ type: PROVIDER_CHANGE, provider: { ...getState().login.provider, authenticating: true } })
 
     const TeamActions = bindActionCreators(TeamsActions, dispatch)
-    const TeamHandler = createTeamHandler(require(`lib/handlers/${provider}`))
+    const TeamHandler = createTeamHandler(provider)
     const Team = new TeamHandler(opts, dispatch)
-    Team.once('connected', (TeamData) => TeamActions.addTeam(TeamData, Team))
+    Team.once('connected', (TeamData) => TeamActions.addTeam(Team))
 
     Team.once('some_error_event', (teamData) => {
       //dispatch({ type: PROVIDER_ERROR, provider: {...getState().login.provider, authenticating: false, error } })
