@@ -19,7 +19,7 @@ export default class Chat extends Component {
   }
 
   _mapUserIDtoData(id) {
-    const { name, images } = this.props.users[id]
+    const { name, images } = _.get(this.props.users, id, {})
     return { name, image: _.last(images) }
   }
 
@@ -49,7 +49,7 @@ export default class Chat extends Component {
                 firstInChain={this.props.messages[idx - 1] && this.props.messages[idx - 1].user !== user}
                 user={::this._mapUserIDtoData(user)}
                 text={text}
-                timestamp={friendlyTimestamp || timestamp.toString()}
+                timestamp={friendlyTimestamp || timestamp}
               />
             ))
           }

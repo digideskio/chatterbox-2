@@ -11,6 +11,25 @@ const DEFAULT_OPTIONS = {
   autoJoinNewChannels: false
 }
 
+function parseMessage(type, message, overrideEvent = false) {
+  switch (type) {
+    case 'message':
+      const { channel, user, text, ts } = message
+      const msg = {
+        channel,
+        user,
+        text,
+        timestamp: ts,
+        friendlyTimestamp: moment.unix(ts).format('h:mm a')
+      }
+      if (overrideEvent) return msg
+      else this.emit('message', msg)
+      break
+    default:
+      console.log(message)
+  }
+}
+
 export default class SlackHandler extends EventEmitter {
   constructor({ token }) {
     super()
@@ -41,22 +60,7 @@ export default class SlackHandler extends EventEmitter {
       this.emit('connected')
     })
 
-    this._slack.on(RTM_EVENTS.MESSAGE, ({ type, ...message }) => {
-      switch (type) {
-        case 'message':
-          const { channel, user, text, ts } = message
-          this.emit('message', {
-            channel,
-            user,
-            text,
-            timestamp: parseInt(ts),
-            friendlyTimestamp: moment.unix(ts).format('h:mm a')
-          })
-          break
-        default:
-          console.log(message)
-      }
-    })
+    this._slack.on(RTM_EVENTS.MESSAGE, ({ type, ...message }) => parseMessage.bind(this)(type, message))
 
     this._slack.start()
   }
@@ -83,12 +87,7 @@ export default class SlackHandler extends EventEmitter {
     return new Promise((resolve, reject) => {
       this._slack._webClient.channels.history(channel_or_dm_id, { count, latest, oldest, unreads: true }, (a, { has_more, messages = [], ok, unread_count_display }) => {
         if (!ok) return reject()
-        resolve(messages.map(({ user, text, ts }) => ({
-          user,
-          text,
-          timestamp: parseInt(ts),
-          friendlyTimestamp: moment.unix(ts).format('h:mm a')
-        })))
+        resolve(messages.reverse().map(({ type, ...message }) => parseMessage.bind(this)(type, message, true)))
       })
     })
   }
