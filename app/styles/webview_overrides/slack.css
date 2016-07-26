@@ -32,3 +32,43 @@ footer, nav.top.persistent, #page_contents div.align_center:last-of-type, #page_
 #page_contents .large_bottom_margin {
   margin-bottom: 1px !important;
 }
+
+
+/* Override oAuth screen to match rest of dialogs style */
+
+section.oauth_header {
+  padding: 15px 0 !important;
+  margin: 0 !important;
+}
+
+body.oauth_page {
+  background: #f9f9f9 !important;
+}
+
+.oauth_page_content {
+  font-size: 0.93rem !important;
+  max-width: 39rem !important;
+  background-color: #fff;
+  border-radius: .25rem;
+  box-shadow: 0 1px 0 rgba(0, 0, 0, .25);
+  padding: 2rem 2rem 1rem;
+  margin: 0 auto 2rem;
+  border: 1px solid #e8e8e8;
+}
+
+
+/* Override the scrollbar to make it sexier */
+
+body::-webkit-scrollbar {
+  width: 10px;
+}
+
+body::-webkit-scrollbar-track {
+  -webkit-box-shadow: inset 0 0 2px rgba(0, 0, 0, 0.3);
+  border-radius: 5px;
+}
+
+body::-webkit-scrollbar-thumb {
+  border-radius: 5px;
+  -webkit-box-shadow: inset 0 0 2px rgba(0, 0, 0, 0.55);
+}
