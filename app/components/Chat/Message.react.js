@@ -6,21 +6,32 @@ export default class Message extends Component {
     attachments: PropTypes.oneOfType([PropTypes.array, PropTypes.bool]),
     text: PropTypes.string,
     timestamp: PropTypes.string,
+    firstInChain: PropTypes.bool,
     user: PropTypes.shape({ image: PropTypes.string, name: PropTypes.string })
   }
 
   render() {
-    const { timestamp, user, text, attachments } = this.props
+    const { timestamp, user, text, attachments, firstInChain} = this.props
     return (
       <div className={styles.message}>
         <div className={styles.aside}>
-          <div style={{backgroundImage: `url(${user.image})`}} className={styles.profile_pic} />
+          {
+            firstInChain ? (
+              <div style={{backgroundImage: `url(${user.image})`}} className={styles.profile_pic} />
+            ) : (
+              <span className={styles.time}>{timestamp}</span>
+            )
+          }
         </div>
         <div className={styles.body}>
-          <div className={styles.info}>
-            <span className={styles.user}>{user.name}</span>
-            <span className={styles.time}>{timestamp}</span>
-          </div>
+          {
+            firstInChain ? (
+              <div className={styles.info}>
+                <span className={styles.user}>{user.name}</span>
+                <span className={styles.time}>{timestamp}</span>
+              </div>
+            ) : null
+          }
           <p className={styles.message_text}>{text}</p>
           {attachments ? (
             <div className={styles.attachments}>
