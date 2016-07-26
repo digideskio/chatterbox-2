@@ -59,7 +59,8 @@ export default class Team extends Component {
           {..._.pick(this._team, ['channels', 'users', 'user', 'team'])}
         />
         <Chat
-          users={this._usersOnCurrentChannelorDM}
+          {..._.pick(this._team, ['users', 'user', 'team'])}
+          channelUsers={this._usersOnCurrentChannelorDM}
           messages={this._messages}
         />
       </div>

@@ -91,7 +91,7 @@ export default class SlackHandler extends EventEmitter {
         name: `# ${name}`,
         id,
         main: is_general,
-        members: members || [],
+        members: members.map(id => !this._slack.dataStore.users[id].deleted ? id : false).filter(Boolean) || [],
         meta: { topic: selectn('value', topic), purpose: selectn('value', purpose) }
       })
     })

@@ -5,14 +5,24 @@ import styles from 'styles/chat.css'
 
 export default class Chat extends Component {
   static propTypes = {
-    messages: PropTypes.array
+    messages: PropTypes.array,
+    users: PropTypes.object,
+    channelUsers: PropTypes.array
   }
 
   static defaultProps = {
-    messages: []
+    messages: [],
+    users: {},
+    channelUsers: []
+  }
+
+  _mapUserIDtoData(id) {
+    const { name, images } = this.props.users[id]
+    return { name, image: images[0] }
   }
 
   render() {
+    console.log(this.props)
     return (
       <div className={styles.chat}>
         <header>
@@ -25,11 +35,11 @@ export default class Chat extends Component {
         </header>
         <section className={styles.messages}>
           {
-            this.props.messages.map(message => (
+            this.props.messages.map(({text, user, timestamp}) => (
               <Message
-                user={{name: 'luigiplr', avatar: 'https://avatars.slack-edge.com/2016-02-10/20910217602_0d43ac764daac4f67918_48.jpg'}}
-                text='pizzatime is here again.'
-                timestamp='12:00 PM'
+                user={::this._mapUserIDtoData(user)}
+                text={text}
+                timestamp={timestamp}
               />
             ))
           }

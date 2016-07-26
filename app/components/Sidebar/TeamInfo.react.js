@@ -38,7 +38,6 @@ export default class TeamInfo extends Component {
 
 
 class Channel extends Component {
-
   static propTypes = {
     active: PropTypes.bool,
     name: PropTypes.string,

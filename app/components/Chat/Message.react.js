@@ -6,7 +6,7 @@ export default class Message extends Component {
     attachments: PropTypes.oneOfType([PropTypes.array, PropTypes.bool]),
     text: PropTypes.string,
     timestamp: PropTypes.string,
-    user: PropTypes.shape({ avatar: PropTypes.string, name: PropTypes.string })
+    user: PropTypes.shape({ image: PropTypes.string, name: PropTypes.string })
   }
 
   render() {
@@ -14,7 +14,7 @@ export default class Message extends Component {
     return (
       <div className={styles.message}>
         <div className={styles.aside}>
-          <div style={{backgroundImage: `url(${user.avatar})`}} className={styles.profile_pic} />
+          <div style={{backgroundImage: `url(${user.image})`}} className={styles.profile_pic} />
         </div>
         <div className={styles.body}>
           <div className={styles.info}>
