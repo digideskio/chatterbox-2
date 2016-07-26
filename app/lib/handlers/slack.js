@@ -14,15 +14,21 @@ const DEFAULT_OPTIONS = {
 function parseMessage(type, message, overrideEvent = false) {
   switch (type) {
     case 'message':
-      const { channel, user, text, ts } = message
-      const msg = { channel, user, text, timestamp: ts, friendlyTimestamp: moment.unix(ts).format('h:mm a') }
+      const { channel, user, text, ts, user_profile } = message
+      const msg = _.omitBy({
+        channel,
+        user,
+        text,
+        user_profile,
+        timestamp: ts,
+        friendlyTimestamp: moment.unix(ts).format('h:mm a')
+      }, _.isNil)
 
       if (overrideEvent) return msg
       else this.emit('message', msg)
       break
-    default:
-      console.log(message)
   }
+  console.log(message)
 }
 
 export default class SlackHandler extends EventEmitter {

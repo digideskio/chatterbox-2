@@ -1,5 +1,6 @@
 import {
   ACTIVE_TEAM_CHANGE,
+  ACTIVE_CHANNEL_OR_DM_CHANGE,
   TEAM_ADD,
   TEAM_REMOVE,
 
@@ -39,27 +40,40 @@ const DEFAULT_STATE = {
   activeTeamID: null
 }
 
-export default function settings(state = DEFAULT_STATE, { type, ...action }) {
+export default function teams(state = DEFAULT_STATE, { type, ...action }) {
   switch (type) {
     case TEAM_ADD:
       return {...state, teams: {...state.teams, [action.team.team.id]: action.team }, activeTeamID: action.team.team.id }
     case ACTIVE_TEAM_CHANGE:
       return {...state, activeTeamID: action.activeTeamID }
+    case ACTIVE_CHANNEL_OR_DM_CHANGE:
+      return (() => {
+        const { team, teams } = extractTeamfromTeams(action.team, state.teams)
+        team.activeChannelorDMID = action.channel_or_dm_id
+        return {...state, teams: {...teams, [action.team]: teamToChange } }
+      })()
+      break
     case NEW_MESSAGE:
-      const { team: messageTeam, channel: messageChannel, ...message } = action.message
-      const {
-        [messageTeam]: teamToChange, ...teams } = state.teams
+      return (() => {
+        const { team: messageTeam, channel: messageChannel, message } = action
+        const { teams, team } = extractTeamfromTeams(messageTeam, state.teams)
 
-      if (!teamToChange.messages[messageChannel]) {
-        teamToChange.messages[messageChannel] = [message]
-      } else {
-        teamToChange.messages[messageChannel].push(message)
-      }
+        if (!team.messages[messageChannel]) {
+          team.messages[messageChannel] = [message]
+        } else {
+          team.messages[messageChannel].push(message)
+        }
 
-      return {...state, teams: {...teams, [messageTeam]: teamToChange } }
+        return {...state, teams: {...teams, [messageTeam]: team } }
+      })
     case EDIT_MESSAGE:
       return {...state }
     default:
       return state
   }
 }
+
+const extractTeamfromTeams = (teamID, teams) => ({
+  [teamID]: team,
+  ...teams
+} = teams)
