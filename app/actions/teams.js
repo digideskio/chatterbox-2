@@ -1,3 +1,5 @@
+import _ from 'lodash'
+
 export const ACTIVE_TEAM_CHANGE = 'ACTIVE_TEAM_CHANGE'
 export const TEAM_ADD = 'TEAM_ADD'
 export const TEAM_CHANGE = 'TEAM_CHANGE'
@@ -9,8 +11,12 @@ export const REMOVE_MESSAGE = 'REMOVE_MESSAGE'
 
 
 
-export function addTeam(team) {
-  return { type: TEAM_ADD, team }
+export function addTeam(Handler) {
+  return (dispatch, getState) => {
+    const mainChannel = _.find(Handler.channels, 'main')
+      //const mainChannelHistory = Handler.
+    console.log(mainChannel)
+  }
 }
 
 export function removeTeam(team) {
@@ -22,7 +28,7 @@ export function changeTeam(team) {
 }
 
 export function changeActiveTeam(team) {
-  return { type: LOADED_CHANGE, team }
+  return { type: ACTIVE_TEAM_CHANGE, team }
 }
 
 

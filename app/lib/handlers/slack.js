@@ -17,7 +17,7 @@ export default class SlackHandler extends EventEmitter {
     super()
 
     this._slack = new RtmClient(token, DEFAULT_OPTIONS)
-    this._initEvents()
+    this._initProviderEvents()
     this._slack.start()
   }
 
@@ -27,11 +27,11 @@ export default class SlackHandler extends EventEmitter {
   reconnect() {
     this._slack = null
     this._slack = new RtmClient(token, Object.assign(DEFAULT_OPTIONS, options))
-    this._initEvents()
+    this._initProviderEvents()
     this._slack.start()
   }
 
-  _initEvents() {
+  _initProviderEvents() {
     this._slack.on(CLIENT_EVENTS.RTM.AUTHENTICATED, () => {
       this._connected = true
       this._slackWeb = new WebClient(this._slack._token)

@@ -1,20 +1,23 @@
 import * as TeamsActions from './teams'
 import { bindActionCreators } from 'redux'
-import TeamHandler from 'lib/teamHandler'
-
+import createTeamHandler from 'lib/teamHandler'
 
 export const TEAM_ADD = 'TEAM_ADD'
+export const PROVIDER_ERROR = 'PROVIDER_ERROR'
 export const PROVIDER_CHANGE = 'PROVIDER_CHANGE'
 
 
 export function addTeam(provider, opts = {}) {
   return (dispatch, getState) => {
-    const TeamActions = bindActionCreators(TeamsActions, dispatch)
-    const ProviderHandler = require(`lib/handlers/${provider}`)
-    const Team = new TeamHandler(new ProviderHandler(opts))
+    //dispatch({ type: PROVIDER_CHANGE, provider: { ...getState().login.provider, authenticating: true } })
 
-    Team.once('connected', (teamData) => {
-      console.log(teamData)
+    const TeamActions = bindActionCreators(TeamsActions, dispatch)
+    const TeamHandler = createTeamHandler(require(`lib/handlers/${provider}`))
+    const Team = new TeamHandler(opts, dispatch)
+    Team.once('connected', (TeamData) => TeamActions.addTeam(TeamData, Team))
+
+    Team.once('some_error_event', (teamData) => {
+      //dispatch({ type: PROVIDER_ERROR, provider: {...getState().login.provider, authenticating: false, error } })
     })
   }
 }

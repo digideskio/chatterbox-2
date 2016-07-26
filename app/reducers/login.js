@@ -1,8 +1,8 @@
-import { PROVIDER_CHANGE } from 'actions/login'
+import { PROVIDER_CHANGE, PROVIDER_ERROR } from 'actions/login'
 
 
 const DEFAULT_STATE = {
-  provider: { loaded: false, name: null },
+  provider: { loading: true, authenticating: false, name: null, error: null },
   providers: ['slack', 'irc']
 }
 
