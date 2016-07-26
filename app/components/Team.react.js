@@ -1,6 +1,5 @@
 import React, { Component, PropTypes } from 'react'
 import _ from 'lodash'
-import selectn from 'selectn'
 import Chat from './Chat'
 import Sidebar from './Sidebar'
 
@@ -31,22 +30,22 @@ export default class Team extends Component {
   }
 
   get _team() {
-    return this.props.teams[this.props.activeTeamID]
+    return _.get(this.props, `teams.${this.props.activeTeamID}`, {})
   }
 
   get _messages() {
     const { messages, activeChannelorDMID } = (this._team || {})
-    return selectn(activeChannelorDMID, messages)
+    return _.get(messages, activeChannelorDMID, [])
   }
 
   get _currentChannelorDM() {
     const { channels, dms, activeChannelorDMID } = (this._team || {})
-    return selectn(activeChannelorDMID, channels) || selectn(activeChannelorDMID, dms)
+    return _.get(channels, activeChannelorDMID) || _.get(dms, activeChannelorDMID)
   }
 
   get _usersOnCurrentChannelorDM() {
     const { channels, dms, activeChannelorDMID } = (this._team || {})
-    return selectn(`${activeChannelorDMID}.members`, channels) || selectn(`${activeChannelorDMID}.members`, dms)
+    return _.get(channels, `${activeChannelorDMID}.members`) || _.get(dms, `${activeChannelorDMID}.members`)
   }
 
   render() {
@@ -60,6 +59,7 @@ export default class Team extends Component {
 
         <Chat
           {..._.pick(this._team, ['users', 'user', 'team'])}
+          channel={this._currentChannelorDM}
           channelUsers={this._usersOnCurrentChannelorDM}
           messages={this._messages}
         />

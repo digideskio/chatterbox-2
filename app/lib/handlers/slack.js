@@ -1,7 +1,6 @@
 import { EventEmitter } from 'events'
 import moment from 'moment'
 import _ from 'lodash'
-import selectn from 'selectn'
 import { WebClient, RtmClient, MemoryDataStore, CLIENT_EVENTS, RTM_EVENTS } from '@slack/client'
 
 
@@ -103,7 +102,7 @@ export default class SlackHandler extends EventEmitter {
         id,
         main: is_general,
         members: members.map(id => !this._slack.dataStore.users[id].deleted ? id : false).filter(Boolean) || [],
-        meta: { topic: selectn('value', topic), purpose: selectn('value', purpose) }
+        meta: { topic: _.get(topic, 'value', null), purpose: _.get(purpose, 'value', null) }
       })
     })
     return channels

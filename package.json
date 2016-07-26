@@ -30,7 +30,7 @@
     "babel-plugin-transform-remove-console": "^6.8.0",
     "babel-plugin-transform-remove-debugger": "^6.8.0",
     "babel-plugin-webpack-loaders": "^0.7.0",
-    "babel-polyfill": "^6.9.0",
+    "babel-polyfill": "^6.9.1",
     "babel-preset-es2015": "^6.9.0",
     "babel-preset-react": "^6.5.0",
     "babel-preset-react-hmre": "^1.1.1",
@@ -84,8 +84,7 @@
     "react-router-redux": "^4.0.4",
     "redux": "^3.5.2",
     "redux-thunk": "^2.1.0",
-    "request": "^2.74.0",
-    "selectn": "^1.0.22"
+    "request": "^2.74.0"
   },
   "devEngines": {
     "node": "4.x || 5.x || 6.x",

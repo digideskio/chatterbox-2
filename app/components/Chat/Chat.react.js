@@ -1,4 +1,5 @@
 import React, { Component, PropTypes } from 'react'
+import _ from 'lodash'
 import Message, { DaySeparator } from './Message.react'
 import Sender from './Sender.react'
 import styles from 'styles/chat.css'
@@ -13,7 +14,8 @@ export default class Chat extends Component {
   static defaultProps = {
     messages: [],
     users: {},
-    channelUsers: []
+    channelUsers: [],
+    channel: {}
   }
 
   _mapUserIDtoData(id) {
@@ -27,10 +29,16 @@ export default class Chat extends Component {
       <div className={styles.chat}>
         <header>
           <div className={styles.info}>
-            <span className={styles.channel}>#general</span>
-            <span className={styles.meta}>43 Members</span>
-            <span className={styles.spacer}>|</span>
-            <span className={styles.meta}>Welcome to Magics, We make cool things.</span>
+            <span className={styles.channel}>{this.props.channel.name}</span>
+            <span className={styles.meta}>{this.props.channelUsers.length} Members</span>
+            {
+              _.get(this.props, 'channel.meta.topic') ? (
+                <div>
+                  <span className={styles.spacer}>|</span>
+                  <span className={styles.meta}>{this.props.channel.meta.topic}</span>
+                </div>
+              ) : null
+            }
           </div>
         </header>
         <section className={styles.messages}>
