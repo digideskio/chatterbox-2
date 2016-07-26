@@ -15,13 +15,8 @@ function parseMessage(type, message, overrideEvent = false) {
   switch (type) {
     case 'message':
       const { channel, user, text, ts } = message
-      const msg = {
-        channel,
-        user,
-        text,
-        timestamp: ts,
-        friendlyTimestamp: moment.unix(ts).format('h:mm a')
-      }
+      const msg = { channel, user, text, timestamp: ts, friendlyTimestamp: moment.unix(ts).format('h:mm a') }
+
       if (overrideEvent) return msg
       else this.emit('message', msg)
       break

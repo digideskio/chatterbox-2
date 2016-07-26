@@ -41,11 +41,7 @@ const DEFAULT_STATE = {
 export default function settings(state = DEFAULT_STATE, { type, ...action }) {
   switch (type) {
     case TEAM_ADD:
-      return {
-        ...state,
-        teams: { ...state.teams, [action.team.team.id]: action.team },
-        activeTeamID: action.team.team.id
-      }
+      return { ...state, teams: { ...state.teams, [action.team.team.id]: action.team }, activeTeamID: action.team.team.id }
     case ACTIVE_TEAM_CHANGE:
       return {...state, activeTeamID: action.activeTeamID }
     case NEW_MESSAGE:
