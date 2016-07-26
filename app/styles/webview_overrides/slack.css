@@ -7,8 +7,8 @@ footer, nav.top.persistent, #page_contents div.align_center:last-of-type, #page_
   line-height: 2rem !important;
 }
 
-#page_contents h1:not(#signin_header):before {
-  content: "Sign into your Slack Team";
+#page_contents form h1:before {
+  content: 'Sign into your Slack Team';
   position: absolute;
   background-color: white;
 }
@@ -21,9 +21,14 @@ footer, nav.top.persistent, #page_contents div.align_center:last-of-type, #page_
 #page_contents form:not(#signin_form), #page_contents .card {
   padding: 1rem !important;
   width: 80% !important;
+  margin: 0 auto !important;
 }
 
 #page_contents .col {
   width: 80% !important;
   padding-right: 0;
+}
+
+#page_contents .large_bottom_margin {
+  margin-bottom: 1px !important;
 }
