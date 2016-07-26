@@ -43,10 +43,7 @@ export default function settings(state = DEFAULT_STATE, { type, ...action }) {
     case TEAM_ADD:
       return {
         ...state,
-        teams: {
-          ...state.teams,
-          [action.team.team.id]: action.team
-        },
+        teams: { ...state.teams, [action.team.team.id]: action.team },
         activeTeamID: action.team.team.id
       }
     case ACTIVE_TEAM_CHANGE:

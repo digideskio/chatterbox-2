@@ -20,7 +20,7 @@ export default class Chat extends Component {
 
   _mapUserIDtoData(id) {
     const { name, images } = this.props.users[id]
-    return { name, image: images[0] }
+    return { name, image: _.last(images) }
   }
 
   render() {
