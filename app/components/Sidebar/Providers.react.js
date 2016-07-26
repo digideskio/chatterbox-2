@@ -7,13 +7,17 @@ export default class Providers extends Component {
 
   static propTypes = {
     providers: PropTypes.array,
-    selected: PropTypes.object
+    currentTeam: PropTypes.object
+  }
+
+  static defaultProps = {
+    currentTeam: {}
   }
 
   render() {
     return (
       <div className={styles.providers}>
-        <div className={styles.selected} />
+        <div className={styles.selected} style={{backgroundImage: `url(${this.props.currentTeam.image})`}} />
         <div className={styles.bottom}>
           <div className={styles.provider}>
             <div className={styles.new_message} />

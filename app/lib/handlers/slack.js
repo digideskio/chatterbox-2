@@ -98,7 +98,7 @@ export default class SlackHandler extends EventEmitter {
 
   get team() {
     const { name, icon, id } = this._slack.dataStore.teams[Object.keys(this._slack.dataStore.teams)[0]]
-    return { name, id, photo: icon.image_original, type: 'slack' }
+    return { name, id, image: icon.image_original, type: 'slack' }
   }
 
   get users() {

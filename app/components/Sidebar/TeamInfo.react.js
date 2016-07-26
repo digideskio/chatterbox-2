@@ -5,13 +5,16 @@ import styles from 'styles/sidebar.css'
 export default class TeamInfo extends Component {
 
   static propTypes = {
-    channels: PropTypes.array.isRequired,
+    channels: PropTypes.array,
     username: PropTypes.string,
     name: PropTypes.string,
   }
 
+  static defaultProps = {
+    channels: []
+  }
+
   render() {
-    console.log(this.props)
     return (
       <div className={styles.teamInfo}>
         <div className={styles.team}>

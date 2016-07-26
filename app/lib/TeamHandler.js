@@ -20,7 +20,7 @@ export default function createTeamHandler(provider) {
       })
 
       this.on('message', (message) => {
-        this._dispatch({ type: NEW_MESSAGE, message })
+        this._dispatch({ type: NEW_MESSAGE, message: {...message, team: this.team.id } })
       })
     }
   }
