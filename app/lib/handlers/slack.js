@@ -87,7 +87,7 @@ export default class SlackHandler extends EventEmitter {
     return Object.keys(this._slack.dataStore.channels)
       .map(channel => this._slack.dataStore.channels[channel])
       .map(({ is_archived, name, is_general, id, members, topic, purpose }) => is_archived ? false : {
-        name,
+        name: `# ${name}`,
         id,
         main: is_general,
         members: members || [],

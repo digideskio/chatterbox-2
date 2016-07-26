@@ -5,14 +5,20 @@ import styles from 'styles/sidebar.css'
 
 
 export default class Sidebar extends Component {
-  static propTypes = {}
+  static propTypes = {
+    users: PropTypes.array.isRequired,
+    channels: PropTypes.array.isRequired
+  }
 
   render() {
     return (
       <div className={styles.sidebar}>
         <div className={styles.selected}/>
         <Providers />
-        <TeamInfo />
+        <TeamInfo
+          channels={this.props.channels}
+          users={this.props.users}
+        />
       </div>
     )
   }

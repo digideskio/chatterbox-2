@@ -5,11 +5,13 @@ import styles from 'styles/sidebar.css'
 export default class TeamInfo extends Component {
 
   static propTypes = {
+    channels: PropTypes.array.isRequired,
     username: PropTypes.string,
     name: PropTypes.string,
   }
 
   render() {
+    console.log(this.props)
     return (
       <div className={styles.teamInfo}>
         <div className={styles.team}>
@@ -18,9 +20,11 @@ export default class TeamInfo extends Component {
           <span className={styles.handle}>luigiplr</span>
         </div>
         <div className={styles.channels}>
-          <Channel name='# general' active={true} missedPings={false} />
-          <Channel name='# luigis-shit' active={false} missedPings={false} />
-          <Channel name='# victoria' active={false} missedPings={false} />
+          {
+            this.props.channels.map(({id, name}) => (
+              <Channel key={id} name={name} active={false} missedPings={false} />
+            ))
+          }
         </div>
       </div>
     )
