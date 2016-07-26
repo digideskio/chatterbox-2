@@ -1,4 +1,5 @@
 import _ from 'lodash'
+import { push as locationPush } from 'react-router-redux'
 
 export const ACTIVE_TEAM_CHANGE = 'ACTIVE_TEAM_CHANGE'
 export const TEAM_LOAD = 'TEAM_LOAD'
@@ -15,14 +16,17 @@ export const REMOVE_MESSAGE = 'REMOVE_MESSAGE'
 export function addTeam(Handler) {
   return (dispatch) => {
     const mainChannelID = _.find(Handler.channels, 'main').id
-    Handler.loadHistoryByID(mainChannelID).then(messages => dispatch({
-      type: TEAM_ADD,
-      team: Object.assign(Handler, {
-        messages: {
-          [mainChannelID]: messages
-        }
+    Handler.loadHistoryByID(mainChannelID).then(messages => {
+      dispatch({
+        type: TEAM_ADD,
+        team: Object.assign(Handler, {
+          messages: {
+            [mainChannelID]: messages
+          }
+        })
       })
-    }))
+      dispatch(locationPush(`/chat/${Handler.team.id}`))
+    })
   }
 }
 

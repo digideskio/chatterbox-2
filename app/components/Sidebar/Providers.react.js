@@ -1,4 +1,5 @@
 import React, { Component, PropTypes } from 'react'
+import { Link } from 'react-router'
 import classnames from 'classnames'
 import styles from 'styles/sidebar.css'
 
@@ -19,7 +20,7 @@ export default class Providers extends Component {
             <div className={styles.unread_counter}>4</div>
           </div>
           <div className={styles.provider} />
-          <i className={classnames('ion-ios-plus-empty', styles.add)} />
+          <Link to='/login/slack' className={classnames('ion-ios-plus-empty', styles.add)} />
         </div>
       </div>
     )
