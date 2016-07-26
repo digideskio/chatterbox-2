@@ -1,5 +1,6 @@
 import React, { Component, PropTypes } from 'react'
 import _ from 'lodash'
+import selectn from 'selectn'
 import Chat from './Chat'
 import Sidebar from './Sidebar'
 
@@ -34,22 +35,18 @@ export default class Team extends Component {
   }
 
   get _messages() {
-    if (!this._team) return []
-    const { messages, activeChannelorDMID } = this._team
-    return messages[activeChannelorDMID]
+    const { messages, activeChannelorDMID } = (this._team || {})
+    return selectn(activeChannelorDMID, messages)
+  }
+
+  get _currentChannelorDM() {
+    const { channels, dms, activeChannelorDMID } = (this._team || {})
+    return selectn(activeChannelorDMID, channels) || selectn(activeChannelorDMID, dms)
   }
 
   get _usersOnCurrentChannelorDM() {
-    if (!this._team) return []
-    const { channels, dms, activeChannelorDMID } = this._team
-
-    if (channels[activeChannelorDMID]) {
-      return channels[activeChannelorDMID].members
-    } else if (dms[activeChannelorDMID]) {
-      return dms[activeChannelorDMID].members
-    } else {
-      return []
-    }
+    const { channels, dms, activeChannelorDMID } = (this._team || {})
+    return selectn(`${activeChannelorDMID}.members`, channels) || selectn(`${activeChannelorDMID}.members`, dms)
   }
 
   render() {
@@ -60,12 +57,12 @@ export default class Team extends Component {
           {..._.pick(this.props, ['changeActiveTeam', 'settings', 'changeSetting', 'removeTeam'])}
           {..._.pick(this._team, ['channels', 'users', 'user', 'team'])}
         />
+
         <Chat
           {..._.pick(this._team, ['users', 'user', 'team'])}
           channelUsers={this._usersOnCurrentChannelorDM}
           messages={this._messages}
         />
-
       </div>
     )
   }
