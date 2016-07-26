@@ -91,9 +91,7 @@ export default class SlackHandler extends EventEmitter {
     _.forEach(this._slack.dataStore.channels, ({ is_archived, name, is_general: main, id, members, topic, purpose }) => {
       if (is_archived) return
       channels[id] = ({
-        name: `# ${name}`,
-        id,
-        main,
+        name: `# ${name}`, id, main,
         members: members != undefined ? members.map(id => !this._slack.dataStore.users[id].deleted ? id : false).filter(Boolean) || [] : [],
         meta: { topic: _.get(topic, 'value', null), purpose: _.get(purpose, 'value', null) }
       })
@@ -108,29 +106,29 @@ export default class SlackHandler extends EventEmitter {
 
   get users() {
     const users = {}
-    _.forEach(this._slack.dataStore.users, ({ tz: timezone, id, deleted, profile, name: handle, presence }) => {
+    _.forEach(this._slack.dataStore.users, ({ tz: timezone, id, deleted, profile: { email, real_name_normalized, ...profile }, name: handle, presence }) => {
       if (deleted) return
       users[id] = ({
         handle,
-        name: profile.real_name_normalized.length > 0 ? profile.real_name_normalized : null,
+        name: real_name_normalized.length > 0 ? real_name_normalized : null,
         id,
         presence: presence === 'active' ? 'online' : 'offline',
         images: _.filter(profile, (data, key) => key.includes('image')),
-        meta: { timezone, email: profile.email }
+        meta: { timezone, email }
       })
     })
     return users
   }
 
   get user() {
-    const { tz: timezone, id, deleted, profile, name, presence } = this._slack.dataStore.users[this._slack.activeUserId]
+    const { tz: timezone, id, deleted, profile: { email, real_name_normalized, ...profile }, name: handle, presence } = this._slack.dataStore.users[this._slack.activeUserId]
     return {
-      handle: name,
-      name: profile.real_name_normalized.length > 0 ? profile.real_name_normalized : null,
+      handle,
+      name: real_name_normalized.length > 0 ? real_name_normalized : null,
       id,
       presence,
       images: _.filter(profile, (data, key) => key.includes('image')),
-      meta: { timezone, email: profile.email }
+      meta: { timezone, email }
     }
   }
 
