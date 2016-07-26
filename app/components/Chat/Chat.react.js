@@ -18,13 +18,29 @@ export default class Chat extends Component {
     channel: {}
   }
 
+  componentDidUpdate({ messages: prevMessages }) {
+    const { timestamp: prevTimestamp } = _.last(prevMessages)
+    const { timestamp: currentTimestamp } = _.last(this.props.messages)
+
+    console.log(prevTimestamp, currentTimestamp)
+
+    if (prevTimestamp !== currentTimestamp) {
+      this._checkMessagesScroll()
+    }
+  }
+
+  _checkMessagesScroll() {
+    console.log('scrolling messages container')
+    const { messagesContainer } = this.refs
+    messagesContainer.scrollTop = messagesContainer.scrollHeight
+  }
+
   _mapUserIDtoData(id) {
     const { name, images } = _.get(this.props.users, id, {})
     return { name, image: _.last(images) }
   }
 
   render() {
-    console.log(this.props)
     return (
       <div className={styles.chat}>
         <header>
@@ -41,7 +57,7 @@ export default class Chat extends Component {
             }
           </div>
         </header>
-        <section className={styles.messages}>
+        <section ref='messagesContainer' className={styles.messages}>
           {
             this.props.messages.map(({text, user, timestamp, friendlyTimestamp}, idx) => (
               <Message

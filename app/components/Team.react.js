@@ -3,6 +3,7 @@ import _ from 'lodash'
 import Chat from './Chat'
 import Sidebar from './Sidebar'
 
+
 export default class Team extends Component {
   static propTypes = {
     routeParams: PropTypes.object.isRequired,
@@ -18,10 +19,6 @@ export default class Team extends Component {
     settings: PropTypes.object.isRequired,
   }
 
-  static defaultProps = {
-    teams: {}
-  }
-
   componentDidMount() {
     this.mounted = true
   }
@@ -35,22 +32,21 @@ export default class Team extends Component {
   }
 
   get _messages() {
-    const { messages, activeChannelorDMID } = (this._team || {})
+    const { messages, activeChannelorDMID } = this._team
     return _.get(messages, activeChannelorDMID, [])
   }
 
   get _currentChannelorDM() {
-    const { channels, dms, activeChannelorDMID } = (this._team || {})
+    const { channels, dms, activeChannelorDMID } = this._team
     return _.get(channels, activeChannelorDMID) || _.get(dms, activeChannelorDMID)
   }
 
   get _usersOnCurrentChannelorDM() {
-    const { channels, dms, activeChannelorDMID } = (this._team || {})
+    const { channels, dms, activeChannelorDMID } = this._team
     return _.get(channels, `${activeChannelorDMID}.members`) || _.get(dms, `${activeChannelorDMID}.members`)
   }
 
   render() {
-    console.log(this._team)
     return (
       <div>
         <Sidebar
