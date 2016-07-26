@@ -32,7 +32,11 @@ export default class Message extends Component {
               </div>
             ) : null
           }
-          <p className={styles.message_text}>{text}</p>
+          {
+            text ? (
+              <p className={styles.message_text}>{text}</p>
+            ) : null
+          }
           {attachments ? (
             <div className={styles.attachments}>
               <img src='http://i.imgur.com/qNmnGzr.jpg' />

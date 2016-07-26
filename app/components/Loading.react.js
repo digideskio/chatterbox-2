@@ -38,7 +38,7 @@ export default class Loading extends Component {
     if (!hasStartedLoading.includes('teams') && done.includes('settings') && !done.includes('teams')) {
       this.setState({ hasStartedLoading: [...this.state.hasStartedLoading, 'teams'] })
       console.log('START THE TEAM LOAD')
-      defer(() => this.context.router.push('/login/slack'))
+      this.context.router.push('/login/slack')
     }
   }
 

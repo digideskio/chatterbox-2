@@ -55,7 +55,7 @@ export default function teams(state = DEFAULT_STATE, { type, ...action }) {
       break
     case NEW_MESSAGE:
       return (() => {
-        const { team: messageTeam, channel: messageChannel, message } = action
+        const { team: messageTeam, channel: messageChannel, ...message } = action
         const { teams, team } = extractTeamfromTeams(messageTeam, state.teams)
 
         if (!team.messages[messageChannel]) {
@@ -65,7 +65,7 @@ export default function teams(state = DEFAULT_STATE, { type, ...action }) {
         }
 
         return {...state, teams: {...teams, [messageTeam]: team } }
-      })
+      })()
     case EDIT_MESSAGE:
       return {...state }
     default:
@@ -73,7 +73,10 @@ export default function teams(state = DEFAULT_STATE, { type, ...action }) {
   }
 }
 
-const extractTeamfromTeams = (teamID, teams) => ({
-  [teamID]: team,
-  ...teams
-} = teams)
+const extractTeamfromTeams = (teamID, allTeams) => {
+  const {
+    [teamID]: team,
+    ...teams
+  } = allTeams
+  return { team, teams }
+}

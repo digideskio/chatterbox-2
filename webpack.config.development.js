@@ -48,7 +48,7 @@ export default {
       new webpack.DefinePlugin({ 'process.env.NODE_ENV': JSON.stringify('development') })
     ],
     externals: [
-      'electron', 'fs', 'tls', 'net', 'os', 'process',
-      'url', 'request', 'ws'
+      'electron', 'fs', 'tls', 'net', 'os', 'process', 'url',
+      'request', 'ws'
     ]
 }
