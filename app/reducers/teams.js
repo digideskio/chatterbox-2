@@ -11,22 +11,19 @@ import {
 /*
 
 team: {
-  users: [],
-  channels: [],
+  users: {},
+  channels: {},
   messages: {
     channelID: []
   },
-  dms: [],
+  dms: {},
   message: {
     send() {},
     edit() {},
     remove() {},
   },
-  history: {
-    channels: {
-      id: []
-    },
-    dms: {}
+  messages: {
+    id: []
   },
   activeChannelorDMID: 'id'
 }
@@ -55,8 +52,16 @@ export default function settings(state = DEFAULT_STATE, { type, ...action }) {
     case ACTIVE_TEAM_CHANGE:
       return {...state, activeTeamID: action.activeTeamID }
     case NEW_MESSAGE:
-      const { team, channel, message } = action
-      return {...state }
+      const { team: messageTeam, channel: messageChannel, ...message } = action.message
+      const { [messageTeam]: teamToChange, ...teams } = state.teams
+
+      if (!teamToChange.messages[messageChannel]) {
+        teamToChange.messages[messageChannel] = [message]
+      } else {
+        teamToChange.messages[messageChannel].push(message)
+      }
+
+      return {...state, teams: {...teams, [messageTeam]: teamToChange } }
     case EDIT_MESSAGE:
       return {...state }
     default:
