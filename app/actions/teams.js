@@ -50,6 +50,10 @@ export function changeActiveTeam(team) {
   return { type: ACTIVE_TEAM_CHANGE, team }
 }
 
+export function changeActiveTeamChannelOrDM(channel_or_dm_id, teamID) {
+  return { type: ACTIVE_CHANNEL_OR_DM_CHANGE, channel_or_dm_id, team: teamID }
+}
+
 
 export function addHistory(channel, messages) {
   return { type: ADD_HISTORY, message }

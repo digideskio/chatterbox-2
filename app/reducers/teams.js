@@ -10,30 +10,6 @@ import {
   REMOVE_MESSAGE
 } from 'actions/teams'
 
-/*
-
-team: {
-  users: {},
-  channels: {},
-  messages: {
-    channelID: []
-  },
-  dms: {},
-  message: {
-    send() {},
-    edit() {},
-    remove() {},
-  },
-  messages: {
-    id: []
-  },
-  activeChannelorDMID: 'id'
-}
-
-activeTeamID: 'id'
-
-*/
-
 
 const DEFAULT_STATE = {
   teams: {},
@@ -50,7 +26,7 @@ export default function teams(state = DEFAULT_STATE, { type, ...action }) {
       return (() => {
         const { team, teams } = extractTeamfromTeams(action.team, state.teams)
         team.activeChannelorDMID = action.channel_or_dm_id
-        return {...state, teams: {...teams, [action.team]: teamToChange } }
+        return {...state, teams: {...teams, [action.team]: team } }
       })()
       break
     case NEW_MESSAGE:
