@@ -34,11 +34,13 @@ export default class Team extends Component {
   }
 
   get _messages() {
+    if (!this._team) return []
     const { messages, activeChannelorDMID } = this._team
     return messages[activeChannelorDMID]
   }
 
   get _usersOnCurrentChannelorDM() {
+    if (!this._team) return []
     const { channels, dms, activeChannelorDMID } = this._team
 
     if (channels[activeChannelorDMID]) {
@@ -63,6 +65,7 @@ export default class Team extends Component {
           channelUsers={this._usersOnCurrentChannelorDM}
           messages={this._messages}
         />
+
       </div>
     )
   }

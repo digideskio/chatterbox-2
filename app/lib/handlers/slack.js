@@ -46,7 +46,13 @@ export default class SlackHandler extends EventEmitter {
       switch (type) {
         case 'message':
           const { channel, user, text, ts } = message
-          this.emit('message', { channel, user, text, timestamp: parseInt(ts) })
+          this.emit('message', {
+            channel,
+            user,
+            text,
+            timestamp: parseInt(ts),
+            friendlyTimestamp: moment.unix(ts).format('h:mm a')
+          })
           break
         default:
           console.log(message)
@@ -78,7 +84,12 @@ export default class SlackHandler extends EventEmitter {
     return new Promise((resolve, reject) => {
       this._slack._webClient.channels.history(channel_or_dm_id, { count, latest, oldest, unreads: true }, (a, { has_more, messages = [], ok, unread_count_display }) => {
         if (!ok) return reject()
-        resolve(messages.map(({ user, text, ts }) => ({ user, text, timestamp: parseInt(ts) })))
+        resolve(messages.map(({ user, text, ts }) => ({
+          user,
+          text,
+          timestamp: parseInt(ts),
+          friendlyTimestamp: moment.unix(ts).format('h:mm a')
+        })))
       })
     })
   }

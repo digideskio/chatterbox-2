@@ -35,11 +35,11 @@ export default class Chat extends Component {
         </header>
         <section className={styles.messages}>
           {
-            this.props.messages.map(({text, user, timestamp}) => (
+            this.props.messages.map(({text, user, timestamp, friendlyTimestamp}) => (
               <Message
                 user={::this._mapUserIDtoData(user)}
                 text={text}
-                timestamp={timestamp}
+                timestamp={friendlyTimestamp || timestamp.toString()}
               />
             ))
           }
