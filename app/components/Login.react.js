@@ -26,14 +26,10 @@ export default class Login extends Component {
   _renderTeamLogin() {
     switch (this.props.routeParams.teamType) {
       case 'slack':
-        return <SlackLogin switchToNewTeam={::this._switchToNewTeam} addTeam={::this.props.addTeam} />
+        return <SlackLogin addTeam={::this.props.addTeam} />
       default:
         return null
     }
-  }
-
-  _switchToNewTeam(teamID) {
-    this.context.router.replace('/login/slack')
   }
 
   render() {

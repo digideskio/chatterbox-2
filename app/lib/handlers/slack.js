@@ -14,15 +14,8 @@ const DEFAULT_OPTIONS = {
 function parseMessage(type, message, overrideEvent = false) {
   switch (type) {
     case 'message':
-      const { channel, user, text, ts, user_profile } = message
-      const msg = _.omitBy({
-        channel,
-        user,
-        text,
-        user_profile,
-        timestamp: ts,
-        friendlyTimestamp: moment.unix(ts).format('h:mm a')
-      }, _.isNil)
+      const { channel, user, text, ts: timestamp, user_profile } = message
+      const msg = _.omitBy({ channel, user, text, user_profile, timestamp, friendlyTimestamp: moment.unix(timestamp).format('h:mm a') }, _.isNil)
 
       if (overrideEvent) return msg
       else this.emit('message', msg)
@@ -95,12 +88,12 @@ export default class SlackHandler extends EventEmitter {
 
   get channels() {
     const channels = {}
-    _.forEach(this._slack.dataStore.channels, ({ is_archived, name, is_general, id, members, topic, purpose }) => {
+    _.forEach(this._slack.dataStore.channels, ({ is_archived, name, is_general: main, id, members, topic, purpose }) => {
       if (is_archived) return
       channels[id] = ({
         name: `# ${name}`,
         id,
-        main: is_general,
+        main,
         members: members != undefined ? members.map(id => !this._slack.dataStore.users[id].deleted ? id : false).filter(Boolean) || [] : [],
         meta: { topic: _.get(topic, 'value', null), purpose: _.get(purpose, 'value', null) }
       })
@@ -115,29 +108,29 @@ export default class SlackHandler extends EventEmitter {
 
   get users() {
     const users = {}
-    _.forEach(this._slack.dataStore.users, ({ tz, id, deleted, profile, name, presence }) => {
+    _.forEach(this._slack.dataStore.users, ({ tz: timezone, id, deleted, profile, name: handle, presence }) => {
       if (deleted) return
       users[id] = ({
-        handle: name,
+        handle,
         name: profile.real_name_normalized.length > 0 ? profile.real_name_normalized : null,
         id,
         presence: presence === 'active' ? 'online' : 'offline',
         images: _.filter(profile, (data, key) => key.includes('image')),
-        meta: { timezone: tz, email: profile.email }
+        meta: { timezone, email: profile.email }
       })
     })
     return users
   }
 
   get user() {
-    const { tz, id, deleted, profile, name, presence } = this._slack.dataStore.users[this._slack.activeUserId]
+    const { tz: timezone, id, deleted, profile, name, presence } = this._slack.dataStore.users[this._slack.activeUserId]
     return {
       handle: name,
       name: profile.real_name_normalized.length > 0 ? profile.real_name_normalized : null,
       id,
       presence,
       images: _.filter(profile, (data, key) => key.includes('image')),
-      meta: { timezone: tz, email: profile.email }
+      meta: { timezone, email: profile.email }
     }
   }
 

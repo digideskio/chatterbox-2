@@ -8,6 +8,9 @@ import styles from 'styles/login.css'
 
 
 export default class SlackLogin extends Component {
+  static propTypes = {
+    addTeam: PropTypes.func.isRequired
+  }
 
   state = {
     webviewShown: false
@@ -73,8 +76,8 @@ export default class SlackLogin extends Component {
         request.post('https://slack.com/api/oauth.access', {
           form: { client_secret: this.client_secret, client_id: this.client_id, code, redirect_uri: this.redirect_uri },
           json: true
-        }, (err, res, { access_token }) => {
-          this.props.addTeam('slack', { token: access_token })
+        }, (err, res, { access_token: token }) => {
+          this.props.addTeam('slack', { token })
         })
       }
     })

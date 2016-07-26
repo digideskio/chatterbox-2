@@ -3,6 +3,7 @@ import Database from 'lib/database'
 import { push as locationPush } from 'react-router-redux'
 
 export const ACTIVE_TEAM_CHANGE = 'TEAMS_ACTIVE_TEAM_CHANGE'
+export const ACTIVE_CHANNEL_OR_DM_CHANGE = 'TEAM_ACTIVE_CHANNEL_OR_DM_CHANGE'
 export const TEAM_LOAD = 'TEAMS_TEAM_LOAD'
 export const TEAM_ADD = 'TEAMS_TEAM_ADD'
 export const TEAM_CHANGE = 'TEAMS_TEAM_CHANGE'
