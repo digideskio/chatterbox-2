@@ -14,15 +14,24 @@ const DEFAULT_OPTIONS = {
 const santitizeAttachments = (attachments = []) => attachments.map(({ color, pretext, text, mrkdwn_in: order }) => _.omitBy({ color, pretext, text, order }, _.isNil))
 
 function parseMessage({ type, subtype, ...message }, overrideEvent = false) {
-  let bot = false
+  let isBot = false
 
   switch (subtype ? `${type}:${subtype}` : type) {
     case 'message:bot_message':
-      bot = true
+      isBot = true
     case 'message':
       return (() => {
         const { channel, bot, user, text, ts: timestamp, user_profile: userProfile, attachments } = message
-        const msg = _.omitBy({ attachments: santitizeAttachments(attachments), channel, user, text, userProfile, timestamp, friendlyTimestamp: moment.unix(timestamp).format('h:mm a') }, _.isNil)
+        const msg = _.omitBy({
+          attachments: santitizeAttachments(attachments),
+          channel,
+          user,
+          isBot,
+          text,
+          userProfile,
+          timestamp,
+          friendlyTimestamp: moment.unix(timestamp).format('h:mm a')
+        }, _.isNil)
 
         if (overrideEvent) return msg
         else this.emit('message', msg)
@@ -31,7 +40,14 @@ function parseMessage({ type, subtype, ...message }, overrideEvent = false) {
     case 'message:file_share':
       return (() => {
         const { channel, user, text, ts: timestamp, file: { permalink } } = message
-        const msg = _.omitBy({ channel, user, text, timestamp, friendlyTimestamp: moment.unix(timestamp).format('h:mm a') }, _.isNil)
+        const msg = _.omitBy({
+          channel,
+          user,
+          text,
+          isBot,
+          timestamp,
+          friendlyTimestamp: moment.unix(timestamp).format('h:mm a')
+        }, _.isNil)
 
         if (overrideEvent) return msg
         else this.emit('message', msg)

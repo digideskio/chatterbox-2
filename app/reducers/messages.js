@@ -16,7 +16,7 @@ export default function messages(state = {}, { type, payload }) {
     case NEW_MESSAGE:
       return (() => {
         const messages = {...state }
-        const { team: msgTeam, channel: msgChannel, ...message } = payload
+        const { team: msgTeam, channel: msgChannel, message } = payload
         _.update(messages, `${msgTeam}.${msgChannel}`, (channel = []) => {
           return [...channel, message]
         })
