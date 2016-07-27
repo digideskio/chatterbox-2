@@ -56,6 +56,10 @@ export default function createTeamHandler(provider) {
       this.on('message', ({ channel, ...message }) => {
         this._dispatch({ type: NEW_MESSAGE, payload: { channel, message, team: this.team.id } })
       })
+
+      this.on('message:changed', ({ channel, ...message }) => {
+        this._dispatch({ type: EDIT_MESSAGE, payload: { channel, message, team: this.team.id } })
+      })
     }
   }
 }

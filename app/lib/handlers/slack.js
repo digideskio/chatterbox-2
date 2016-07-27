@@ -31,6 +31,21 @@ function parseMessage({ type, subtype, bot_id, ...message }, overrideEvent = fal
         if (overrideEvent) return msg
         else this.emit('message', msg)
       })()
+    case 'message:message_changed':
+      return (() => {
+        const msg = _.omitBy({
+          attachments: santitizeAttachments(message.message.attachments),
+          previousText: message.previous_message.text,
+          previousTimestamp: message.previous_message.ts,
+          channel: message.channel,
+          user: message.previous_message.user,
+          text: message.message.text,
+          timestamp: message.event_ts,
+          friendlyTimestamp: moment.unix(message.event_ts).format('h:mm a')
+        }, _.isNil)
+        if (overrideEvent) return msg
+        else this.emit('message:changed', msg)
+      })()
     case 'message:file_share':
       return (() => {
         const { channel, user, text, ts: timestamp, file: { permalink } } = message
@@ -43,7 +58,6 @@ function parseMessage({ type, subtype, bot_id, ...message }, overrideEvent = fal
           file: permalink,
           friendlyTimestamp: moment.unix(timestamp).format('h:mm a')
         }, _.isNil)
-
         if (overrideEvent) return msg
         else this.emit('message', msg)
       })()
