@@ -33,8 +33,8 @@ export default class Team extends Component {
   }
 
   get _messages() {
-    const { activeChannelorDMID, team: { id: teamID } } = this._team
-    return _.get(this.props, `messages.${teamID}.${activeChannelorDMID}`, [])
+    const { activeChannelorDMID, team } = this._team
+    return _.get(this.props, `messages.${team.id}.${activeChannelorDMID}`, [])
   }
 
   get _currentChannelorDM() {

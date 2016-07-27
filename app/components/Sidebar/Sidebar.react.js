@@ -6,11 +6,11 @@ import styles from 'styles/sidebar.css'
 
 export default class Sidebar extends Component {
   static propTypes = {
-    teams: PropTypes.object.isRequired,
-    team: PropTypes.object.isRequired,
-    users: PropTypes.object.isRequired,
-    user: PropTypes.object.isRequired,
-    channels: PropTypes.object.isRequired
+    teams: PropTypes.object,
+    team: PropTypes.object,
+    users: PropTypes.object,
+    user: PropTypes.object,
+    channels: PropTypes.object
   }
 
   render() {
