@@ -24,7 +24,8 @@ export function load() {
         if (!teams.length) {
           dispatch(locationPush('/login/slack'))
         } else {
-          console.log(teams)
+          changeActiveTeam(teams[0].team.id)
+          dispatch(locationPush('/chat'))
         }
       })
   }
@@ -50,19 +51,25 @@ function loadTeams(dispatch) {
   return new Promise((resolve, reject) => {
     dispatch({ type: TASK_CHANGE, task: 'Loading Teams' })
     const loader = new Database.teams.Loader()
-    let [numTeams, loadedTeams] = [0, 0]
+    let [numTeams, loadedTeams] = [0, []]
+
     loader.on('team', ({ id, name, type, args }) => {
       const [{ loadTeam, changeActiveTeam }, TeamHandler] = [bindActionCreators(TeamsActions, dispatch), createTeamHandler(type)]
       const Team = new TeamHandler(args, dispatch, false)
       Team.once('connected', (TeamData) => {
         loadTeam(Team)
-        loadedTeams++
-        if (numTeams === loadedTeams) {
-          changeActiveTeam(id)
-          dispatch(locationPush('/chat'))
+        loadedTeams.push(Team)
+        if (numTeams === loadedTeams.length) {
+
         }
       })
     })
-    loader.once('finnished', (num) => numTeams = num)
+    loader.once('finnished', (num) => {
+      if (num === 0) {
+        resolve([])
+      } else {
+        numTeams = num
+      }
+    })
   })
 }
