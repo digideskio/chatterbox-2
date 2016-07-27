@@ -61,7 +61,7 @@ function parseMessage({ type, subtype, bot_id, channel = null, ...messageData },
     case 'message':
       return (() => {
         if (messageData.user_profile && !userProfileChecked) {
-          console.log(messageData)
+          console.log(messageData) // we gotta do something about this unsatitized user_profile later.
         }
 
         const msg = _.omitBy({ channel, isBot, ...santitizeMessage(messageData) }, _.isNil)
@@ -70,10 +70,9 @@ function parseMessage({ type, subtype, bot_id, channel = null, ...messageData },
       })()
     case 'message:message_changed':
       return (() => {
-        const { message: { event_ts: editTimestamp, ...message }, previous_message: { text: previousText, ts: previousTimestamp, user } } = messageData
-        const msg = { channel, ...santitizeMessage(message) }
+        const { message, event_ts: eventTimestamp, previous_message: { ts: previousMessageTimestamp } } = messageData
+        const msg = { channel, message: santitizeMessage(message), edit: { eventTimestamp, previousMessageTimestamp } }
 
-        return false
         if (overrideEvent) return msg
         else this.emit('message:changed', msg)
       })()

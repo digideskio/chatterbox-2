@@ -1,5 +1,3 @@
-import _ from 'lodash'
-
 export const ADD_HISTORY = 'MESSAGES_ADD_HISTORY'
 export const NEW_MESSAGE = 'MESSAGES_NEW_MESSAGE'
 export const EDIT_MESSAGE = 'MESSAGES_EDIT_MESSAGE'

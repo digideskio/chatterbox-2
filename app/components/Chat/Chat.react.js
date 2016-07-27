@@ -33,8 +33,8 @@ export default class Chat extends Component {
   }
 
   _mapUserIDtoData(id, messageIdx) {
-    const { handle, name, image } = _.get(this.props.messages, `[${messageIdx}].userProfile`, {})
-    if (name || handle) {
+    if (this.props.messages[messageIdx].userProfile) {
+      const { handle, name, image } = this.props.messages[messageIdx].userProfile
       return { handle, name, image }
     } else {
       const { name, handle, images } = _.get(this.props.users, id, {})

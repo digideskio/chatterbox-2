@@ -9,31 +9,27 @@ export default function messages(state = {}, { type, payload }) {
         const messages = {...state }
         const { team, channel } = payload
         _.update(messages, `${team}.${channel}`, (channel = []) => [...payload.messages, ...channel])
-        return {...state, ...messages }
+        return messages
       })()
     case NEW_MESSAGE:
       return (() => {
         const messages = {...state }
         const { team: msgTeam, channel: msgChannel, message } = payload
         _.update(messages, `${msgTeam}.${msgChannel}`, (channel = []) => [...channel, message])
-        return {...state, ...messages }
+        return messages
       })()
     case EDIT_MESSAGE:
       return (() => {
         const messages = {...state }
-        const { team: msgTeam, channel: msgChannel, message } = payload
+        const { team, channel, message, edit: { eventTimestamp, previousMessageTimestamp } } = payload
+        const oldMsgIndex = _.findIndex(_.get(messages, `${team}.${channel}`, []), ['timestamp', previousMessageTimestamp])
 
-        _.update(messages, `${msgTeam}.${msgChannel}`, (channel = []) => [...channel, message])
-
-        const channelHistory = _.get(messages, `${msgTeam}.${msgChannel}`, [])
-        const oldMsg = {
-          ..._.find(channelHistory, ({ timestamp }) => timestamp === message.previousTimestamp, {})
-        }
-        if (oldMsg) {
-          oldMsg.edited = message.timestamp
-          oldMsg.text = message.text
-        }
-        return {...state, ...messages }
+        _.set(messages, `${team}.${channel}[${oldMsgIndex}]`, {
+          ...message,
+          isBot: false,
+          edited: { timestamp: eventTimestamp }
+        })
+        return messages
       })()
     default:
       return state
