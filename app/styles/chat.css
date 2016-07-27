@@ -109,6 +109,7 @@
   display: flex;
   transition: background-color 50ms ease-in-out, opacity 40ms ease-in-out;
   margin-top: 3px;
+  padding-right: 5px;
   word-break: break-word;
 }
 
@@ -202,3 +203,74 @@
   box-shadow: inset 0 0 0 1px rgba(0, 0, 0, .1);
   max-width: 400px
 }
+
+.chat .messages .message .attachments .attachment .attachmentPretext {
+  margin-bottom: 2px;
+}
+
+.chat .messages .message .attachments .attachment .attachmentContainer {
+  position: relative;
+  padding-left: 13px;
+  max-width: 1000px;
+}
+
+.chat .messages .message .attachments .attachment .attachmentContainer.withThumb {
+  display: flex;
+}
+
+.chat .messages .message .attachments .attachment .attachmentContainer .thumbCont {
+  width: 100px;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+}
+
+.chat .messages .message .attachments .attachment .attachmentContainer .thumbCont .thumb {
+  width: 60px;
+  height: 60px;
+  background-size: contain;
+  background-repeat: no-repeat;
+}
+
+.chat .messages .message .attachments .attachment .sidebar {
+  border-right: 4px solid;
+  border-radius: 3px;
+  position: absolute;
+  height: 100%;
+  left: 2px;
+}
+
+.chat .messages .message .attachments .attachment .attachmentContainer .attachmentBody {
+  padding: 3px 0;
+}
+
+.chat .messages .message .attachments .attachment .attachmentContainer.withThumb .attachmentBody {
+  width: calc(100% - 100px)
+}
+
+.chat .messages .message .attachments .attachment .attachmentBody .authorBody {
+  margin-bottom: 3px;
+  display: flex;
+  height: 18px;
+}
+
+.chat .messages .message .attachments .attachment .attachmentBody .authorBody .authImg {
+  background-size: contain;
+  width: 18px;
+  height: 18px;
+  background-repeat: no-repeat;
+  margin-right: 5px;
+  margin-left: 1px;
+  margin-top: 1px;
+}
+
+.chat .messages .message .attachments .attachment .authorBody .authName {
+  color: grey;
+  font-size: 15px;
+}
+
+.chat .messages .message .attachments .attachment .authorBody .authName.link:hover {
+  text-decoration: underline;
+}
+
+.chat .messages .message .attachments .attachment .text {}

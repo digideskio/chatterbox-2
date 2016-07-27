@@ -10,8 +10,6 @@ const DEFAULT_OPTIONS = {
   autoJoinNewChannels: false
 }
 
-const santitizeAttachments = (attachments = []) => attachments.map(({ color, pretext, text, mrkdwn_in: order }) => _.omitBy({ color, pretext, text, order }, _.isNil))
-
 function parseMessage({ type, subtype, bot_id, ...message }, overrideEvent = false) {
   let isBot = subtype == 'bot_message' || bot_id != undefined
 
@@ -20,7 +18,7 @@ function parseMessage({ type, subtype, bot_id, ...message }, overrideEvent = fal
       return (() => {
         const { channel, user, text, ts: timestamp, user_profile: userProfile, attachments } = message
         const msg = _.omitBy({
-          attachments: santitizeAttachments(attachments),
+          attachments,
           channel,
           user,
           isBot,
