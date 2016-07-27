@@ -16,7 +16,7 @@ export default class Message extends Component {
   render() {
     const { timestamp, user, text, attachments, firstInChain } = this.props
     return (
-      <div className={classnames(styles.message, {[styles.firstInChain]:firstInChain})}>
+      <div className={classnames(styles.message, {[styles.firstInChain]: firstInChain})}>
         <div className={styles.aside}>
           {
             firstInChain ? (
@@ -53,15 +53,15 @@ export default class Message extends Component {
 
 export class DaySeparator extends Component {
   static propTypes = {
-    timestamp: PropTypes.string.isRequired,
+    timestamp: PropTypes.string.isRequired
   }
 
   render() {
     return (
       <div className={styles.day_separator}>
-        <div/>
+        <div />
         <span>{this.props.timestamp}</span>
-        <div/>
+        <div />
       </div>
     )
   }

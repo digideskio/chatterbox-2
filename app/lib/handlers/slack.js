@@ -10,73 +10,75 @@ const DEFAULT_OPTIONS = {
   autoJoinNewChannels: false
 }
 
+function santitizeUser({ tz: timezone, id, deleted, profile, name: handle, presence }) {
+  return {
+    handle,
+    name: _.get(profile, 'real_name_normalized', '').length > 0 ? profile.real_name_normalized : null,
+    id,
+    presence: presence === 'active' ? 'online' : 'offline',
+    images: _.filter(profile, (data, key) => key.includes('image')),
+    meta: { timezone, email: _.get(profile, 'email') }
+  }
+}
+
 
 function santitizeAttachments(attachments) {
   return attachments.map(({ title, text, pretext, ...attachment }) => {
     return {
-      images: { thumb: attachment.thumb_url },
-      author: { icon: attachment.author_icon, link: attachment.author_link, name: attachment.author_name },
-      title: { text: title, link: attachment.title_link },
+      images: { thumb: attachment.thumb_url, author: attachment.author_icon },
+      links: { author: attachment.author_link, title: attachment.title_link },
+      author: attachment.author_name,
+      title,
       pretext,
       text
     }
   })
 }
 
+function santitizeMessage({ user, text, ts: timestamp, user_profile: userProfile = null, attachments = [] }) {
+  return {
+    attachments: santitizeAttachments(attachments),
+    user,
+    text,
+    userProfile,
+    timestamp,
+    friendlyTimestamp: moment.unix(timestamp).format('h:mm a')
+  }
+}
 
-function parseMessage({ type, subtype, bot_id, ...message }, overrideEvent = false) {
-  let isBot = subtype == 'bot_message' || bot_id != undefined
-
+function parseMessage({ type, subtype, bot_id, channel = null, ...messageData }, overrideEvent = false) {
+  let isBot = Boolean(bot_id)
+  let userProfileChecked = false
   switch (subtype ? `${type}:${subtype}` : type) {
+    case 'message:bot_message':
+      (() => {
+        isBot = true
+        userProfileChecked = true
+        const { images, icons, name: handle, id } = this._slack.dataStore.bots[bot_id]
+        messageData.user_profile = { handle, id, image: _.last(_.filter((images || icons), (a, key) => key.includes('image'))) }
+      })()
+    case 'message:file_share':
     case 'message':
       return (() => {
-        const { channel, user, text, ts: timestamp, user_profile: userProfile, attachments } = message
-        const msg = _.omitBy({
-          attachments: santitizeAttachments(attachments),
-          channel,
-          user,
-          isBot,
-          text,
-          userProfile,
-          timestamp,
-          friendlyTimestamp: moment.unix(timestamp).format('h:mm a')
-        }, _.isNil)
+        if (messageData.user_profile && !userProfileChecked) {
+          console.log(messageData)
+        }
 
+        const msg = _.omitBy({ channel, isBot, ...santitizeMessage(messageData) }, _.isNil)
         if (overrideEvent) return msg
         else this.emit('message', msg)
       })()
     case 'message:message_changed':
       return (() => {
-        const msg = _.omitBy({
-          attachments: santitizeAttachments(message.message.attachments),
-          previousText: message.previous_message.text,
-          previousTimestamp: message.previous_message.ts,
-          channel: message.channel,
-          user: message.previous_message.user,
-          text: message.message.text,
-          timestamp: message.event_ts,
-          friendlyTimestamp: moment.unix(message.event_ts).format('h:mm a')
-        }, _.isNil)
+        const { message: { event_ts: editTimestamp, ...message }, previous_message: { text: previousText, ts: previousTimestamp, user } } = messageData
+        const msg = { channel, ...santitizeMessage(message) }
+
+        return false
         if (overrideEvent) return msg
         else this.emit('message:changed', msg)
       })()
-    case 'message:file_share':
-      return (() => {
-        const { channel, user, text, ts: timestamp, file: { permalink } } = message
-        const msg = _.omitBy({
-          channel,
-          user,
-          text,
-          isBot,
-          timestamp,
-          file: permalink,
-          friendlyTimestamp: moment.unix(timestamp).format('h:mm a')
-        }, _.isNil)
-        if (overrideEvent) return msg
-        else this.emit('message', msg)
-      })()
     default:
-      console.info('Unable to parse message:', { type, subtype, ...message })
+      console.info('Unable to parse message:', { type, subtype, ...messageData })
       return false
   }
 }
@@ -139,7 +141,8 @@ export default class SlackHandler extends EventEmitter {
     return new Promise((resolve, reject) => {
       this._slack._webClient.channels.history(channel_or_dm_id, { count, latest, oldest, unreads: true }, (a, { has_more, messages = [], ok, unread_count_display }) => {
         if (!ok) return reject()
-        resolve(messages.reverse().map(message => parseMessage.bind(this)(message, true)).filter(Boolean))
+        const santitizedMessages = messages.map(m => parseMessage.bind(this)(m, true)).filter(Boolean).reverse()
+        resolve(santitizedMessages)
       })
     })
   }
@@ -166,30 +169,15 @@ export default class SlackHandler extends EventEmitter {
 
   get users() {
     const users = {}
-    _.forEach(this._slack.dataStore.users, ({ tz: timezone, id, deleted, profile, name: handle, presence }) => {
-      if (deleted) return
-      users[id] = ({
-        handle,
-        name: _.get(profile, 'real_name_normalized', '').length > 0 ? profile.real_name_normalized : null,
-        id,
-        presence: presence === 'active' ? 'online' : 'offline',
-        images: _.filter(profile, (data, key) => key.includes('image')),
-        meta: { timezone, email: _.get(profile, 'email') }
-      })
+    _.forEach(this._slack.dataStore.users, ({ deleted, id, ...user }) => {
+      if (!deleted) users[id] = santitizeUser({ id, ...user })
     })
     return users
   }
 
   get user() {
-    const { tz: timezone, id, deleted, profile, name: handle, presence } = _.get(this._slack, `dataStore.users.${this._slack.activeUserId}`, {})
-    return {
-      handle,
-      name: _.get(profile, 'real_name_normalized', '').length > 0 ? profile.real_name_normalized : null,
-      id,
-      presence,
-      images: _.filter(profile, (data, key) => key.includes('image')),
-      meta: { timezone, email: _.get(profile, 'email') }
-    }
+    const { id, ...user } = _.get(this._slack, `dataStore.users.${this._slack.activeUserId}`, {})
+    return santitizeUser({ id, ...user })
   }
 
   get _persistenceData() {
