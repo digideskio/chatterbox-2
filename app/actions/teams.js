@@ -1,5 +1,4 @@
 import _ from 'lodash'
-import Database from 'lib/database'
 import { push as locationPush } from 'react-router-redux'
 
 export const ACTIVE_TEAM_CHANGE = 'TEAMS_ACTIVE_TEAM_CHANGE'
@@ -17,15 +16,14 @@ export const REMOVE_MESSAGE = 'TEAMS_REMOVE_MESSAGE'
 
 export function addTeam(Handler) {
   return (dispatch) => {
-    Handler.initHistory()
-    Database.teams.add(Handler.persistence)
     dispatch({ type: TEAM_ADD, team: Object.assign(Handler, { activeChannelorDMID: Handler.initialActiveChannelorDMID }) })
-    dispatch(locationPush(`/chat/${Handler.team.id}`))
+    dispatch({ type: ACTIVE_TEAM_CHANGE, team: Handler.team.id })
+    dispatch(locationPush('/chat'))
   }
 }
 
-export function loadTeam(team) {
-  return { type: TEAM_LOAD, team }
+export function loadTeam(Handler) {
+  return { type: TEAM_ADD, team: Object.assign(Handler, { activeChannelorDMID: Handler.initialActiveChannelorDMID }) }
 }
 
 export function removeTeam(team) {

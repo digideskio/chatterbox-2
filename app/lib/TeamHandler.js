@@ -1,4 +1,5 @@
 import _ from 'lodash'
+import Database from 'lib/database'
 import { queue } from 'async'
 import { ADD_HISTORY, NEW_MESSAGE, EDIT_MESSAGE, REMOVE_MESSAGE } from 'actions/teams'
 
@@ -6,12 +7,11 @@ export default function createTeamHandler(provider) {
   const Provider = require(`lib/handlers/${provider}`)
 
   return class Team extends Provider {
-    constructor(providerOpts, dispatch) {
+    constructor(providerOpts, dispatch, firstLoad = false) {
       super(providerOpts)
 
-
       this._dispatch = dispatch
-      this._initTeamEvents()
+      this._initTeamEvents({ firstLoad })
     }
 
     _historyRequestQueue = queue(({ channel, args }, next) => {
@@ -34,8 +34,18 @@ export default function createTeamHandler(provider) {
       return this._activeChannelorDMID
     }
 
-    _initTeamEvents() {
+    _initTeamEvents({ firstLoad }) {
+
+      this.on('authenticated', () => {
+        if (firstLoad) {
+          Database.teams.add(this._persistenceData).then(() => {
+            console.info('saved team')
+          })
+        }
+      })
+
       this.on('connected', (teamData) => {
+        this.initHistory()
         console.log(`Connected to ${this.team.type} team: ${this.team.name} via ${this.user.handle}`)
       })
 

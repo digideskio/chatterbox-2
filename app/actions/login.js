@@ -10,10 +10,8 @@ export const PROVIDER_CHANGE = 'LOGIN_PROVIDER_CHANGE'
 export function addTeam(provider, opts = {}) {
   return (dispatch, getState) => {
     //dispatch({ type: PROVIDER_CHANGE, provider: { ...getState().login.provider, authenticating: true } })
-
-    const TeamActions = bindActionCreators(TeamsActions, dispatch)
-    const TeamHandler = createTeamHandler(provider)
-    const Team = new TeamHandler(opts, dispatch)
+    const [TeamActions, TeamHandler] = [bindActionCreators(TeamsActions, dispatch), createTeamHandler(provider)]
+    const Team = new TeamHandler(opts, dispatch, true)
     Team.once('connected', (TeamData) => TeamActions.addTeam(Team))
 
     Team.once('some_error_event', (teamData) => {

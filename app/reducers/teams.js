@@ -20,9 +20,9 @@ const DEFAULT_STATE = {
 export default function teams(state = DEFAULT_STATE, { type, ...action }) {
   switch (type) {
     case TEAM_ADD:
-      return {...state, teams: {...state.teams, [action.team.team.id]: action.team }, activeTeamID: action.team.team.id }
+      return {...state, teams: {...state.teams, [action.team.team.id]: action.team } }
     case ACTIVE_TEAM_CHANGE:
-      return {...state, activeTeamID: action.activeTeamID }
+      return {...state, activeTeamID: action.team }
     case ACTIVE_CHANNEL_OR_DM_CHANGE:
       return (() => {
         const { team, teams } = extractTeamfromTeams(action.team, state.teams)

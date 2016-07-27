@@ -9,10 +9,8 @@ export default class Loading extends Component {
 
   static propTypes = {
     settings: PropTypes.object.isRequired,
-    loadSettings: PropTypes.func.isRequired,
-    loaded: PropTypes.number.isRequired,
-    task: PropTypes.string.isRequired,
-    done: PropTypes.array.isRequired
+    load: PropTypes.func.isRequired,
+    task: PropTypes.string.isRequired
   }
 
   state = {
@@ -23,28 +21,12 @@ export default class Loading extends Component {
   componentDidMount() {
     this.mounted = true
     this.dotDotDotInterval = setInterval(() => this.mounted && this.setState({ dots: this.state.dots.length > 2 ? '' : `${this.state.dots}.` }), 1000)
-    this._loadSettings()
+    this.props.load()
   }
 
   componentWillUnmount() {
     this.mounted = false
     clearInterval(this.dotDotDotInterval)
-  }
-
-  componentDidUpdate() {
-    const { hasStartedLoading } = this.state
-    const { done } = this.props
-
-    if (!hasStartedLoading.includes('teams') && done.includes('settings') && !done.includes('teams')) {
-      this.setState({ hasStartedLoading: [...this.state.hasStartedLoading, 'teams'] })
-      console.log('START THE TEAM LOAD')
-      this.context.router.push('/login/slack')
-    }
-  }
-
-  _loadSettings() {
-    this.props.loadSettings()
-    this.setState({ hasStartedLoading: [...this.state.hasStartedLoading, 'settings'] })
   }
 
   render() {

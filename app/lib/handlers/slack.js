@@ -154,9 +154,9 @@ export default class SlackHandler extends EventEmitter {
     }
   }
 
-  get persistence() {
+  get _persistenceData() {
     return {
-      id: this.team.id,
+      ..._.pick(this.team, 'name', 'id', 'type'),
       args: { token: this._slack._token }
     }
   }
