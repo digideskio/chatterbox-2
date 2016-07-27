@@ -30,8 +30,8 @@ export default class Chat extends Component {
   }
 
   _checkMessagesScroll() {
-    console.log('scrolling messages container')
     const { messagesContainer } = this.refs
+    console.log(messagesContainer)
     messagesContainer.scrollTop = messagesContainer.scrollHeight
   }
 

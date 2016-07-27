@@ -11,17 +11,36 @@ const DEFAULT_OPTIONS = {
   autoJoinNewChannels: false
 }
 
-function parseMessage(type, message, overrideEvent = false) {
-  switch (type) {
-    case 'message':
-      const { channel, user, text, ts: timestamp, user_profile } = message
-      const msg = _.omitBy({ channel, user, text, user_profile, timestamp, friendlyTimestamp: moment.unix(timestamp).format('h:mm a') }, _.isNil)
+const santitizeAttachments = (attachments = []) => attachments.map(({ color, pretext, text, mrkdwn_in: order }) => _.omitBy({ color, pretext, text, order }, _.isNil))
 
-      if (overrideEvent) return msg
-      else this.emit('message', msg)
+function parseMessage({ type, subtype, ...message }, overrideEvent = false) {
+  let bot = false
+
+  switch (subtype ? `${type}:${subtype}` : type) {
+    case 'message:bot_message':
+      bot = true
+    case 'message':
+      return (() => {
+        const { channel, bot, user, text, ts: timestamp, user_profile, attachments } = message
+        const msg = _.omitBy({ attachments: santitizeAttachments(attachments), channel, user, text, user_profile, timestamp, friendlyTimestamp: moment.unix(timestamp).format('h:mm a') }, _.isNil)
+
+        if (overrideEvent) return msg
+        else this.emit('message', msg)
+      })()
       break
+    case 'message:file_share':
+      return (() => {
+        const { channel, user, text, ts: timestamp, file: { permalink } } = message
+        const msg = _.omitBy({ channel, user, text, timestamp, friendlyTimestamp: moment.unix(timestamp).format('h:mm a') }, _.isNil)
+
+        if (overrideEvent) return msg
+        else this.emit('message', msg)
+      })()
+      break
+    default:
+      console.info('Unable to parse message:', { type, subtype, ...message })
+      return false
   }
-  console.log(message)
 }
 
 export default class SlackHandler extends EventEmitter {
@@ -55,7 +74,7 @@ export default class SlackHandler extends EventEmitter {
       this.emit('connected')
     })
 
-    this._slack.on(RTM_EVENTS.MESSAGE, ({ type, ...message }) => parseMessage.bind(this)(type, message))
+    this._slack.on(RTM_EVENTS.MESSAGE, parseMessage.bind(this))
 
     this._slack.start()
   }
@@ -82,7 +101,7 @@ export default class SlackHandler extends EventEmitter {
     return new Promise((resolve, reject) => {
       this._slack._webClient.channels.history(channel_or_dm_id, { count, latest, oldest, unreads: true }, (a, { has_more, messages = [], ok, unread_count_display }) => {
         if (!ok) return reject()
-        resolve(messages.reverse().map(({ type, ...message }) => parseMessage.bind(this)(type, message, true)))
+        resolve(messages.reverse().map(message => parseMessage.bind(this)(message, true)).filter(Boolean))
       })
     })
   }
