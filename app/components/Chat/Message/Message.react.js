@@ -1,5 +1,6 @@
 import React, { Component, PropTypes } from 'react'
 import _ from 'lodash'
+import classnames from 'classnames'
 import Attachments from './Attachments.react'
 import styles from 'styles/chat.css'
 
@@ -15,7 +16,7 @@ export default class Message extends Component {
   render() {
     const { timestamp, user, text, attachments, firstInChain } = this.props
     return (
-      <div className={styles.message}>
+      <div className={classnames(styles.message, {[styles.firstInChain]:firstInChain})}>
         <div className={styles.aside}>
           {
             firstInChain ? (
