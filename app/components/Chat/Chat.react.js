@@ -21,8 +21,6 @@ export default class Chat extends Component {
   componentDidUpdate({ messages: prevMessages }) {
     if (prevMessages.length > 0 && this.props.messages.length > 0) {
       const [{ timestamp: prevTimestamp }, { timestamp: currentTimestamp }] = [_.last(prevMessages), _.last(this.props.messages)]
-      console.log(prevTimestamp, currentTimestamp)
-
       if (prevTimestamp !== currentTimestamp) {
         this._checkMessagesScroll()
       }
@@ -35,12 +33,12 @@ export default class Chat extends Component {
   }
 
   _mapUserIDtoData(id, messageIdx) {
-    const { userProfile } = this.props.messages[messageIdx]
-    if (userProfile) {
-      return { name: userProfile.name, image: _.last(_.filter(userProfile, (a, key) => key.includes('image'))) }
+    const { name: handle, real_name: name, ...userProfile } = _.get(this.props.messages, `[${messageIdx}].userProfile`, {})
+    if (name || handle) {
+      return { name, handle, image: _.last(_.filter(userProfile, (a, key) => key.includes('image'))) }
     } else {
-      const { name, images } = _.get(this.props.users, id, {})
-      return { name, image: _.last(images) }
+      const { name, handle, images } = _.get(this.props.users, id, {})
+      return { name, handle, image: _.last(images) }
     }
   }
 

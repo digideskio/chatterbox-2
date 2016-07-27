@@ -146,7 +146,7 @@ export default class SlackHandler extends EventEmitter {
       if (deleted) return
       users[id] = ({
         handle,
-        name: _.get(profile, 'profile.real_name_normalized', '').length > 0 ? profile.real_name_normalized : null,
+        name: _.get(profile, 'real_name_normalized', '').length > 0 ? profile.real_name_normalized : null,
         id,
         presence: presence === 'active' ? 'online' : 'offline',
         images: _.filter(profile, (data, key) => key.includes('image')),
@@ -160,7 +160,7 @@ export default class SlackHandler extends EventEmitter {
     const { tz: timezone, id, deleted, profile, name: handle, presence } = _.get(this._slack, `dataStore.users.${this._slack.activeUserId}`, {})
     return {
       handle,
-      name: _.get(profile, 'profile.real_name_normalized', '').length > 0 ? profile.real_name_normalized : null,
+      name: _.get(profile, 'real_name_normalized', '').length > 0 ? profile.real_name_normalized : null,
       id,
       presence,
       images: _.filter(profile, (data, key) => key.includes('image')),

@@ -10,7 +10,7 @@ export default class Message extends Component {
     text: PropTypes.string,
     timestamp: PropTypes.string,
     firstInChain: PropTypes.bool,
-    user: PropTypes.shape({ image: PropTypes.string, name: PropTypes.string })
+    user: PropTypes.shape({ image: PropTypes.string, name: PropTypes.string, handle: PropTypes.string })
   }
 
   render() {
@@ -30,7 +30,7 @@ export default class Message extends Component {
           {
             firstInChain ? (
               <div className={styles.info}>
-                <span className={styles.user}>{user.name}</span>
+                <span className={styles.user}>{user.handle}</span>
                 <span className={styles.time}>{timestamp}</span>
               </div>
             ) : null
