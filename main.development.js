@@ -3,7 +3,7 @@ import windowStateKeeper from 'electron-window-state'
 let mainWindow = null
 
 if (process.env.NODE_ENV === 'development') {
-  require('electron-debug')() // eslint-disable-line global-require
+  require('electron-debug')({ showDevTools: 'undocked' }) // eslint-disable-line global-require
 }
 
 app.on('window-all-closed', () => process.platform !== 'darwin' && app.quit())
@@ -19,7 +19,7 @@ const installExtensions = async() => {
       } catch (e) {} // eslint-disable-line
     }
   }
-};
+}
 
 app.on('ready', async() => {
   await installExtensions()
