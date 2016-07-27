@@ -1,4 +1,5 @@
 import React, { Component, PropTypes } from 'react'
+import _ from 'lodash'
 import styles from 'styles/chat.css'
 
 export default class Message extends Component {
@@ -10,8 +11,13 @@ export default class Message extends Component {
     user: PropTypes.shape({ image: PropTypes.string, name: PropTypes.string })
   }
 
+  _renderAttchments(attachments) {
+    return null
+  }
+
   render() {
-    const { timestamp, user, text, attachments, firstInChain} = this.props
+    const { timestamp, user, text, attachments, firstInChain } = this.props
+
     return (
       <div className={styles.message}>
         <div className={styles.aside}>
@@ -37,10 +43,11 @@ export default class Message extends Component {
               <p className={styles.message_text}>{text}</p>
             ) : null
           }
-          {attachments ? (
-            <div className={styles.attachments}>
-              <img src='http://i.imgur.com/qNmnGzr.jpg' />
-            </div>
+          {
+            attachments && attachments.length > 0 ? (
+              <div className={styles.attachments}>
+                {this._renderAttchments(attachments)}
+              </div>
             ) : null
           }
         </div>

@@ -35,9 +35,14 @@ export default class Chat extends Component {
     messagesContainer.scrollTop = messagesContainer.scrollHeight
   }
 
-  _mapUserIDtoData(id) {
-    const { name, images } = _.get(this.props.users, id, {})
-    return { name, image: _.last(images) }
+  _mapUserIDtoData(id, messageIdx) {
+    const { user_profile } = this.props.messages[messageIdx]
+    if (user_profile) {
+      return { name: user_profile.name, image: _.last(_.filter(user_profile, (a, key) => key.includes('image'))) }
+    } else {
+      const { name, images } = _.get(this.props.users, id, {})
+      return { name, image: _.last(images) }
+    }
   }
 
   render() {
@@ -59,13 +64,14 @@ export default class Chat extends Component {
         </header>
         <section ref='messagesContainer' className={styles.messages}>
           {
-            this.props.messages.map(({text, user, timestamp, friendlyTimestamp}, idx) => (
+            this.props.messages.map(({text, user, timestamp, friendlyTimestamp, ...message}, idx) => (
               <Message
                 key={`${user}-${timestamp}`}
                 firstInChain={this.props.messages[idx - 1] && this.props.messages[idx - 1].user !== user}
-                user={::this._mapUserIDtoData(user)}
+                user={::this._mapUserIDtoData(user, idx)}
                 text={text}
                 timestamp={friendlyTimestamp || timestamp}
+                {...message}
               />
             ))
           }
