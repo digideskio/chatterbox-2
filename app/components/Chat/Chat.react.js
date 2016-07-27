@@ -36,9 +36,9 @@ export default class Chat extends Component {
   }
 
   _mapUserIDtoData(id, messageIdx) {
-    const { user_profile } = this.props.messages[messageIdx]
-    if (user_profile) {
-      return { name: user_profile.name, image: _.last(_.filter(user_profile, (a, key) => key.includes('image'))) }
+    const { userProfile } = this.props.messages[messageIdx]
+    if (userProfile) {
+      return { name: userProfile.name, image: _.last(_.filter(userProfile, (a, key) => key.includes('image'))) }
     } else {
       const { name, images } = _.get(this.props.users, id, {})
       return { name, image: _.last(images) }

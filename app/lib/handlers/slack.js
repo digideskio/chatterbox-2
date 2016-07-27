@@ -21,8 +21,8 @@ function parseMessage({ type, subtype, ...message }, overrideEvent = false) {
       bot = true
     case 'message':
       return (() => {
-        const { channel, bot, user, text, ts: timestamp, user_profile, attachments } = message
-        const msg = _.omitBy({ attachments: santitizeAttachments(attachments), channel, user, text, user_profile, timestamp, friendlyTimestamp: moment.unix(timestamp).format('h:mm a') }, _.isNil)
+        const { channel, bot, user, text, ts: timestamp, user_profile: userProfile, attachments } = message
+        const msg = _.omitBy({ attachments: santitizeAttachments(attachments), channel, user, text, userProfile, timestamp, friendlyTimestamp: moment.unix(timestamp).format('h:mm a') }, _.isNil)
 
         if (overrideEvent) return msg
         else this.emit('message', msg)
