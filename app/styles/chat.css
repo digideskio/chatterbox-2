@@ -65,28 +65,6 @@
   outline: 0;
 }
 
-.chat .messages::-webkit-scrollbar {
-  width: 12px;
-}
-
-.chat .messages::-webkit-scrollbar-button {}
-
-.chat .messages::-webkit-scrollbar-track {
-  -webkit-box-shadow: inset 0 0 6px rgba(0, 0, 0, 0.3);
-  border-radius: 5px;
-}
-
-.chat .messages::-webkit-scrollbar-track-piece {}
-
-.chat .messages::-webkit-scrollbar-thumb {
-  border-radius: 5px;
-  -webkit-box-shadow: inset 0 0 6px rgba(0, 0, 0, 0.5);
-}
-
-.chat .messages::-webkit-scrollbar-corner {}
-
-.chat .messages::-webkit-resizer {}
-
 .chat .messages {
   padding-top: 10px;
   padding-bottom: 5px;
