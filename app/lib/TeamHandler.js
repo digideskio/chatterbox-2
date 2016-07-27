@@ -17,7 +17,7 @@ export default function createTeamHandler(provider) {
     _historyRequestQueue = queue(({ channel, args }, next) => {
       this._getHistoryByID({ channel_or_dm_id: channel, ...args })
         .then(messages => this.emit('history:loaded', { channel, messages }))
-        .then(next)
+        .then(() => process.nextTick(next))
         .catch(next) // yes we should deal with any errors here later
     })
 
