@@ -24,7 +24,7 @@ export function load() {
         if (!teams.length) {
           dispatch(locationPush('/login/slack'))
         } else {
-          changeActiveTeam(teams[0].team.id)
+          bindActionCreators(TeamsActions, dispatch).changeActiveTeam(teams[0].team.id)
           dispatch(locationPush('/chat'))
         }
       })
@@ -54,7 +54,7 @@ function loadTeams(dispatch) {
     let [numTeams, loadedTeams] = [0, []]
 
     loader.on('team', ({ id, name, type, args }) => {
-      const [{ loadTeam, changeActiveTeam }, TeamHandler] = [bindActionCreators(TeamsActions, dispatch), createTeamHandler(type)]
+      const [{ loadTeam }, TeamHandler] = [bindActionCreators(TeamsActions, dispatch), createTeamHandler(type)]
       const Team = new TeamHandler(args, dispatch, false)
       Team.once('connected', (TeamData) => {
         loadTeam(Team)
