@@ -10,6 +10,20 @@ const DEFAULT_OPTIONS = {
   autoJoinNewChannels: false
 }
 
+
+function santitizeAttachments(attachments) {
+  return attachments.map(({ title, text, pretext, ...attachment }) => {
+    return {
+      images: { thumb: attachment.thumb_url },
+      author: { icon: attachment.author_icon, link: attachment.author_link, name: attachment.author_name },
+      title: { text: title, link: attachment.title_link },
+      pretext,
+      text
+    }
+  })
+}
+
+
 function parseMessage({ type, subtype, bot_id, ...message }, overrideEvent = false) {
   let isBot = subtype == 'bot_message' || bot_id != undefined
 
@@ -18,7 +32,7 @@ function parseMessage({ type, subtype, bot_id, ...message }, overrideEvent = fal
       return (() => {
         const { channel, user, text, ts: timestamp, user_profile: userProfile, attachments } = message
         const msg = _.omitBy({
-          attachments,
+          attachments: santitizeAttachments(attachments),
           channel,
           user,
           isBot,
