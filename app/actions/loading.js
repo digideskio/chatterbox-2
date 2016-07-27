@@ -20,11 +20,11 @@ export function load() {
   return (dispatch) => {
     loadSettings(dispatch)
       .then(loadTeams.bind(this, dispatch))
-      .then(teams => {
-        if (!teams.length) {
+      .then(Team => {
+        if (!Team) {
           dispatch(locationPush('/login/slack'))
         } else {
-          bindActionCreators(TeamsActions, dispatch).changeActiveTeam(teams[0].team.id)
+          bindActionCreators(TeamsActions, dispatch).changeActiveTeam(Team.team.id)
           dispatch(locationPush('/chat'))
         }
       })
@@ -51,24 +51,22 @@ function loadTeams(dispatch) {
   return new Promise((resolve, reject) => {
     dispatch({ type: TASK_CHANGE, task: 'Loading Teams' })
     const loader = new Database.teams.Loader()
-    let [numTeams, loadedTeams] = [0, []]
+    let firstLoaded = false
 
     loader.on('team', ({ id, name, type, args }) => {
       const [{ loadTeam }, TeamHandler] = [bindActionCreators(TeamsActions, dispatch), createTeamHandler(type)]
       const Team = new TeamHandler(args, dispatch, false)
       Team.once('connected', (TeamData) => {
         loadTeam(Team)
-        loadedTeams.push(Team)
-        if (numTeams === loadedTeams.length) {
-          resolve(loadedTeams)
+        if (!firstLoaded) {
+          firstLoaded = true
+          resolve(Team)
         }
       })
     })
     loader.once('finnished', (num) => {
       if (num === 0) {
-        resolve([])
-      } else {
-        numTeams = num
+        resolve(null)
       }
     })
   })

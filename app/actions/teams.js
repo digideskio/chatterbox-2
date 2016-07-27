@@ -8,11 +8,6 @@ export const TEAM_ADD = 'TEAMS_TEAM_ADD'
 export const TEAM_CHANGE = 'TEAMS_TEAM_CHANGE'
 export const TEAM_REMOVE = 'TEAMS_TEAM_REMOVE'
 
-export const ADD_HISTORY = 'TEAMS_ADD_HISTORY'
-export const NEW_MESSAGE = 'TEAMS_NEW_MESSAGE'
-export const EDIT_MESSAGE = 'TEAMS_EDIT_MESSAGE'
-export const REMOVE_MESSAGE = 'TEAMS_REMOVE_MESSAGE'
-
 
 export function addTeam(Handler) {
   return (dispatch) => {
@@ -40,20 +35,4 @@ export function changeActiveTeam(team) {
 
 export function changeActiveTeamChannelOrDM(channel_or_dm_id, teamID) {
   return { type: ACTIVE_CHANNEL_OR_DM_CHANGE, channel_or_dm_id, team: teamID }
-}
-
-export function addHistory(team, channel, messages = []) {
-  return { type: ADD_HISTORY, team, channel, messages }
-}
-
-export function newMessage(message) {
-  return { type: NEW_MESSAGE, message }
-}
-
-export function editMessage(message) {
-  return { type: EDIT_MESSAGE, message }
-}
-
-export function removeMessage(message) {
-  return { type: REMOVE_MESSAGE, message }
 }

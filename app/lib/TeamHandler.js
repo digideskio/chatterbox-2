@@ -1,7 +1,7 @@
 import _ from 'lodash'
 import Database from 'lib/database'
 import { queue } from 'async'
-import { ADD_HISTORY, NEW_MESSAGE, EDIT_MESSAGE, REMOVE_MESSAGE } from 'actions/teams'
+import { ADD_HISTORY, NEW_MESSAGE, EDIT_MESSAGE, REMOVE_MESSAGE } from 'actions/messages'
 
 export default function createTeamHandler(provider) {
   const Provider = require(`lib/handlers/${provider}`)
@@ -50,11 +50,11 @@ export default function createTeamHandler(provider) {
       })
 
       this.on('history:loaded', ({ channel, messages }) => {
-        this._dispatch({ type: ADD_HISTORY, messages, channel, team: this.team.id })
+        this._dispatch({ type: ADD_HISTORY, payload: { messages, channel, team: this.team.id } })
       })
 
-      this.on('message', (message) => {
-        this._dispatch({ type: NEW_MESSAGE, message, team: this.team.id })
+      this.on('message', ({ channel, ...message }) => {
+        this._dispatch({ type: NEW_MESSAGE, payload: { channel, message, team: this.team.id } })
       })
     }
   }

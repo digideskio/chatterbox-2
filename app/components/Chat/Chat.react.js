@@ -19,19 +19,18 @@ export default class Chat extends Component {
   }
 
   componentDidUpdate({ messages: prevMessages }) {
-    const { timestamp: prevTimestamp } = _.last(prevMessages)
-    const { timestamp: currentTimestamp } = _.last(this.props.messages)
+    if (prevMessages.length > 0 && this.props.messages.length > 0) {
+      const [{ timestamp: prevTimestamp }, { timestamp: currentTimestamp }] = [_.last(prevMessages), _.last(this.props.messages)]
+      console.log(prevTimestamp, currentTimestamp)
 
-    console.log(prevTimestamp, currentTimestamp)
-
-    if (prevTimestamp !== currentTimestamp) {
-      this._checkMessagesScroll()
+      if (prevTimestamp !== currentTimestamp) {
+        this._checkMessagesScroll()
+      }
     }
   }
 
   _checkMessagesScroll() {
     const { messagesContainer } = this.refs
-    console.log(messagesContainer)
     messagesContainer.scrollTop = messagesContainer.scrollHeight
   }
 

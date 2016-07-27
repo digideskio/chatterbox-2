@@ -128,29 +128,29 @@ export default class SlackHandler extends EventEmitter {
 
   get users() {
     const users = {}
-    _.forEach(this._slack.dataStore.users, ({ tz: timezone, id, deleted, profile: { email, real_name_normalized, ...profile }, name: handle, presence }) => {
+    _.forEach(this._slack.dataStore.users, ({ tz: timezone, id, deleted, profile, name: handle, presence }) => {
       if (deleted) return
       users[id] = ({
         handle,
-        name: real_name_normalized.length > 0 ? real_name_normalized : null,
+        name: _.get(profile, 'profile.real_name_normalized', '').length > 0 ? profile.real_name_normalized : null,
         id,
         presence: presence === 'active' ? 'online' : 'offline',
         images: _.filter(profile, (data, key) => key.includes('image')),
-        meta: { timezone, email }
+        meta: { timezone, email: _.get(profile, 'email') }
       })
     })
     return users
   }
 
   get user() {
-    const { tz: timezone, id, deleted, profile: { email, real_name_normalized, ...profile }, name: handle, presence } = this._slack.dataStore.users[this._slack.activeUserId]
+    const { tz: timezone, id, deleted, profile, name: handle, presence } = _.get(this._slack, `dataStore.users.${this._slack.activeUserId}`, {})
     return {
       handle,
-      name: real_name_normalized.length > 0 ? real_name_normalized : null,
+      name: _.get(profile, 'profile.real_name_normalized', '').length > 0 ? profile.real_name_normalized : null,
       id,
       presence,
       images: _.filter(profile, (data, key) => key.includes('image')),
-      meta: { timezone, email }
+      meta: { timezone, email: _.get(profile, 'email') }
     }
   }
 

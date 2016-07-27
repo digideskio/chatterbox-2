@@ -30,7 +30,7 @@ export default class Providers extends Component {
         <div className={styles.bottom}>
           {
             Object.keys(this.props.teams).map(team => (
-              <Provider onClick={::this.handleProviderClick} {..._.get(this.props.teams, `${team}.team`, {})} />
+              <Provider key={team} onClick={::this.handleProviderClick} {..._.get(this.props.teams, `${team}.team`, {})} />
             ))
           }
           <Link to='/login/slack' className={classnames('ion-ios-plus-empty', styles.add)} />

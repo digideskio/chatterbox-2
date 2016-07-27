@@ -4,11 +4,13 @@ import titlebar from './titlebar'
 import settings from './settings'
 import loading from './loading'
 import teams from './teams'
+import messages from './messages'
 import login from './login'
 
 const rootReducer = combineReducers({
   teams,
   login,
+  messages,
   titlebar,
   settings,
   loading,

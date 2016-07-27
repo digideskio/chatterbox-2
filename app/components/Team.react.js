@@ -14,6 +14,7 @@ export default class Team extends Component {
     removeTeam: PropTypes.func.isRequired,
     changeActiveTeam: PropTypes.func.isRequired,
     changeActiveTeamChannelOrDM: PropTypes.func.isRequired,
+    messages: PropTypes.object.isRequired,
 
     changeSetting: PropTypes.func.isRequired,
     settings: PropTypes.object.isRequired,
@@ -32,8 +33,8 @@ export default class Team extends Component {
   }
 
   get _messages() {
-    const { messages, activeChannelorDMID } = this._team
-    return _.get(messages, activeChannelorDMID, [])
+    const { activeChannelorDMID, team: { id: teamID } } = this._team
+    return _.get(this.props, `messages.${teamID}.${activeChannelorDMID}`, [])
   }
 
   get _currentChannelorDM() {
