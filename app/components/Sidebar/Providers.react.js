@@ -23,7 +23,6 @@ export default class Providers extends Component {
   }
 
   render() {
-    console.log(this.props)
     return (
       <div className={styles.providers}>
         <div className={styles.selected} style={{backgroundImage: `url(${this.props.currentTeam.image})`}} />
