@@ -60,7 +60,7 @@ function loadTeams(dispatch) {
         loadTeam(Team)
         loadedTeams.push(Team)
         if (numTeams === loadedTeams.length) {
-
+          resolve(loadedTeams)
         }
       })
     })
