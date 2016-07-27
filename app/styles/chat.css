@@ -68,6 +68,7 @@
 .chat .messages {
   padding-top: 10px;
   padding-bottom: 5px;
+  margin-right: 2px;
   flex: 1;
   overflow-y: scroll;
 }
