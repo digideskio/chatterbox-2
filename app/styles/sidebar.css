@@ -6,11 +6,13 @@
   color: #fff;
   width: 320px;
 }
+
 .sidebar .providers {
   height: 100%;
   width: 90px;
   position: absolute;
 }
+
 .sidebar .selected {
   background-color: white;
   border: white solid 2px;
@@ -28,12 +30,14 @@
   background-image: url("http://i.imgur.com/LjHCXDP.png");
   position: absolute;
 }
+
 .sidebar .providers .bottom {
   bottom: 0;
   position: absolute;
   margin-left: 15px;
   width: 52px;
 }
+
 .sidebar .providers .bottom .provider {
   width: 55px;
   height: 55px;
@@ -47,6 +51,7 @@
   background-image: url("http://i.imgur.com/LjHCXDP.png");
   margin-top: 10px;
 }
+
 .sidebar .providers .bottom .provider .new_message {
   width: 9px;
   height: 9px;
@@ -56,6 +61,7 @@
   position: absolute;
   margin-top: calc(50% - 6px);
 }
+
 .sidebar .providers .bottom .provider .unread_counter {
   width: 24px;
   height: 22px;
@@ -71,6 +77,7 @@
   position: absolute;
   margin-top: calc(50% - 6px);
 }
+
 .sidebar .providers .bottom .add {
   width: 42px;
   height: 42px;
@@ -87,16 +94,19 @@
   cursor: pointer;
   position: relative;
 }
+
 .sidebar .teamInfo {
   width: calc(100% - 90px - 15px);
   position: absolute;
   right: 0;
 }
+
 .sidebar .teamInfo .team {
   display: block;
   padding-top: 25px;
   margin-bottom: 40px;
 }
+
 .sidebar .teamInfo .team .name {
   font-size: 18px;
   margin-bottom: 2px;
@@ -104,21 +114,26 @@
   text-rendering: optimizeLegibility;
   letter-spacing: 0.5px;
 }
+
 .sidebar .teamInfo .team .status {
   width: 10px;
   height: 10px;
   border-radius: 50%;
   display: inline-block;
 }
+
 .sidebar .teamInfo .team .status.online {
   background-color: #7fd421;
 }
+
 .sidebar .teamInfo .team .status.offline {
   background-color: gray;
 }
+
 .sidebar .teamInfo .team .status.away {
   background-color: yellow;
 }
+
 .sidebar .teamInfo .team .handle {
   margin-left: 4px;
   position: relative;
@@ -126,10 +141,12 @@
   top: 1px;
   color: rgba(255, 255, 255, 0.69);
 }
+
 .sidebar .teamInfo .channels {
   display: block;
   margin-bottom: 30px;
 }
+
 .sidebar .teamInfo .channels .title {
   text-transform: uppercase;
   font-size: 14px;
@@ -138,13 +155,16 @@
   color: rgba(255, 255, 255, 0.58);
   margin-bottom: 6px;
 }
+
 .sidebar .teamInfo .channels .title span {
   margin-left: 4px;
   color: rgba(255, 255, 255, 0.41);
 }
+
 .sidebar .teamInfo .channels .channel:hover {
   background-color: rgba(255, 255, 255, 0.06);
 }
+
 .sidebar .teamInfo .channels .channel {
   padding-left: 3px;
   cursor: pointer;
@@ -153,6 +173,7 @@
   border-radius: 3px;
   transition: background-color 100ms ease-in-out;
 }
+
 .sidebar .teamInfo .channels .channel p {
   padding: 0;
   margin: 0;
@@ -162,6 +183,7 @@
   font-weight: 400;
   letter-spacing: 0.5px;
 }
+
 .sidebar .teamInfo .channels .channel .missed_pings {
   width: 22px;
   height: 20px;
@@ -175,14 +197,17 @@
   color: #feecec;
   margin-left: 10px;
 }
+
 .sidebar .teamInfo .channels .channel.attention p {
   font-size: 14px;
   color: rgba(255, 255, 255, 0.85);
   font-weight: 600;
 }
+
 .sidebar .teamInfo .channels .channel.active {
   background-color: rgba(255, 255, 255, 0.12);
 }
+
 .sidebar .teamInfo .channels .channel.active p {
   color: rgba(255, 255, 255, 0.85);
 }

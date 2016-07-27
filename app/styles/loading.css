@@ -3,17 +3,20 @@
   height: 100vh;
   background-color: #fafafa;
 }
+
 .loading .gif {
   height: 400px;
   display: block;
   margin: auto;
   margin-top: -40px;
 }
+
 .loading .info {
   display: block;
   margin: auto;
   width: 700px;
 }
+
 .loading .info .title {
   display: block;
   margin: auto;
@@ -25,15 +28,18 @@
   text-align: center;
   margin-bottom: 3px;
 }
+
 .loading .info .title span {
   position: absolute;
   margin-left: 1px;
 }
+
 .loading .info .progress_bar {
   display: block;
   height: 2px;
   background-color: #eff3f6;
 }
+
 .loading .info .progress_bar div {
   background-color: #166cd5;
   width: 40%;
