@@ -3,7 +3,6 @@ import moment from 'moment'
 import _ from 'lodash'
 import { WebClient, RtmClient, MemoryDataStore, CLIENT_EVENTS, RTM_EVENTS } from '@slack/client'
 
-
 const DEFAULT_OPTIONS = {
   logLevel: 'error',
   dataStore: new MemoryDataStore(),
@@ -14,12 +13,12 @@ const DEFAULT_OPTIONS = {
 const santitizeAttachments = (attachments = []) => attachments.map(({ color, pretext, text, mrkdwn_in: order }) => _.omitBy({ color, pretext, text, order }, _.isNil))
 
 function parseMessage({ type, subtype, bot_id, ...message }, overrideEvent = false) {
-  let isBot = (subtype == 'bot_message' || bot_id) ? true : false
+  let isBot = subtype == 'bot_message' || bot_id != undefined
 
   switch (subtype ? `${type}:${subtype}` : type) {
     case 'message':
       return (() => {
-        const { channel, bot, user, text, ts: timestamp, user_profile: userProfile, attachments } = message
+        const { channel, user, text, ts: timestamp, user_profile: userProfile, attachments } = message
         const msg = _.omitBy({
           attachments: santitizeAttachments(attachments),
           channel,
@@ -34,7 +33,6 @@ function parseMessage({ type, subtype, bot_id, ...message }, overrideEvent = fal
         if (overrideEvent) return msg
         else this.emit('message', msg)
       })()
-      break
     case 'message:file_share':
       return (() => {
         const { channel, user, text, ts: timestamp, file: { permalink } } = message
@@ -44,13 +42,13 @@ function parseMessage({ type, subtype, bot_id, ...message }, overrideEvent = fal
           text,
           isBot,
           timestamp,
+          file: permalink,
           friendlyTimestamp: moment.unix(timestamp).format('h:mm a')
         }, _.isNil)
 
         if (overrideEvent) return msg
         else this.emit('message', msg)
       })()
-      break
     default:
       console.info('Unable to parse message:', { type, subtype, ...message })
       return false
