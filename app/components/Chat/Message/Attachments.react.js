@@ -9,7 +9,7 @@ import styles from 'styles/chat.css'
     thumb, author, ...images
   },
   links: {
-    thumb, title, author
+    title, author
   },
   title: '',
   'pretext': 'Hello lol',
@@ -34,8 +34,12 @@ export default class Attachments extends Component {
     )
   }
 
-  _renderThumb() {
-    return null
+  _renderThumb(thumbURL) {
+    return (
+      <div className={styles.thumbCont}>
+        <div className={styles.thumb} style={{backgroundImage: `url(${thumbURL})`}}></div>
+      </div>
+    )
   }
 
   render() {
@@ -54,6 +58,7 @@ export default class Attachments extends Component {
 
                   {text ? <div className={styles.text}>{_.unescape(text)}</div> : null}
                 </div>
+                {images.thumb ? this._renderThumb(images.thumb) : null}
               </div>
             </div>
           ))
