@@ -61,7 +61,12 @@ function parseMessage({ type, subtype, bot_id, channel = null, ...messageData },
     case 'message':
       return (() => {
         if (messageData.user_profile && !userProfileChecked) {
-          console.log(messageData) // we gotta do something about this unsatitized user_profile later.
+          const { name: handle, real_name: name, ...user_profile } = messageData.user_profile
+          messageData.user_profile = {
+            image: _.last(_.filter(user_profile, (a, key) => key.includes('image') || key.includes('icon'))),
+            handle,
+            name
+          }
         }
 
         const msg = _.omitBy({ channel, isBot, ...santitizeMessage(messageData) }, _.isNil)
