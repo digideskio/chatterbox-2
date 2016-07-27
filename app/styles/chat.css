@@ -108,11 +108,12 @@
 .chat .messages .message {
   display: flex;
   transition: background-color 50ms ease-in-out, opacity 40ms ease-in-out;
-  margin-top: 2px;
+  margin-top: 3px;
+  word-break: break-word;
 }
 
 .chat .messages .message.firstInChain {
-  margin-top: 5px;
+  margin-top: 6px;
 }
 
 .chat .messages .message:hover {
