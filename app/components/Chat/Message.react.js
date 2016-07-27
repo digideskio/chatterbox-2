@@ -12,7 +12,18 @@ export default class Message extends Component {
   }
 
   _renderAttchments(attachments) {
-    return null
+    return attachments.map(({ pretext, text, color }, idx) => {
+      return (
+        <div key={idx + 1} className={styles.attachment}>
+          <div className={styles.pretext}>{pretext}</div>
+          <div className={styles.textHolder}>
+            <div className={styles.sidebar} style={{backgroundColor: color}} />
+            <div className={styles.text}>{text}</div>
+          </div>
+        </div>
+      )
+      return false
+    }).filter(Boolean)
   }
 
   render() {
@@ -40,7 +51,7 @@ export default class Message extends Component {
           }
           {
             text ? (
-              <p className={styles.message_text}>{text}</p>
+              <div className={styles.message_text}>{text}</div>
             ) : null
           }
           {
