@@ -1,6 +1,6 @@
 import React, { Component, PropTypes } from 'react'
 import _ from 'lodash'
-import Message, { DaySeparator } from './Message.react'
+import Message, { DaySeparator } from './Message'
 import Sender from './Sender.react'
 import styles from 'styles/chat.css'
 
@@ -75,7 +75,6 @@ export default class Chat extends Component {
               />
             ))
           }
-          <DaySeparator timestamp='June 12' />
         </section>
         <Sender />
       </div>
