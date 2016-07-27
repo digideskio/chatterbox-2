@@ -13,12 +13,10 @@ const DEFAULT_OPTIONS = {
 
 const santitizeAttachments = (attachments = []) => attachments.map(({ color, pretext, text, mrkdwn_in: order }) => _.omitBy({ color, pretext, text, order }, _.isNil))
 
-function parseMessage({ type, subtype, ...message }, overrideEvent = false) {
-  let isBot = false
+function parseMessage({ type, subtype, bot_id, ...message }, overrideEvent = false) {
+  let isBot = (subtype == 'bot_message' || bot_id) ? true : false
 
   switch (subtype ? `${type}:${subtype}` : type) {
-    case 'message:bot_message':
-      isBot = true
     case 'message':
       return (() => {
         const { channel, bot, user, text, ts: timestamp, user_profile: userProfile, attachments } = message
