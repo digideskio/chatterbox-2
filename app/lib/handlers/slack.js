@@ -87,6 +87,9 @@ function parseMessage({ type, subtype, bot_id, channel = null, ...messageData },
   }
 }
 
+
+
+
 export default class SlackHandler extends EventEmitter {
   constructor({ token }) {
     super()
@@ -123,23 +126,26 @@ export default class SlackHandler extends EventEmitter {
     this._slack.start()
   }
 
-  _canSend = false
-  _connected = false
-
   message = {
-    send(channelID, message, custom = false) {
+    send: (channelID, message, custom = false) => {
       return new Promise((resolve, reject) => {
         if (channelID.startsWith('U')) {
           const { name } = this._slack.dataStore.getUserById(channelID)
           this._slack.sendMessage(message, this._slack.dataStore.getDMByName(name).id)
         } else {
-          this._slack.sendMessage(message, channelID)
+          this._slack.sendMessage(message, channelID).then(message => {
+            parseMessage.bind(this)(message)
+            resolve(message)
+          }, reject)
         }
       })
     },
-    edit(channelID, messageID, editedMessage, custom = false) {},
-    remove(channelID, messageID) {}
+    edit: (channelID, messageID, editedMessage, custom = false) => {},
+    remove: (channelID, messageID) => {}
   }
+
+  _canSend = false
+  _connected = false
 
   _getHistoryByID({ channel_or_dm_id, count = 50, latest = null, oldest = 0 }) {
     return new Promise((resolve, reject) => {

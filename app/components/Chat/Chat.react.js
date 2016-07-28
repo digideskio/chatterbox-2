@@ -8,7 +8,10 @@ export default class Chat extends Component {
   static propTypes = {
     messages: PropTypes.array,
     users: PropTypes.object,
-    channelUsers: PropTypes.array
+    channel: PropTypes.object,
+    channelUsers: PropTypes.array,
+    sendMessage: PropTypes.func,
+    activeChannelorDMID: PropTypes.string
   }
 
   static defaultProps = {
@@ -73,7 +76,11 @@ export default class Chat extends Component {
             ))
           }
         </section>
-        <Sender />
+        <Sender
+          sendMessage={::this.props.sendMessage}
+          teamID={_.get(this.props, 'team.id')}
+          channelID={this.props.activeChannelorDMID}
+        />
       </div>
     )
   }

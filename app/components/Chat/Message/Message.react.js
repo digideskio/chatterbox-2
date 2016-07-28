@@ -1,5 +1,4 @@
 import React, { Component, PropTypes } from 'react'
-import _ from 'lodash'
 import classnames from 'classnames'
 import Attachments from './Attachments.react'
 import styles from 'styles/chat.css'
