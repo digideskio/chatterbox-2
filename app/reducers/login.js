@@ -1,16 +1,29 @@
-import { PROVIDER_CHANGE, PROVIDER_ERROR } from 'actions/login'
-
+import { combineReducers } from 'redux'
+import { LOGIN_PROVIDER_CHANGE } from 'actions/login'
 
 const DEFAULT_STATE = {
-  provider: { loading: true, authenticating: false, name: null, error: null },
+  provider: {
+    loading: true,
+    authenticating: false,
+    name: null,
+    error: null
+  },
   providers: ['slack', 'irc']
 }
 
-export default function settings(state = DEFAULT_STATE, { type, ...action }) {
-  switch (type) {
-    case PROVIDER_CHANGE:
-      return {...state, provider: provider.action }
-    default:
-      return state
+function provider(state = DEFAULT_STATE.provider, action) {
+  if (action.type === LOGIN_PROVIDER_CHANGE) {
+    return action.provider
   }
+  return state
 }
+
+function providers(state = DEFAULT_STATE.providers, action) {
+  // TODO: stuff would probably be nice, maybe.
+  return state
+}
+
+export default combineReducers({
+  provider,
+  providers
+})

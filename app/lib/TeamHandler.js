@@ -1,7 +1,7 @@
 import _ from 'lodash'
 import Database from 'lib/database'
 import { queue } from 'async'
-import { ADD_HISTORY, NEW_MESSAGE, EDIT_MESSAGE, REMOVE_MESSAGE } from 'actions/messages'
+import { addHistory, newMessage, editMessage, removeMessage } from 'actions/messages'
 
 export default function createTeamHandler(provider) {
   const Provider = require(`lib/handlers/${provider}`)
@@ -35,7 +35,6 @@ export default function createTeamHandler(provider) {
     }
 
     _initTeamEvents({ firstLoad }) {
-
       this.on('authenticated', () => {
         if (firstLoad) {
           Database.teams.add(this._persistenceData).then(() => {
@@ -50,15 +49,15 @@ export default function createTeamHandler(provider) {
       })
 
       this.on('history:loaded', ({ channel, messages }) => {
-        this._dispatch({ type: ADD_HISTORY, payload: { messages, channel, team: this.team.id } })
+        this._dispatch(addHistory({messages, channel, team: this.team.id}))
       })
 
       this.on('message', ({ channel, ...message }) => {
-        this._dispatch({ type: NEW_MESSAGE, payload: { channel, message, team: this.team.id } })
+        this._dispatch(newMessage({ channel, message, team: this.team.id }))
       })
 
       this.on('message:changed', ({ channel, ...editData }) => {
-        this._dispatch({ type: EDIT_MESSAGE, payload: { channel, team: this.team.id, ...editData } })
+        this._dispatch(editMessage({ channel, team: this.team.id, ...editData }))
       })
     }
   }

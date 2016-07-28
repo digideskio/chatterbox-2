@@ -1,34 +1,44 @@
-import {
-  ACTIVE_TEAM_CHANGE,
-  ACTIVE_CHANNEL_OR_DM_CHANGE,
-  TEAM_ADD,
-  TEAM_REMOVE
-} from 'actions/teams'
+import { combineReducers } from 'redux'
 
+import { TEAMS_ACTIVE_TEAM_CHANGE, TEAMS_ACTIVE_CHANNEL_OR_DM_CHANGE, TEAMS_TEAM_ADD } from 'actions/teams'
 
 const DEFAULT_STATE = {
   teams: {},
   activeTeamID: null
 }
 
-export default function teams(state = DEFAULT_STATE, { type, ...action }) {
-  switch (type) {
-    case TEAM_ADD:
-      return {...state, teams: {...state.teams, [action.team.team.id]: action.team } }
-    case ACTIVE_TEAM_CHANGE:
-      return {...state, activeTeamID: action.team }
-    case ACTIVE_CHANNEL_OR_DM_CHANGE:
-      return (() => {
-        const { team, teams } = extractTeamfromTeams(action.team, state.teams)
-        team.activeChannelorDMID = action.channel_or_dm_id
-        return {...state, teams: {...teams, [action.team]: team } }
-      })()
+function teams(state = DEFAULT_STATE.teams, action) {
+  switch (action.type) {
+    case TEAMS_TEAM_ADD:
+      return {
+        ...state,
+        [action.team.team.id]: action.team
+      }
+    case TEAMS_ACTIVE_CHANNEL_OR_DM_CHANGE:
+      const { team, teams } = extractTeamFromTeams(action.team, state)
+      team.activeChannelorDMID = action.channel_or_dm_id
+      return {
+        ...teams,
+        [action.team]: team
+      }
     default:
       return state
   }
 }
 
-const extractTeamfromTeams = (teamID, allTeams) => {
+function activeTeamID(state = DEFAULT_STATE.activeTeamID, action) {
+  if (action.type === TEAMS_ACTIVE_TEAM_CHANGE) {
+    return action.team
+  }
+  return state
+}
+
+export default combineReducers({
+  teams,
+  activeTeamID
+})
+
+const extractTeamFromTeams = (teamID, allTeams) => {
   const {
     [teamID]: team,
     ...teams

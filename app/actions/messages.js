@@ -1,9 +1,12 @@
-export const ADD_HISTORY = 'MESSAGES_ADD_HISTORY'
-export const SEND_MESSAGE = 'MESSAGES_SEND_MESSAGE'
-export const NEW_MESSAGE = 'MESSAGES_NEW_MESSAGE'
-export const EDIT_MESSAGE = 'MESSAGES_EDIT_MESSAGE'
-export const REMOVE_MESSAGE = 'MESSAGES_REMOVE_MESSAGE'
+export const MESSAGES_ADD_HISTORY = 'MESSAGES_ADD_HISTORY'
+export const MESSAGES_SEND_MESSAGE = 'MESSAGES_SEND_MESSAGE'
+export const MESSAGES_NEW_MESSAGE = 'MESSAGES_NEW_MESSAGE'
+export const MESSAGES_EDIT_MESSAGE = 'MESSAGES_EDIT_MESSAGE'
+export const MESSAGES_REMOVE_MESSAGE = 'MESSAGES_REMOVE_MESSAGE'
 
+export function addHistory(payload) {
+  return { type: MESSAGES_ADD_HISTORY, payload }
+}
 
 export function sendMessage(teamID, channelID, message) {
   return (dispatch, getState) => {
@@ -15,13 +18,13 @@ export function sendMessage(teamID, channelID, message) {
 }
 
 export function newMessage(payload) {
-  return { type: NEW_MESSAGE, payload }
+  return { type: MESSAGES_NEW_MESSAGE, payload }
 }
 
 export function editMessage(payload) {
-  return { type: EDIT_MESSAGE, payload }
+  return { type: MESSAGES_EDIT_MESSAGE, payload }
 }
 
 export function removeMessage(payload) {
-  return { type: REMOVE_MESSAGE, payload }
+  return { type: MESSAGES_REMOVE_MESSAGE, payload }
 }

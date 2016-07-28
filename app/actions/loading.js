@@ -1,19 +1,20 @@
 import { push as locationPush } from 'react-router-redux'
 import { bindActionCreators } from 'redux'
-import * as TeamsActions from './teams'
+
 import Database from 'lib/database'
 import createTeamHandler from 'lib/teamHandler'
-import { SET as SETTINGS_SET } from './settings'
+import * as TeamsActions from './teams'
+import { setSetting } from './settings'
 
-export const LOADED_CHANGE = 'LOADING_LOADED_CHANGE'
-export const TASK_CHANGE = 'LOADING_TASK_CHANGE'
+export const LOADING_LOADED_CHANGE = 'LOADING_LOADED_CHANGE'
+export const LOADING_TASK_CHANGE = 'LOADING_TASK_CHANGE'
 
-export function setTask(task) {
-  return { type: TASK_CHANGE, task }
+export function changeTask(task) {
+  return { type: LOADING_TASK_CHANGE, task }
 }
 
 export function setLoadedPercent(percent) {
-  return { type: LOADED_CHANGE, loaded: percent }
+  return { type: LOADING_LOADED_CHANGE, loaded: percent }
 }
 
 export function load() {
@@ -34,14 +35,14 @@ export function load() {
 
 function loadSettings(dispatch) {
   return new Promise((resolve, reject) => {
-    dispatch({ type: TASK_CHANGE, task: 'Loading settings' })
+    dispatch({ type: LOADING_TASK_CHANGE, task: 'Loading settings' })
     const loader = new Database.settings.Loader()
     loader.on('loaded', ({ setting, value }, percent) => {
-      dispatch({ type: SETTINGS_SET, [setting]: value })
-      dispatch({ type: LOADED_CHANGE, percent })
+      dispatch(setSetting(setting, value))
+      dispatch(setLoadedPercent(percent))
     })
     loader.once('finnished', () => {
-      dispatch({ type: LOADED_CHANGE, percent: 100 })
+      dispatch(setLoadedPercent(100))
       resolve()
     })
   })
@@ -49,7 +50,7 @@ function loadSettings(dispatch) {
 
 function loadTeams(dispatch) {
   return new Promise((resolve, reject) => {
-    dispatch({ type: TASK_CHANGE, task: 'Loading Teams' })
+    dispatch(changeTask('Loading teams'))
     const loader = new Database.teams.Loader()
     let firstLoaded = false
 

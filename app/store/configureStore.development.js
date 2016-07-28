@@ -5,7 +5,7 @@ import { hashHistory } from 'react-router'
 import { routerMiddleware } from 'react-router-redux'
 import rootReducer from 'reducers'
 
-const logger = createLogger({ level: 'info', collapsed: true, })
+const logger = createLogger({ level: 'info', collapsed: true })
 
 const router = routerMiddleware(hashHistory)
 

@@ -1,14 +1,27 @@
-import { TASK_CHANGE, LOADED_CHANGE } from 'actions/loading'
+import { combineReducers } from 'redux'
 
-const DEFAULT_STATE = { loaded: 0, task: '' }
+import { LOADING_TASK_CHANGE, LOADING_LOADED_CHANGE } from 'actions/loading'
 
-export default function loading(state = DEFAULT_STATE, { type, ...action }) {
-  switch (type) {
-    case TASK_CHANGE:
-      return {...state, task: action.task }
-    case LOADED_CHANGE:
-      return {...state, loaded: action.loaded }
-    default:
-      return state
-  }
+const DEFAULT_STATE = {
+  loaded: 0,
+  task: ''
 }
+
+function loaded(state = DEFAULT_STATE.loaded, action) {
+  if (action.type === LOADING_LOADED_CHANGE) {
+    return action.loaded
+  }
+  return state
+}
+
+function task(state = DEFAULT_STATE.task, action) {
+  if (action.type === LOADING_TASK_CHANGE) {
+    return action.task
+  }
+  return state
+}
+
+export default combineReducers({
+  loaded,
+  task
+})
