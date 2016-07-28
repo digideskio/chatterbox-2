@@ -8,6 +8,10 @@ export default class Team extends Component {
   static propTypes = {
     routeParams: PropTypes.object.isRequired,
 
+    editMessage: PropTypes.func.isRequired,
+    removeMessage: PropTypes.func.isRequired,
+    sendMessage: PropTypes.func.isRequired,
+
     activeTeamID: PropTypes.string.isRequired,
     teams: PropTypes.object.isRequired,
     changeTeam: PropTypes.func.isRequired,
@@ -17,7 +21,7 @@ export default class Team extends Component {
     messages: PropTypes.object.isRequired,
 
     changeSetting: PropTypes.func.isRequired,
-    settings: PropTypes.object.isRequired,
+    settings: PropTypes.object.isRequired
   }
 
   componentDidMount() {
@@ -56,10 +60,11 @@ export default class Team extends Component {
         />
 
         <Chat
-          {..._.pick(this._team, ['users', 'user', 'team'])}
+          {..._.pick(this._team, ['users', 'user', 'team', 'activeChannelorDMID'])}
           channel={this._currentChannelorDM}
           channelUsers={this._usersOnCurrentChannelorDM}
           messages={this._messages}
+          sendMessage={::this.props.sendMessage}
         />
       </div>
     )
