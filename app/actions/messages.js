@@ -8,6 +8,10 @@ export function addHistory(payload) {
   return { type: MESSAGES_ADD_HISTORY, payload }
 }
 
+export function newMessage(payload) {
+  return { type: MESSAGES_NEW_MESSAGE, payload }
+}
+
 export function sendMessage(teamID, channelID, message) {
   return (dispatch, getState) => {
     const { teams: { [teamID]: Team } } = getState().teams
@@ -15,10 +19,6 @@ export function sendMessage(teamID, channelID, message) {
       console.info('it sent.')
     }, console.error)
   }
-}
-
-export function newMessage(payload) {
-  return { type: MESSAGES_NEW_MESSAGE, payload }
 }
 
 export function editMessage(payload) {
