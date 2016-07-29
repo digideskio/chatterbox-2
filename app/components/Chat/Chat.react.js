@@ -67,7 +67,7 @@ export default class Chat extends Component {
             this.props.messages.map(({text, user, timestamp, friendlyTimestamp, ...message}, idx) => (
               <Message
                 key={`${user}-${timestamp}`}
-                firstInChain={this.props.messages[idx - 1] && this.props.messages[idx - 1].user !== user}
+                firstInChain={!this.props.messages[idx - 1] || this.props.messages[idx - 1].user !== user}
                 user={::this._mapUserIDtoData(user, idx)}
                 text={text}
                 timestamp={friendlyTimestamp || timestamp}
