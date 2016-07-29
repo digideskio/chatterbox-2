@@ -6,7 +6,7 @@ import styles from 'styles/chat.css'
 export default class Message extends Component {
   static propTypes = {
     attachments: PropTypes.oneOfType([PropTypes.array, PropTypes.bool]),
-    text: PropTypes.string,
+    text: PropTypes.oneOfType([PropTypes.array, PropTypes.string]),
     timestamp: PropTypes.string,
     firstInChain: PropTypes.bool,
     user: PropTypes.shape({ image: PropTypes.string, name: PropTypes.string, handle: PropTypes.string })
