@@ -77,6 +77,8 @@
     "async": "^2.0.0",
     "classnames": "^2.2.5",
     "electron-window-state": "^3.0.3",
+    "emoji-annotation-to-unicode": "^0.2.4",
+    "escape-string-regexp": "^1.0.5",
     "localforage": "^1.4.2",
     "lodash": "^4.13.1",
     "moment": "^2.14.1",

@@ -2,6 +2,7 @@ import { EventEmitter } from 'events'
 import moment from 'moment'
 import _ from 'lodash'
 import { WebClient, RtmClient, MemoryDataStore, CLIENT_EVENTS, RTM_EVENTS } from '@slack/client'
+import emojify from '../emojis'
 
 const DEFAULT_OPTIONS = {
   logLevel: 'error',
@@ -21,7 +22,6 @@ function santitizeUser({ tz: timezone, id, deleted, profile, name: handle, prese
   }
 }
 
-
 function santitizeAttachments(attachments) {
   return attachments.map(({ title, text, pretext, ...attachment }) => {
     return {
@@ -35,11 +35,16 @@ function santitizeAttachments(attachments) {
   })
 }
 
+function formatText(text) {
+  let formatText = emojify(text)
+  return formatText
+}
+
 function santitizeMessage({ user, text, ts: timestamp, user_profile: userProfile = null, attachments = [] }) {
   return {
     attachments: santitizeAttachments(attachments),
     user,
-    text,
+    text: formatText(text),
     userProfile,
     timestamp,
     friendlyTimestamp: moment.unix(timestamp).format('h:mm a')
@@ -86,8 +91,6 @@ function parseMessage({ type, subtype, bot_id, channel = null, ...messageData },
       return false
   }
 }
-
-
 
 
 export default class SlackHandler extends EventEmitter {
