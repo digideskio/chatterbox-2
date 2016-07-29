@@ -27,7 +27,11 @@ export default function createTeamHandler(provider) {
       } = this.channels
 
       this._historyRequestQueue.push({ channel_or_dm_id: mainChannelID })
-      _.forEach({ ...channels, ...this.dms }, ({ id }) => this._historyRequestQueue.push({ channel_or_dm_id: id }))
+
+      _.forEach({
+        ..._.pickBy(channels, ({ isMember }) => isMember),
+        ..._.pickBy(this.dms, ({ isOpen }) => isOpen)
+      }, ({ id }) => this._historyRequestQueue.push({ channel_or_dm_id: id }))
     }
 
     get initialActiveChannelorDMID() {
