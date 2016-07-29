@@ -15,7 +15,8 @@ class SettingsLoader extends EventEmitter {
       .then(loadedSetting => this.emit('loaded', { setting, value: loadedSetting !== null ? loadedSetting : defaultValue }, ((index + 1) / total) * 100))
       .then(next)
       .catch(err => {
-        this.emit('loaded', { setting, value: loadedSetting }, settingIndex / total)
+        console.error(err)
+        this.emit('loaded', { setting, value: defaultValue }, ((index + 1) / total) * 100)
         next()
       }))
     loadingQueue.drain = () => this.emit('finnished')
