@@ -55,7 +55,7 @@ export default class Attachments extends Component {
             <div key={idx + 1} className={styles.attachment}>
               {pretext ? <div className={styles.attachmentPretext}>{_.unescape(this._sanitizeText(pretext))}</div> : null}
 
-              <div className={classnames(styles.attachmentContainer, {[styles.withThumb]: (links.thumb && images.thumb)})}>
+              <div className={classnames(styles.attachmentContainer, {[styles.withThumb]: images.thumb})}>
                 <div className={styles.sidebar} style={{borderColor}} />
                 <div className={styles.attachmentBody}>
 
