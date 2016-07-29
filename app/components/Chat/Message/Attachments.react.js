@@ -42,13 +42,18 @@ export default class Attachments extends Component {
     )
   }
 
+  // Remove links for dev only
+  _sanitizeText(text) {
+    return text.replace(/<.+\|/g, ' [LINK REMOVED]')
+  }
+
   render() {
     return (
       <div className={styles.attachments}>
         {
           this.props.attachments.map(({text, color: borderColor = 'gray', pretext, title, links = {}, images = {}, author}, idx) => (
             <div key={idx + 1} className={styles.attachment}>
-              {pretext ? <div className={styles.attachmentPretext}>{pretext}</div> : null}
+              {pretext ? <div className={styles.attachmentPretext}>{_.unescape(this._sanitizeText(pretext))}</div> : null}
 
               <div className={classnames(styles.attachmentContainer, {[styles.withThumb]: (links.thumb && images.thumb)})}>
                 <div className={styles.sidebar} style={{borderColor}} />
@@ -56,7 +61,7 @@ export default class Attachments extends Component {
 
                   {author ? this._renderAuthor(author, links.author, images.author) : null}
 
-                  {text ? <div className={styles.text}>{_.unescape(text)}</div> : null}
+                  {text ? <div className={styles.text}>{_.unescape(this._sanitizeText(text))}</div> : null}
                 </div>
                 {images.thumb ? this._renderThumb(images.thumb) : null}
               </div>
