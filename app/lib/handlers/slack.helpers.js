@@ -1,3 +1,4 @@
+import React from 'react'
 import moment from 'moment'
 import _ from 'lodash'
 import emojify from '../emojify'
@@ -28,6 +29,7 @@ function santitizeAttachments(attachments) {
 }
 
 function formatText(text) {
+  const a = new SlackDown(text)
   let formatText = emojify(text)
   return formatText
 }
@@ -85,58 +87,41 @@ export function parseMessage({ type, subtype, bot_id, channel = null, ...message
 }
 
 
+
+const codeBlockRegex = /(^|\s|[_*\?\.,\-!\^;:{(\[%$#+=\u2000-\u206F\u2E00-\u2E7F"])```([\s\S]*?)?```(?=$|\s|[_*\?\.,\-!\^;:})\]%$#+=\u2000-\u206F\u2E00-\u2E7F…"])/g
+const codeRegex = /(^|\s|[\?\.,\-!\^;:{(\[%$#+=\u2000-\u206F\u2E00-\u2E7F"])\`(.*?\S *)?\`/g
+
+const boldRegex = /(^|\s|[\?\.,\-!\^;:{(\[%$#+=\u2000-\u206F\u2E00-\u2E7F"])~(.*? *\S)?~(?=$|\s|[\?\.,'\-!\^;:})\]%$~{\[<#+=\u2000-\u206F\u2E00-\u2E7F…"\uE022])/g
+const italicRegex = /(?!:.+:)(^|\s|[\?\.,\-!\^;:{(\[%$#+=\u2000-\u206F\u2E00-\u2E7F"])_(.*?\S *)?_(?=$|\s|[\?\.,'\-!\^;:})\]%$~{\[<#+=\u2000-\u206F\u2E00-\u2E7F…"\uE022])/g
+const quoteRegex = /(^|)&gt;(?![\W_](?:&lt;|&gt;|[\|\/\\\[\]{}\(\)Dpb](?=\s|$)))(([^]*)(&gt;[^]*)*)/g
+const longQuote = /(^|)&gt;&gt;&gt;([\s\S]*$)/
+
 class SlackDown {
   constructor(text) {
 
-    const regex = this._regex
+    this._reactStringReplace(text, codeBlockRegex, match => {
+      console.log('MATCH FOUND:', match)
+      return <div>{match}</div>
+    })
+  }
 
+  _replaceString(str, match, fn) {
+    var re = match
 
-    for (let patternIndex = 0; patternIndex < regex.length; patternIndex++) {
-      const { callback, pattern } = regex[patternIndex]
-      let [result, original] = [null, text]
+    var result = str.split(re.trim())
 
-      while ((([result] = []) = pattern.exec(original)) !== null) {
-        let replace = callback(result)
-
-        if (replace) {
-          text = text.replace(result, replace)
-        }
+    for (var i = 1, { length } = result; i < length; i += 2) {
+      if (result[i].length > 0) {
+        console.log(result[i], i)
+        result[i] = fn(result[i], i)
       }
     }
+    console.log(result)
+    return result
   }
 
-  _isWhiteSpace = str => /^\s?$/.test(str)
-
-  _matchTag(match) {
-    var prefix_ok = match.index == 0;
-    var postfix_ok = match.index == match.input.length - match[0].length;
-
-    if (!prefix_ok) {
-      var charAtLeft = match.input.substr(match.index - 1, 1);
-      prefix_ok = isWhiteSpace(charAtLeft);
-    }
-
-    if (!postfix_ok) {
-      var charAtRight = match.input.substr(match.index + match[0].length, 1);
-      postfix_ok = isWhiteSpace(charAtRight);
-    }
-
-    if (prefix_ok && postfix_ok) {
-      return tag;
-    }
-    return false;
-  }
-
-  _safeMatch(match, tag) {
-
-  }
-
-  get _regex() {
-    return [
-      { pattern: /<(.*?)>/g, callback: this._matchTag },
-      { pattern: /\*([^\*]*?)\*/g, callback: matchBold },
-      { pattern: /_([^_]*?)_/g, callback: matchItalic },
-      { pattern: /`([^`]*?)`/g, callback: matchFixed }
-    ]
+  _reactStringReplace(source, match, callback) {
+    if (!_.isArray(source)) source = [source]
+    return _.flatten(source.map((x) => _.isString(x) ? this._replaceString(x, match, callback) : x))
   }
 }
