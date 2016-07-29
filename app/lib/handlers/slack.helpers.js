@@ -17,7 +17,6 @@ export function santitizeUser({ tz: timezone, id, deleted, profile, name: handle
 function santitizeAttachments(attachments) {
   return attachments.map(({ title, text, pretext, ...attachment }) => {
     return {
-      original: { title, text, pretext, ...attachment },
       images: { thumb: attachment.thumb_url, author: attachment.author_icon },
       links: { author: attachment.author_link, title: attachment.title_link },
       author: attachment.author_name,
@@ -82,5 +81,62 @@ export function parseMessage({ type, subtype, bot_id, channel = null, ...message
     default:
       console.info('Unable to parse message:', { type, subtype, ...messageData })
       return false
+  }
+}
+
+
+class SlackDown {
+  constructor(text) {
+
+    const regex = this._regex
+
+
+    for (let patternIndex = 0; patternIndex < regex.length; patternIndex++) {
+      const { callback, pattern } = regex[patternIndex]
+      let [result, original] = [null, text]
+
+      while ((([result] = []) = pattern.exec(original)) !== null) {
+        let replace = callback(result)
+
+        if (replace) {
+          text = text.replace(result, replace)
+        }
+      }
+    }
+  }
+
+  _isWhiteSpace = str => /^\s?$/.test(str)
+
+  _matchTag(match) {
+    var prefix_ok = match.index == 0;
+    var postfix_ok = match.index == match.input.length - match[0].length;
+
+    if (!prefix_ok) {
+      var charAtLeft = match.input.substr(match.index - 1, 1);
+      prefix_ok = isWhiteSpace(charAtLeft);
+    }
+
+    if (!postfix_ok) {
+      var charAtRight = match.input.substr(match.index + match[0].length, 1);
+      postfix_ok = isWhiteSpace(charAtRight);
+    }
+
+    if (prefix_ok && postfix_ok) {
+      return tag;
+    }
+    return false;
+  }
+
+  _safeMatch(match, tag) {
+
+  }
+
+  get _regex() {
+    return [
+      { pattern: /<(.*?)>/g, callback: this._matchTag },
+      { pattern: /\*([^\*]*?)\*/g, callback: matchBold },
+      { pattern: /_([^_]*?)_/g, callback: matchItalic },
+      { pattern: /`([^`]*?)`/g, callback: matchFixed }
+    ]
   }
 }
