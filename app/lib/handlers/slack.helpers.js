@@ -17,6 +17,7 @@ export function santitizeUser({ tz: timezone, id, deleted, profile, name: handle
 function santitizeAttachments(attachments) {
   return attachments.map(({ title, text, pretext, ...attachment }) => {
     return {
+      original: { title, text, pretext, ...attachment },
       images: { thumb: attachment.thumb_url, author: attachment.author_icon },
       links: { author: attachment.author_link, title: attachment.title_link },
       author: attachment.author_name,
