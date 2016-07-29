@@ -51,7 +51,7 @@ export default class Chat extends Component {
         <header>
           <div className={styles.info}>
             <span className={styles.channel}>{this.props.channel.name}</span>
-            <span className={styles.meta}>{this.props.channelUsers.length} Members</span>
+            <span className={styles.meta}>{_.get(this.props, 'channel.meta.members') || `${this.props.channelUsers.length} Members`}</span>
             {
               _.get(this.props, 'channel.meta.topic') ? (
                 <div>
@@ -67,7 +67,7 @@ export default class Chat extends Component {
             this.props.messages.map(({text, user, timestamp, friendlyTimestamp, ...message}, idx) => (
               <Message
                 key={`${user}-${timestamp}`}
-                firstInChain={this.props.messages[idx - 1] && this.props.messages[idx - 1].user !== user}
+                firstInChain={!this.props.messages[idx - 1] || this.props.messages[idx - 1].user !== user}
                 user={::this._mapUserIDtoData(user, idx)}
                 text={text}
                 timestamp={friendlyTimestamp || timestamp}

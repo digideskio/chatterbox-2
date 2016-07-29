@@ -36,6 +36,14 @@ export default class Team extends Component {
     return _.get(this.props, `teams.${this.props.activeTeamID}`, {})
   }
 
+  get _joinedDms() {
+    return _.pickBy(this._team.dms, ({ isOpen }) => isOpen)
+  }
+
+  get _joinedChannels() {
+    return _.pickBy(this._team.channels, ({ isMember }) => isMember)
+  }
+
   get _messages() {
     const { activeChannelorDMID, team } = this._team
     return _.get(this.props, `messages.${team.id}.${activeChannelorDMID}`, [])
@@ -56,7 +64,9 @@ export default class Team extends Component {
       <div>
         <Sidebar
           {..._.pick(this.props, ['changeActiveTeam', 'changeActiveTeamChannelOrDM', 'settings', 'changeSetting', 'removeTeam', 'teams'])}
-          {..._.pick(this._team, ['channels', 'users', 'user', 'team', 'activeChannelorDMID'])}
+          {..._.pick(this._team, ['users', 'user', 'team', 'activeChannelorDMID'])}
+          channels={this._joinedChannels}
+          dms={this._joinedDms}
         />
 
         <Chat
