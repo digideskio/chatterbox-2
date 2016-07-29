@@ -12,10 +12,14 @@ export default class Message extends Component {
     user: PropTypes.shape({ image: PropTypes.string, name: PropTypes.string, handle: PropTypes.string })
   }
 
+  _handleClick() {
+    console.log(this.props)
+  }
+
   render() {
     const { timestamp, user, text, attachments, firstInChain } = this.props
     return (
-      <div className={classnames(styles.message, {[styles.firstInChain]: firstInChain})}>
+      <div onClick={::this._handleClick} className={classnames(styles.message, {[styles.firstInChain]: firstInChain})}>
         <div className={styles.aside}>
           {
             firstInChain ? (

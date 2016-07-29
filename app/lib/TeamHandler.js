@@ -14,9 +14,9 @@ export default function createTeamHandler(provider) {
       this._initTeamEvents({ firstLoad })
     }
 
-    _historyRequestQueue = queue(({ channel, args }, next) => {
-      this._getHistoryByID({ channel_or_dm_id: channel, ...args })
-        .then(messages => this.emit('history:loaded', { channel, messages }))
+    _historyRequestQueue = queue(({ channel_or_dm_id, args }, next) => {
+      this._getHistoryByID({ channel_or_dm_id, ...args })
+        .then(messages => this.emit('history:loaded', { channel: channel_or_dm_id, messages }))
         .then(() => process.nextTick(next))
         .catch(next) // yes we should deal with any errors here later
     })
@@ -26,8 +26,10 @@ export default function createTeamHandler(provider) {
         [this.initialActiveChannelorDMID]: { id: mainChannelID }, ...channels
       } = this.channels
 
-      this._historyRequestQueue.push({ channel: mainChannelID })
-      _.forEach(channels, ({ id }) => this._historyRequestQueue.push({ channel: id }))
+      this._historyRequestQueue.push({ channel_or_dm_id: mainChannelID })
+      _.forEach(channels, ({ id }) => this._historyRequestQueue.push({ channel_or_dm_id: id }))
+      console.log(this.dms)
+      _.forEach(this.dms, ({ id }) => this._historyRequestQueue.push({ channel_or_dm_id: id }))
     }
 
     get initialActiveChannelorDMID() {
@@ -49,7 +51,7 @@ export default function createTeamHandler(provider) {
       })
 
       this.on('history:loaded', ({ channel, messages }) => {
-        this._dispatch(addHistory({messages, channel, team: this.team.id}))
+        this._dispatch(addHistory({ messages, channel, team: this.team.id }))
       })
 
       this.on('message', ({ channel, ...message }) => {

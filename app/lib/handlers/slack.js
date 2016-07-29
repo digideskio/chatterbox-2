@@ -131,16 +131,9 @@ export default class SlackHandler extends EventEmitter {
 
   message = {
     send: (channelID, message, custom = false) => {
-      return new Promise((resolve, reject) => {
-        if (channelID.startsWith('U')) {
-          const { name } = this._slack.dataStore.getUserById(channelID)
-          this._slack.sendMessage(message, this._slack.dataStore.getDMByName(name).id)
-        } else {
-          this._slack.sendMessage(message, channelID).then(message => {
-            parseMessage.bind(this)(message)
-            resolve(message)
-          }, reject)
-        }
+      return this._slack.sendMessage(message, channelID).then(message => {
+        parseMessage.bind(this)(message)
+        return message
       })
     },
     edit: (channelID, messageID, editedMessage, custom = false) => {},
@@ -152,7 +145,9 @@ export default class SlackHandler extends EventEmitter {
 
   _getHistoryByID({ channel_or_dm_id, count = 50, latest = null, oldest = 0 }) {
     return new Promise((resolve, reject) => {
-      this._slack._webClient.channels.history(channel_or_dm_id, { count, latest, oldest, unreads: true }, (a, { has_more, messages = [], ok, unread_count_display }) => {
+      let method = 'channels'
+      if (channel_or_dm_id.startsWith('D')) method = 'im'
+      this._slack._webClient[method].history(channel_or_dm_id, { count, latest, oldest, unreads: true }, (a, { has_more, messages = [], ok, unread_count_display }) => {
         if (!ok) return reject()
         const santitizedMessages = messages.map(m => parseMessage.bind(this)(m, true)).filter(Boolean).reverse()
         resolve(santitizedMessages)
@@ -173,6 +168,23 @@ export default class SlackHandler extends EventEmitter {
       })
     })
     return channels
+  }
+
+  get dms() {
+    const dms = {}
+    _.forEach(this._slack.dataStore.dms, ({ is_open, is_im, user, id }) => {
+      if (!is_open | !is_im) return
+      const { name, presence, images: [image], handle } = this.users[user]
+      dms[id] = ({
+        id,
+        name: `@${handle}`,
+        handle,
+        image,
+        user,
+        meta: { members: presence, topic: name }
+      })
+    })
+    return dms
   }
 
   get team() {
