@@ -2,7 +2,7 @@ import { EventEmitter } from 'events'
 import moment from 'moment'
 import _ from 'lodash'
 import { WebClient, RtmClient, MemoryDataStore, CLIENT_EVENTS, RTM_EVENTS } from '@slack/client'
-import emojify from '../emojis'
+import emojify from '../emojify'
 
 const DEFAULT_OPTIONS = {
   logLevel: 'error',
