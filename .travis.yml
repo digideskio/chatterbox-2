@@ -6,6 +6,6 @@ node_js:
   -  stable
 
 install:
-  -  npm i eslint eslint-config-{standard-jsx,promise,react,standard}
+  -  npm i
 script:
   -  npm run lint
