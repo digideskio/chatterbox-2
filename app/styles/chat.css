@@ -210,6 +210,11 @@
   white-space: pre;
 }
 
+.chat .messages .message .body .message_text em {
+  text-decoration: line-through;
+  font-style: normal;
+}
+
 .chat .messages .message .body .message_text a {
   cursor: pointer;
   color: #05afe6;
