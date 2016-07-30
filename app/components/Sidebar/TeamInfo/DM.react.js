@@ -7,6 +7,7 @@ export default class DM extends Component {
     id: PropTypes.string,
     image: PropTypes.string,
     handle: PropTypes.string,
+    presence: PropTypes.bool,
     active: PropTypes.bool,
     name: PropTypes.string,
     missedPings: PropTypes.oneOfType([PropTypes.number, PropTypes.bool]),
@@ -16,9 +17,10 @@ export default class DM extends Component {
   handleOnClick = () => this.props.onClick(this.props.id)
 
   render() {
-    const { image, active, handle } = this.props
+    const { image, active, handle, presence } = this.props
     return (
       <div onClick={this.handleOnClick} className={classnames(styles.dm, {[styles.active]: active})}>
+        <div className={classnames(styles.status, {[styles.online]: presence === 'online'})} />
         <div className={styles.image} style={{backgroundImage: `url(${image})`}} />
         <div className={styles.name}>{handle}</div>
       </div>

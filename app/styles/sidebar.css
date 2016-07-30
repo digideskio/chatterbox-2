@@ -96,9 +96,9 @@
 }
 
 .sidebar .teamInfo {
-  width: calc(100% - 90px - 15px);
+  width: calc(100% - 90px - 20px);
   position: absolute;
-  right: 0;
+  right: 10px;
 }
 
 .sidebar .teamInfo .team {
@@ -254,6 +254,19 @@
     display: inline-block;
     background-position: center;
     background-size: contain;
+}
+
+.sidebar .teamInfo .dms .dm .status{
+  width: 10px;
+  height: 10px;
+  position: absolute;
+  margin-top: 15px;
+  left: -13px;
+  border-radius: 50%;
+}
+
+.sidebar .teamInfo .dms .dm .status.online{
+  background-color: #7ed320;
 }
 
 .sidebar .teamInfo .dms .dm .name {

@@ -94,13 +94,14 @@ export default class SlackHandler extends EventEmitter {
     const users = this.users
     _.forEach(this._slack.dataStore.dms, ({ is_open: isOpen, is_im, user, id }) => {
       if (!is_im) return
-      const { name, presence, images: [image], handle } = users[user]
+      const { name, presence, images, handle } = users[user]
       dms[id] = ({
         isOpen,
         id,
+        presence,
         name: `@${handle}`,
         handle,
-        image,
+        image: _.last(images),
         user,
         meta: { members: presence, topic: name }
       })
