@@ -2,7 +2,6 @@
   height: 20px;
 }
 
-
 .chat {
   background-color: white;
   width: calc(100% - 320px);
@@ -187,6 +186,28 @@
   font-size: 15px;
   line-height: 20px;
   font-weight: 00;
+}
+
+.chat .messages .message .body .message_text .code-inline {
+  color: #d34d4d;
+  border: 1px solid #d4d4d4;
+  background-color: #fff8f8;
+  border-radius: 3px;
+  padding: 0 4px;
+  font-family: monospace;
+  font-size: 13px;
+  display: inline-block;
+}
+
+.chat .messages .message .body .message_text .code-block {
+  color: #757575;
+  border: 1px solid #d4d4d4;
+  background-color: #fff8f8;
+  border-radius: 3px;
+  padding: 1px 4px;
+  font-family: monospace;
+  font-size: 13px;
+  white-space: pre;
 }
 
 .chat .messages .message .body .message_text a {

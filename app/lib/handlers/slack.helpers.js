@@ -88,12 +88,10 @@ export function parseMessage({ type, subtype, bot_id, channel = null, ...message
   }
 }
 
-
-
 const codeBlockRegex = /(^|\s|[_*\?\.,\-!\^;:{(\[%$#+=\u2000-\u206F\u2E00-\u2E7F"])```([\s\S]*?)?```(?=$|\s|[_*\?\.,\-!\^;:})\]%$#+=\u2000-\u206F\u2E00-\u2E7F…"])/g
 const codeRegex = /(^|\s|[\?\.,\-!\^;:{(\[%$#+=\u2000-\u206F\u2E00-\u2E7F"])\`(.*?\S *)?\`/g
 
-const boldRegex = /(^|\s|[\?\.,\-!\^;:{(\[%$#+=\u2000-\u206F\u2E00-\u2E7F"])~(.*? *\S)?~(?=$|\s|[\?\.,'\-!\^;:})\]%$~{\[<#+=\u2000-\u206F\u2E00-\u2E7F…"\uE022])/g
+const boldRegex = /(^|\s|[\?\.,\-!\^;:{(\[%$#+=\u2000-\u206F\u2E00-\u2E7F"])\*(.*?\S *)?\*(?=$|\s|[\?\.,'\-!\^;:})\]%$~{\[<#+=\u2000-\u206F\u2E00-\u2E7F…"\uE022])/g
 const italicRegex = /(?!:.+:)(^|\s|[\?\.,\-!\^;:{(\[%$#+=\u2000-\u206F\u2E00-\u2E7F"])_(.*?\S *)?_(?=$|\s|[\?\.,'\-!\^;:})\]%$~{\[<#+=\u2000-\u206F\u2E00-\u2E7F…"\uE022])/g
 const quoteRegex = /(^|)&gt;(?![\W_](?:&lt;|&gt;|[\|\/\\\[\]{}\(\)Dpb](?=\s|$)))(([^]*)(&gt;[^]*)*)/g
 const longQuote = /(^|)&gt;&gt;&gt;([\s\S]*$)/
@@ -123,6 +121,13 @@ var replacements = [{
     replacement: (match) => {
       match = match.slice(1, -1)
       return match.trim().length > 0 ? ReactDOMServer.renderToStaticMarkup(<b>{match}</b>) : match
+    }
+  },
+  {
+    pattern: italicRegex,
+    replacement: (match) => {
+      match = match.slice(1, -1)
+      return match.trim().length > 0 ? ReactDOMServer.renderToStaticMarkup(<i>{match}</i>) : match
     }
   },
   {
