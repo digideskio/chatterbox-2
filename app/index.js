@@ -11,6 +11,8 @@ import 'styles/app.global.css'
 const store = configureStore()
 const history = syncHistoryWithStore(hashHistory, store)
 
+global.App = { teams: {} }
+
 render(
   <Provider store={store}>
     <Router history={history} routes={routes} />

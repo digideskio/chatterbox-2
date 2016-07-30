@@ -3,7 +3,6 @@ import classnames from 'classnames'
 import styles from 'styles/sidebar.css'
 
 
-
 export default class Channel extends Component {
   static propTypes = {
     id: PropTypes.string,

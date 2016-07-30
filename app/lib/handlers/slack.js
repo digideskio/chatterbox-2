@@ -74,7 +74,7 @@ export default class SlackHandler extends EventEmitter {
 
   get channels() {
     const channels = {}
-    const users = this.users
+    const { users } = this
     _.forEach(this._slack.dataStore.channels, ({ is_archived, is_member: isMember, name, is_general: main, id, members, topic, purpose }) => {
       if (is_archived) return
       channels[id] = ({
@@ -82,7 +82,7 @@ export default class SlackHandler extends EventEmitter {
         name: `# ${name}`,
         id,
         main,
-        members: members != undefined ? members.map(id => !users[id].deleted ? id : false).filter(Boolean) || [] : [],
+        members: members != undefined ? members.map(id => !users[id] ? id : false).filter(Boolean) || [] : [],
         meta: { topic: _.get(topic, 'value', null), purpose: _.get(purpose, 'value', null) }
       })
     })
@@ -91,8 +91,9 @@ export default class SlackHandler extends EventEmitter {
 
   get dms() {
     const dms = {}
-    const users = this.users
-    _.forEach(this._slack.dataStore.dms, ({ is_open: isOpen, is_im, user, id }) => {
+    const { users } = this
+    const readableDMs = _.pick(this._slack.dataStore.dms, ({ user }) => users[user])
+    _.forEach(readableDMs, ({ is_open: isOpen, is_im, user, id }) => {
       if (!is_im) return
       const { name, presence, images, handle } = users[user]
       dms[id] = ({
@@ -116,8 +117,8 @@ export default class SlackHandler extends EventEmitter {
 
   get users() {
     const users = {}
-    _.forEach(this._slack.dataStore.users, ({ deleted, id, ...user }) => {
-      users[id] = santitizeUser({ id, ...user })
+    _.forEach(this._slack.dataStore.users, (user) => {
+      if (!_.get(user, 'deleted', false)) users[user.id] = santitizeUser(user)
     })
     return users
   }
