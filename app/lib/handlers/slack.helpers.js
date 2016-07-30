@@ -13,7 +13,7 @@ export function santitizeUser({ tz: timezone, id, deleted, profile, name: handle
     handle,
     name: _.get(profile, 'real_name_normalized', '').length > 0 ? profile.real_name_normalized : null,
     id,
-    presence,
+    presence: presence === 'active' ? 'online' : 'offline',
     images: _.filter(profile, (data, key) => key.includes('image')),
     meta: { timezone, email: _.get(profile, 'email') }
   }
@@ -30,10 +30,6 @@ function santitizeAttachments(attachments) {
       text
     }
   })
-}
-
-function formatText(text) {
-  return slackDown(text)
 }
 
 function santitizeMessage({ user, text, ts: timestamp, user_profile: userProfile = null, attachments = [] }) {
@@ -146,6 +142,6 @@ const replacements = [{ pattern: codeBlockRegex,
   }
 ]
 
-function slackDown(text) {
+function formatText(text) {
   return replace.strWithArr(text, replacements)
 }

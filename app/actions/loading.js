@@ -1,5 +1,4 @@
 import { push as locationPush } from 'react-router-redux'
-import { bindActionCreators } from 'redux'
 
 import Database from 'lib/database'
 import createTeamHandler from 'lib/teamHandler'
@@ -21,11 +20,12 @@ export function load() {
   return (dispatch) => {
     loadSettings(dispatch)
       .then(loadTeams.bind(this, dispatch))
-      .then(Team => {
-        if (!Team) {
+      .then(teamID => {
+        if (!teamID) {
           dispatch(locationPush('/login/slack'))
         } else {
-          bindActionCreators(TeamsActions, dispatch).changeActiveTeam(Team.team.id)
+          console.log(TeamsActions.changeActiveTeam(teamID))
+          dispatch(TeamsActions.changeActiveTeam(teamID))
           dispatch(locationPush('/chat'))
         }
       })
@@ -55,13 +55,13 @@ function loadTeams(dispatch) {
     let firstLoaded = false
 
     loader.on('team', ({ id, name, type, args }) => {
-      const [{ loadTeam }, TeamHandler] = [bindActionCreators(TeamsActions, dispatch), createTeamHandler(type)]
+      const TeamHandler = createTeamHandler(type)
       const Team = new TeamHandler(args, dispatch, false)
       Team.once('connected', (TeamData) => {
-        loadTeam(Team)
+        dispatch(TeamsActions.loadTeam(Team))
         if (!firstLoaded) {
           firstLoaded = true
-          resolve(Team)
+          resolve(Team.team.id)
         }
       })
     })
