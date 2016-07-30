@@ -141,14 +141,12 @@ const replacements = [
   },
   {
     pattern: emojiWithEmoticons.delimiter,
-    replacement: _emojify
+    replacement: (match) => {
+      const hex = emojiWithEmoticons.dict[_getKey(match)]
+      return hex ? ReactDOMServer.renderToStaticMarkup(<img className={styles.emoji} src={_buildImageUrl(hex)} />) : match
+    }
   }
 ]
-
-function _emojify(match) {
-  const hex = emojiWithEmoticons.dict[_getKey(match)]
-  return hex ? ReactDOMServer.renderToStaticMarkup(<img className={styles.emoji} src={_buildImageUrl(hex)} />) : match
-}
 
 function slackDown(text) {
   return replace.strWithArr(text, replacements)
