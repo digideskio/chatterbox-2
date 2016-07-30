@@ -22,6 +22,12 @@ export default class SlackHandler extends EventEmitter {
       this.emit('authenticated')
     })
 
+    this._slack.on(CLIENT_EVENTS.RTM.ATTEMPTING_RECONNECT, () => {
+      this._connected = false
+      this._canSend = false
+      console.warn('O SHIT SLACK BE RECONNECTING')
+    })
+
     this._slack.on(CLIENT_EVENTS.RTM.DISCONNECT, () => {
       this._canSend = false
       this._connected = false
@@ -37,7 +43,8 @@ export default class SlackHandler extends EventEmitter {
 
     this._slack.on(CLIENT_EVENTS.RTM.RTM_CONNECTION_OPENED, () => {
       this._canSend = true
-      this._activeChannelorDMID = this.channels[_.findKey(this.channels, 'main')].id
+      const { channels } = this
+      this._activeChannelorDMID = channels[_.findKey(channels, 'main')].id
       this.emit('connected')
     })
 
@@ -92,9 +99,8 @@ export default class SlackHandler extends EventEmitter {
   get dms() {
     const dms = {}
     const { users } = this
-    const readableDMs = _.pick(this._slack.dataStore.dms, ({ user }) => users[user])
-    _.forEach(readableDMs, ({ is_open: isOpen, is_im, user, id }) => {
-      if (!is_im) return
+    const readableDMs = _.pickBy(this._slack.dataStore.dms, ({ user, is_im }) => is_im && users[user])
+    _.forEach(readableDMs, ({ is_open: isOpen, user, id }) => {
       const { name, presence, images, handle } = users[user]
       dms[id] = ({
         isOpen,

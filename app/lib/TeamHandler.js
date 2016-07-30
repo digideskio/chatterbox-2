@@ -1,6 +1,6 @@
 import _ from 'lodash'
-import Database from 'lib/database'
 import { queue } from 'async'
+import Database from 'lib/database'
 import { addHistory, newMessage, editMessage } from 'actions/messages'
 
 export default function createTeamHandler(provider) {
@@ -25,12 +25,10 @@ export default function createTeamHandler(provider) {
       const { [this.initialActiveChannelorDMID]: { id: mainChannelID }, ...channels } = this.channels
 
       this._historyRequestQueue.push({ channel_or_dm_id: mainChannelID })
-      /*
       _.forEach({
         ..._.pickBy(channels, ({ isMember }) => isMember),
         ..._.pickBy(this.dms, ({ isOpen }) => isOpen)
       }, ({ id }) => this._historyRequestQueue.push({ channel_or_dm_id: id }))
-      */
     }
 
     loadHistory(channel_or_dm_id) {
@@ -50,10 +48,8 @@ export default function createTeamHandler(provider) {
         }
       })
 
-      this.on('connected', (teamData) => {
-        if (firstLoad) {
-          this.initHistory()
-        }
+      this.on('connected', () => {
+        this.initHistory()
         console.log(`Connected to ${this.team.type} team: ${this.team.name} via ${this.user.handle}`)
       })
 
