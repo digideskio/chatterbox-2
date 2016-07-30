@@ -1,7 +1,8 @@
 import React, { Component, PropTypes } from 'react'
 import classnames from 'classnames'
-import _ from 'lodash'
 import styles from 'styles/sidebar.css'
+import DM from './DM.react'
+import Channel from './Channel.react'
 
 export default class TeamInfo extends Component {
 
@@ -46,54 +47,6 @@ export default class TeamInfo extends Component {
             ))
           }
         </div>
-      </div>
-    )
-  }
-}
-
-class DM extends Component {
-  static propTypes = {
-    id: PropTypes.string,
-    image: PropTypes.string,
-    handle: PropTypes.string,
-    active: PropTypes.bool,
-    name: PropTypes.string,
-    missedPings: PropTypes.oneOfType([PropTypes.number, PropTypes.bool]),
-    onClick: PropTypes.func.isRequired
-  }
-
-  handleOnClick = () => this.props.onClick(this.props.id)
-
-  render() {
-    const { image, active, handle } = this.props
-    return (
-      <div onClick={this.handleOnClick} className={classnames(styles.dm, {[styles.active]: active})}>
-        <div className={styles.image} style={{backgroundImage: `url(${image})`}} />
-        <div className={styles.name}>{handle}</div>
-      </div>
-    )
-  }
-}
-
-class Channel extends Component {
-  static propTypes = {
-    id: PropTypes.string,
-    active: PropTypes.bool,
-    name: PropTypes.string,
-    missedPings: PropTypes.oneOfType([PropTypes.number, PropTypes.bool]),
-    onClick: PropTypes.func.isRequired
-  }
-
-  handleOnClick = () => this.props.onClick(this.props.id)
-
-  render() {
-    const { missedPings, active, name } = this.props
-    return (
-      <div onClick={this.handleOnClick} className={classnames(styles.channel, {[styles.active]:active}, {[styles.attention]:missedPings})}>
-        <p>{name}</p>
-        {
-          missedPings ? <span className={styles.missed_pings}>{missedPings}</span> : null
-        }
       </div>
     )
   }

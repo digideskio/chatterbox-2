@@ -1,6 +1,6 @@
 import React, { Component, PropTypes } from 'react'
 import Providers from './Providers.react'
-import TeamInfo from './TeamInfo.react'
+import TeamInfo from './TeamInfo'
 import styles from 'styles/sidebar.css'
 
 
