@@ -103,7 +103,8 @@ const _getEscapedKeys = hash => Object.keys(hash).map(x => escapeStringRegexp(x)
 const emojiWithEmoticons = { delimiter: new RegExp(`(:(?:${_getEscapedKeys(annotations)}):)`, 'g'), dict: annotations }
 
 
-var replacements = [{
+const replacements = [
+  {
     pattern: codeBlockRegex,
     replacement: (match) => {
       match = match.slice(3, -3)
@@ -146,12 +147,9 @@ var replacements = [{
 
 function _emojify(match) {
   const hex = emojiWithEmoticons.dict[_getKey(match)]
-  console.log(hex)
-  return hex ? ReactDOMServer.renderToStaticMarkup(<img className={styles.emoji} src={_buildImageUrl(hex)}/>) : match
+  return hex ? ReactDOMServer.renderToStaticMarkup(<img className={styles.emoji} src={_buildImageUrl(hex)} />) : match
 }
 
 function slackDown(text) {
-  text = replace.strWithArr(text, replacements)
-  console.log(text)
-  return text
+  return replace.strWithArr(text, replacements)
 }
