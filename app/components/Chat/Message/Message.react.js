@@ -40,7 +40,7 @@ export default class Message extends Component {
           }
           {
             text ? (
-              <div className={styles.message_text}>{text}</div>
+              <div className={styles.message_text} dangerouslySetInnerHTML={{__html: text}} />
             ) : null
           }
           {
