@@ -1,6 +1,6 @@
 import React, { Component, PropTypes } from 'react'
 import _ from 'lodash'
-import Message, { DaySeparator } from './Message'
+import Message from './Message'
 import Sender from './Sender.react'
 import styles from 'styles/chat.css'
 

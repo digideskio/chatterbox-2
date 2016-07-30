@@ -10,7 +10,8 @@ export default class TitleBarComponent extends Component {
   static propTypes = {
     isMaximized: PropTypes.bool.isRequired,
     isMinimized: PropTypes.bool.isRequired,
-    toggleMaximize: PropTypes.func.isRequired
+    toggleMaximize: PropTypes.func.isRequired,
+    toggleMinimize: PropTypes.func.isRequired
   }
 
   _toggleMaximize() {

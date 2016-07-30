@@ -1,4 +1,5 @@
 import React, { Component, PropTypes } from 'react'
+import _ from 'lodash'
 import { Link } from 'react-router'
 import classnames from 'classnames'
 import styles from 'styles/sidebar.css'
@@ -45,7 +46,8 @@ class Provider extends Component {
     image: PropTypes.string,
     unreads: PropTypes.bool,
     pings: PropTypes.number,
-    id: PropTypes.string
+    id: PropTypes.string,
+    onClick: PropTypes.func.isRequired
   }
 
   static defaultProps = {
@@ -61,7 +63,7 @@ class Provider extends Component {
           this.props.unreads ? <div className={styles.new_message} /> : null
         }
         {
-          this.props.pings ? <div className={styles.unread_counter}>{this.props.pings}</div> :  null
+          this.props.pings ? <div className={styles.unread_counter}>{this.props.pings}</div> : null
         }
       </div>
     )

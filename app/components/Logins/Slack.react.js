@@ -51,7 +51,7 @@ export default class SlackLogin extends Component {
       if (!this.mounted) return
 
       webview.insertCSS(require('!raw!styles/webview_overrides/slack.css'))
-        //webview.openDevTools()
+        // webview.openDevTools()
 
       if (!checking) {
         checking = true
@@ -77,6 +77,7 @@ export default class SlackLogin extends Component {
           form: { client_secret: this.client_secret, client_id: this.client_id, code, redirect_uri: this.redirect_uri },
           json: true
         }, (err, res, { access_token: token }) => {
+          if (err) console.error(err)
           this.props.addTeam('slack', { token })
         })
       }
@@ -97,10 +98,10 @@ export default class SlackLogin extends Component {
     return (
       <div className={styles.logininner}>
         <div className={classnames(styles.sidebar, styles.full)}>
-          <object className={styles.slack} data='images/logins/slack.svg' type='image/svg+xml'/>
+          <object className={styles.slack} data='images/logins/slack.svg' type='image/svg+xml' />
         </div>
         <div className={classnames(styles.webview, {[styles.show]: webviewShown})}>
-          <webview preload='components/Logins/slack.injected.js' ref='webview' src={`https://slack.com/oauth/pick_reflow?${::this.getOAuthQuery()}`}/>
+          <webview preload='components/Logins/slack.injected.js' ref='webview' src={`https://slack.com/oauth/pick_reflow?${::this.getOAuthQuery()}`} />
         </div>
       </div>
     )

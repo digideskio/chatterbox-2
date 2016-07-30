@@ -1,7 +1,7 @@
 import _ from 'lodash'
 import Database from 'lib/database'
 import { queue } from 'async'
-import { addHistory, newMessage, editMessage, removeMessage } from 'actions/messages'
+import { addHistory, newMessage, editMessage } from 'actions/messages'
 
 export default function createTeamHandler(provider) {
   const Provider = require(`lib/handlers/${provider}`)

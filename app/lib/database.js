@@ -59,7 +59,7 @@ export default {
   },
 
   settings: {
-    change: (setting, value, callback) => SettingsInstance.setItem(setting, value, callback ? callback : null),
+    change: (setting, value, callback = null) => SettingsInstance.setItem(setting, value, callback),
     Loader: SettingsLoader,
     defaults: defaultSettings
   }

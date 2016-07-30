@@ -4,7 +4,12 @@ import TitleBar from 'components/TitleBar.react'
 import * as TitleBarActions from 'actions/titlebar'
 
 
-export default connect(
-  ({ titlebar }) => titlebar,
-  dispatch => bindActionCreators(TitleBarActions, dispatch)
-)(TitleBar)
+function mapStateToProps({ titlebar }) {
+  return { titlebar }
+}
+
+function mapDispatchToProps(dispatch) {
+  return bindActionCreators(TitleBarActions, dispatch)
+}
+
+export default connect(mapStateToProps, mapDispatchToProps)(TitleBar)

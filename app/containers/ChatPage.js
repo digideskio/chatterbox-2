@@ -10,7 +10,7 @@ function mapStateToProps({ settings, teams, messages }) {
 }
 
 function mapDispatchToProps(dispatch) {
-  return bindActionCreators({...TeamsActions, ...SettingsActions, ...MessageActions }, dispatch)
+  return bindActionCreators({ ...TeamsActions, ...SettingsActions, ...MessageActions }, dispatch)
 }
 
 export default connect(mapStateToProps, mapDispatchToProps)(Team)

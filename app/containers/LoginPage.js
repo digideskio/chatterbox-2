@@ -4,7 +4,12 @@ import Login from 'components/login.react'
 import * as LoginActions from 'actions/login'
 
 
-export default connect(
-  ({ login }) => login,
-  dispatch => bindActionCreators(LoginActions, dispatch)
-)(Login)
+function mapStateToProps({ login }) {
+  return { login }
+}
+
+function mapDispatchToProps(dispatch) {
+  return bindActionCreators(LoginActions, dispatch)
+}
+
+export default connect(mapStateToProps, mapDispatchToProps)(Login)

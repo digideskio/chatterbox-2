@@ -5,6 +5,7 @@
   "description": "",
   "main": "main.js",
   "scripts": {
+    "lint": "eslint .",
     "hot-server": "node -r babel-register server.js",
     "build-main": "cross-env NODE_ENV=production node -r babel-register ./node_modules/webpack/bin/webpack --config webpack.config.electron.js --progress --profile --colors",
     "build-renderer": "cross-env NODE_ENV=production node -r babel-register ./node_modules/webpack/bin/webpack --config webpack.config.production.js --progress --profile --colors",
@@ -17,9 +18,32 @@
     "dev": "concurrently --kill-others \"npm run hot-server\" \"npm run start-hot\""
   },
   "bin": {
-    "electron": "./node_modules/.bin/electron"
+    "electron": "./node_modules/.bin/electron",
+    "eslint": "./node_modules/.bin/eslint"
   },
   "private": true,
+  "dependencies": {
+    "@slack/client": "luigiplr/node-slack-sdk",
+    "async": "^2.0.0",
+    "classnames": "^2.2.5",
+    "electron-window-state": "^3.0.3",
+    "emoji-annotation-to-unicode": "^0.2.4",
+    "escape-string-regexp": "^1.0.5",
+    "frep": "^0.2.3",
+    "localforage": "^1.4.2",
+    "lodash": "^4.13.1",
+    "moment": "^2.14.1",
+    "qs": "^6.2.1",
+    "react": "^15.1.0",
+    "react-desktop": "^0.2.5",
+    "react-dom": "^15.1.0",
+    "react-redux": "^4.4.5",
+    "react-router": "^2.4.1",
+    "react-router-redux": "^4.0.4",
+    "redux": "^3.5.2",
+    "redux-thunk": "^2.1.0",
+    "request": "^2.74.0"
+  },
   "devDependencies": {
     "asar": "^0.12.0",
     "babel-core": "^6.9.0",
@@ -71,28 +95,6 @@
     "webpack": "^1.13.1",
     "webpack-dev-middleware": "^1.6.1",
     "webpack-hot-middleware": "^2.10.0"
-  },
-  "dependencies": {
-    "@slack/client": "luigiplr/node-slack-sdk",
-    "async": "^2.0.0",
-    "classnames": "^2.2.5",
-    "electron-window-state": "^3.0.3",
-    "emoji-annotation-to-unicode": "^0.2.4",
-    "escape-string-regexp": "^1.0.5",
-    "frep": "^0.2.3",
-    "localforage": "^1.4.2",
-    "lodash": "^4.13.1",
-    "moment": "^2.14.1",
-    "qs": "^6.2.1",
-    "react": "^15.1.0",
-    "react-desktop": "^0.2.5",
-    "react-dom": "^15.1.0",
-    "react-redux": "^4.4.5",
-    "react-router": "^2.4.1",
-    "react-router-redux": "^4.0.4",
-    "redux": "^3.5.2",
-    "redux-thunk": "^2.1.0",
-    "request": "^2.74.0"
   },
   "devEngines": {
     "node": "4.x || 5.x || 6.x",

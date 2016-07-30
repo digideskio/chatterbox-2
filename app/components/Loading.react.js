@@ -1,5 +1,4 @@
 import React, { Component, PropTypes } from 'react'
-import { defer } from 'lodash'
 import styles from 'styles/loading.css'
 
 export default class Loading extends Component {
@@ -10,7 +9,8 @@ export default class Loading extends Component {
   static propTypes = {
     settings: PropTypes.object.isRequired,
     load: PropTypes.func.isRequired,
-    task: PropTypes.string.isRequired
+    task: PropTypes.string.isRequired,
+    loaded: PropTypes.number.isRequired
   }
 
   state = {
@@ -36,7 +36,7 @@ export default class Loading extends Component {
         <div className={styles.info}>
           <div className={styles.title}>{this.props.task}<span>{this.state.dots}</span></div>
           <div className={styles.progress_bar}>
-            <div style={{width: `${this.props.loaded}%`}}/>
+            <div style={{width: `${this.props.loaded}%`}} />
           </div>
         </div>
       </div>

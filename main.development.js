@@ -50,16 +50,16 @@ app.on('ready', async() => {
     mainWindow.focus()
   })
 
-  mainWindow.on('closed', () => mainWindow = null)
+  mainWindow.on('closed', () => {
+    mainWindow = null
+  })
 
   if (process.env.NODE_ENV === 'development') {
     mainWindow.openDevTools()
     mainWindow.webContents.on('context-menu', (e, { x, y }) => {
       Menu.buildFromTemplate([{
         label: 'Inspect element',
-        click() {
-          mainWindow.inspectElement(x, y)
-        }
+        click: () => mainWindow.inspectElement(x, y)
       }]).popup(mainWindow)
     })
   }
