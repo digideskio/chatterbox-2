@@ -13,7 +13,7 @@ export function santitizeUser({ tz: timezone, id, deleted, profile, name: handle
     handle,
     name: _.get(profile, 'real_name_normalized', '').length > 0 ? profile.real_name_normalized : null,
     id,
-    presence: presence === 'active' ? 'online' : 'offline',
+    presence,
     images: _.filter(profile, (data, key) => key.includes('image')),
     meta: { timezone, email: _.get(profile, 'email') }
   }
@@ -94,8 +94,8 @@ const codeRegex = /(^|\s|[\?\.,\-!\^;:{(\[%$#+=\u2000-\u206F\u2E00-\u2E7F"])`(.*
 const boldRegex = /(^|\s|[\?\.,\-!\^;:{(\[%$#+=\u2000-\u206F\u2E00-\u2E7F"])\*(.*?\S *)?\*(?=$|\s|[\?\.,'\-!\^;:})\]%$~{\[<#+=\u2000-\u206F\u2E00-\u2E7F…"\uE022])/g
 const italicRegex = /(?!:.+:)(^|\s|[\?\.,\-!\^;:{(\[%$#+=\u2000-\u206F\u2E00-\u2E7F"])_(.*?\S *)?_(?=$|\s|[\?\.,'\-!\^;:})\]%$~{\[<#+=\u2000-\u206F\u2E00-\u2E7F…"\uE022])/g
 const strikeRegex = /(^|\s|[\?\.,\-!\^;:{(\[%$#+=\u2000-\u206F\u2E00-\u2E7F"])~(.*? *\S)?~(?=$|\s|[\?\.,'\-!\^;:})\]%$~{\[<#+=\u2000-\u206F\u2E00-\u2E7F…"\uE022])/g
-// const quoteRegex = /(^|)&gt;(?![\W_](?:&lt;|&gt;|[\|\/\\\[\]{}\(\)Dpb](?=\s|$)))(([^]*)(&gt;[^]*)*)/g
-// const longQuote = /(^|)&gt;&gt;&gt;([\s\S]*$)/
+  // const quoteRegex = /(^|)&gt;(?![\W_](?:&lt;|&gt;|[\|\/\\\[\]{}\(\)Dpb](?=\s|$)))(([^]*)(&gt;[^]*)*)/g
+  // const longQuote = /(^|)&gt;&gt;&gt;([\s\S]*$)/
 
 const _buildImageUrl = (hex, ext = 'png') => `http://cdn.jsdelivr.net/emojione/assets/${ext}/${hex.toUpperCase()}.${ext}`
 const _getKey = key => key.match(/^:.*:$/) ? key.replace(/^:/, '').replace(/:$/, '') : key
@@ -103,9 +103,7 @@ const _getEscapedKeys = hash => Object.keys(hash).map(x => escapeStringRegexp(x)
 const emojiWithEmoticons = { delimiter: new RegExp(`(:(?:${_getEscapedKeys(annotations)}):)`, 'g'), dict: annotations }
 
 
-const replacements = [
-  {
-    pattern: codeBlockRegex,
+const replacements = [{ pattern: codeBlockRegex,
     replacement: (match) => {
       match = match.slice(3, -3)
       return match.trim().length > 0 ? ReactDOMServer.renderToStaticMarkup(<div className={styles['code-block']}>{match}</div>) : match

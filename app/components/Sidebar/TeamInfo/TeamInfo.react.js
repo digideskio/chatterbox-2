@@ -28,7 +28,7 @@ export default class TeamInfo extends Component {
       <div className={styles.teamInfo}>
         <div className={styles.team}>
           <div className={styles.name}>{this.props.team.name}</div>
-          <div className={classnames(styles.status, this.props.user.presence)} />
+          <div className={classnames(styles.status, styles[this.props.user.presence])} />
           <span className={styles.handle}>{this.props.user.handle}</span>
         </div>
         <div className={styles.channels}>
