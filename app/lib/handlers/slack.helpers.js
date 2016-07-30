@@ -1,7 +1,11 @@
 import React from 'react'
+import ReactDOMServer from 'react-dom/server'
 import moment from 'moment'
 import _ from 'lodash'
-import emojify from '../emojify'
+import replace from 'frep'
+import escapeStringRegexp from 'escape-string-regexp'
+import annotations from 'emoji-annotation-to-unicode'
+import styles from 'styles/chat.css'
 
 
 export function santitizeUser({ tz: timezone, id, deleted, profile, name: handle, presence }) {
@@ -29,9 +33,7 @@ function santitizeAttachments(attachments) {
 }
 
 function formatText(text) {
-  const a = new SlackDown(text)
-  let formatText = emojify(text)
-  return formatText
+  return slackDown(text)
 }
 
 function santitizeMessage({ user, text, ts: timestamp, user_profile: userProfile = null, attachments = [] }) {
@@ -96,32 +98,47 @@ const italicRegex = /(?!:.+:)(^|\s|[\?\.,\-!\^;:{(\[%$#+=\u2000-\u206F\u2E00-\u2
 const quoteRegex = /(^|)&gt;(?![\W_](?:&lt;|&gt;|[\|\/\\\[\]{}\(\)Dpb](?=\s|$)))(([^]*)(&gt;[^]*)*)/g
 const longQuote = /(^|)&gt;&gt;&gt;([\s\S]*$)/
 
-class SlackDown {
-  constructor(text) {
+const _buildImageUrl = (hex, ext = 'png') => `http://cdn.jsdelivr.net/emojione/assets/${ext}/${hex.toUpperCase()}.${ext}`
+const _getKey = key => key.match(/^:.*:$/) ? key.replace(/^:/, '').replace(/:$/, '') : key
+const _getEscapedKeys = hash => Object.keys(hash).map(x => escapeStringRegexp(x)).join('|')
+const emojiWithEmoticons = { delimiter: new RegExp(`(:(?:${_getEscapedKeys(annotations)}):)`, 'g'), dict: annotations }
 
-    this._reactStringReplace(text, codeBlockRegex, match => {
-      console.log('MATCH FOUND:', match)
-      return <div>{match}</div>
-    })
-  }
 
-  _replaceString(str, match, fn) {
-    var re = match
-
-    var result = str.split(re.trim())
-
-    for (var i = 1, { length } = result; i < length; i += 2) {
-      if (result[i].length > 0) {
-        console.log(result[i], i)
-        result[i] = fn(result[i], i)
-      }
+var replacements = [{
+    pattern: codeBlockRegex,
+    replacement: (match) => {
+      match = match.slice(3, -3)
+      return match.trim().length > 0 ? ReactDOMServer.renderToStaticMarkup(<div className={styles['code-block']}>{match}</div>) : match
     }
-    console.log(result)
-    return result
+  },
+  {
+    pattern: codeRegex,
+    replacement: (match) => {
+      match = match.slice(1, -1)
+      return match.trim().length > 0 ? ReactDOMServer.renderToStaticMarkup(<div className={styles['code-inline']}>{match}</div>) : match
+    }
+  },
+  {
+    pattern: boldRegex,
+    replacement: (match) => {
+      match = match.slice(1, -1)
+      return match.trim().length > 0 ? ReactDOMServer.renderToStaticMarkup(<b>{match}</b>) : match
+    }
+  },
+  {
+    pattern: emojiWithEmoticons.delimiter,
+    replacement: _emojify
   }
+]
 
-  _reactStringReplace(source, match, callback) {
-    if (!_.isArray(source)) source = [source]
-    return _.flatten(source.map((x) => _.isString(x) ? this._replaceString(x, match, callback) : x))
-  }
+function _emojify(match) {
+  const hex = emojiWithEmoticons.dict[_getKey(match)]
+  console.log(hex)
+  return hex ? ReactDOMServer.renderToStaticMarkup(<img className={styles.emoji} src={_buildImageUrl(hex)}/>) : match
+}
+
+function slackDown(text) {
+  text = replace.strWithArr(text, replacements)
+  console.log(text)
+  return text
 }
