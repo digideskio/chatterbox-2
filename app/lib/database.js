@@ -29,18 +29,24 @@ class TeamsLoader extends EventEmitter {
   constructor() {
     super()
 
+    let total = 0
+
+    const loadingQueue = queue(({ key, idx }, next) => TeamsInstance.getItem(key)
+      .then(team => this.emit('team', team))
+      .then(() => ((idx + 1) === total) && this.emit('finnished', total))
+      .then(next)
+      .catch(err => {
+        console.error(err)
+        this.emit('finnished', 0)
+        next()
+      }))
+
     TeamsInstance.keys().then((keys) => {
       if (keys.length === 0) {
         this.emit('finnished', 0)
       } else {
-        keys.forEach((key, idx) => {
-          TeamsInstance.getItem(key).then(team => {
-            this.emit('team', team)
-            if ((idx + 1) === keys.length) {
-              this.emit('finnished', keys.length)
-            }
-          })
-        })
+        total = keys.length
+        keys.forEach((key, idx) => loadingQueue.push({ key, idx }))
       }
     }).catch((err) => {
       console.error(err)

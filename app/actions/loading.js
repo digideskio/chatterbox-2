@@ -57,7 +57,8 @@ function loadTeams(dispatch) {
     loader.on('team', ({ id, name, type, args }) => {
       const TeamHandler = createTeamHandler(type)
       const Team = new TeamHandler(args, dispatch, false)
-      Team.once('connected', (TeamData) => {
+      Team.once('connected', () => {
+        console.log('loaded', Team)
         dispatch(TeamsActions.loadTeam(Team))
         if (!firstLoaded) {
           firstLoaded = true

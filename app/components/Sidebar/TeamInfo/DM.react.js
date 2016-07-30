@@ -7,7 +7,7 @@ export default class DM extends Component {
     id: PropTypes.string,
     image: PropTypes.string,
     handle: PropTypes.string,
-    presence: PropTypes.bool,
+    presence: PropTypes.string,
     active: PropTypes.bool,
     name: PropTypes.string,
     missedPings: PropTypes.oneOfType([PropTypes.number, PropTypes.bool]),
