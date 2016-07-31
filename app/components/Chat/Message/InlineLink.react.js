@@ -1,7 +1,6 @@
 import React, { Component, PropTypes } from 'react'
 import { bindActionCreators } from 'redux'
 import { connect } from 'react-redux'
-import classnames from 'classnames'
 import { shell } from 'electron'
 import * as LinkPreviewsActions from 'actions/linkPreviews'
 import styles from 'styles/chat.css'
