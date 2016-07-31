@@ -1,11 +1,12 @@
 import React from 'react'
-import ReactDOMServer from 'react-dom/server'
 import uuid from 'node-uuid'
 import moment from 'moment'
 import _ from 'lodash'
 import replace from 'frep'
 import escapeStringRegexp from 'escape-string-regexp'
 import annotations from 'emoji-annotation-to-unicode'
+import ChatInlineUser from 'components/Chat/Message/InlineUser.react'
+import ChatInlineChannel from 'components/Chat/Message/InlineChannel.react'
 import styles from 'styles/chat.css'
 
 
@@ -88,6 +89,7 @@ export function parseMessage({ type, subtype, bot_id, channel = null, ...message
 const codeBlockRegex = /(^|\s|[_*\?\.,\-!\^;:{(\[%$#+=\u2000-\u206F\u2E00-\u2E7F"])```([\s\S]*?)?```(?=$|\s|[_*\?\.,\-!\^;:})\]%$#+=\u2000-\u206F\u2E00-\u2E7F…"])/g
 const codeRegex = /(^|\s|[\?\.,\-!\^;:{(\[%$#+=\u2000-\u206F\u2E00-\u2E7F"])`(.*?\S *)?`/g
 
+const userOrChannelRegex = /<[#@]+(.*?)>/g
 const boldRegex = /(^|\s|[\?\.,\-!\^;:{(\[%$#+=\u2000-\u206F\u2E00-\u2E7F"])\*(.*?\S *)?\*(?=$|\s|[\?\.,'\-!\^;:})\]%$~{\[<#+=\u2000-\u206F\u2E00-\u2E7F…"\uE022])/g
 const italicRegex = /(?!:.+:)(^|\s|[\?\.,\-!\^;:{(\[%$#+=\u2000-\u206F\u2E00-\u2E7F"])_(.*?\S *)?_(?=$|\s|[\?\.,'\-!\^;:})\]%$~{\[<#+=\u2000-\u206F\u2E00-\u2E7F…"\uE022])/g
 const strikeRegex = /(^|\s|[\?\.,\-!\^;:{(\[%$#+=\u2000-\u206F\u2E00-\u2E7F"])~(.*? *\S)?~(?=$|\s|[\?\.,'\-!\^;:})\]%$~{\[<#+=\u2000-\u206F\u2E00-\u2E7F…"\uE022])/g
@@ -102,7 +104,7 @@ const emojiWithEmoticons = { delimiter: new RegExp(`(:(?:${_getEscapedKeys(annot
 
 function formatText(text) {
 
-  const messageReplaceMentDict = {}
+  const messageReplacementDict = {}
 
   const replacements = [{
       pattern: codeBlockRegex,
@@ -110,7 +112,7 @@ function formatText(text) {
         match = match.slice(3, -3)
         if (match.trim().length > 0) {
           const replacement = uuid.v1()
-          messageReplaceMentDict[replacement] = <div className={styles['code-block']}>{match}</div>
+          messageReplacementDict[replacement] = <div className={styles['code-block']}>{match}</div>
           return replacement
         }
         return match
@@ -122,7 +124,7 @@ function formatText(text) {
         match = match.slice(1, -1)
         if (match.trim().length > 0) {
           const replacement = uuid.v1()
-          messageReplaceMentDict[replacement] = <div className={styles['code-inline']}>{match}</div>
+          messageReplacementDict[replacement] = <div className={styles['code-inline']}>{match}</div>
           return replacement
         }
         return match
@@ -134,7 +136,7 @@ function formatText(text) {
         match = match.slice(1, -1)
         if (match.trim().length > 0) {
           const replacement = uuid.v1()
-          messageReplaceMentDict[replacement] = <b>{match}</b>
+          messageReplacementDict[replacement] = <b>{match}</b>
           return replacement
         }
         return match
@@ -146,7 +148,7 @@ function formatText(text) {
         match = match.slice(1, -1)
         if (match.trim().length > 0) {
           const replacement = uuid.v1()
-          messageReplaceMentDict[replacement] = <i>{match}</i>
+          messageReplacementDict[replacement] = <i>{match}</i>
           return replacement
         }
         return match
@@ -158,19 +160,45 @@ function formatText(text) {
         match = match.slice(1, -1)
         if (match.trim().length > 0) {
           const replacement = uuid.v1()
-          messageReplaceMentDict[replacement] = <em>{match}</em>
+          messageReplacementDict[replacement] = <em>{match}</em>
           return replacement
         }
         return match
       }
     },
     {
+      pattern: userOrChannelRegex,
+      replacement: (match) => {
+        if (match.trim().length > 0) {
+          const replacement = uuid.v1()
+          if (match.includes('<@')) {
+            const user = match.replace(/<|>/g, '')
+            const isValidUser = this.users[user.replace('@', '')]
+            if (isValidUser) {
+              const isPing = user.startsWith('@')
+              messageReplacementDict[replacement] = <ChatInlineUser isPing={isPing} {...isValidUser} />
+              return replacement
+            }
+            return match
+          } else {
+            const channel = match.replace(/<|>|#/g, '')
+            const isValidChannel = this.channels[channel]
+            if (isValidChannel) {
+              messageReplacementDict[replacement] = <ChatInlineChannel {...isValidChannel} />
+              return replacement
+            }
+            return match
+          }
+        }
+        return match
+      }
+    }, {
       pattern: emojiWithEmoticons.delimiter,
       replacement: (match) => {
         const hex = emojiWithEmoticons.dict[_getKey(match)]
         if (hex) {
           const replacement = uuid.v1()
-          messageReplaceMentDict[replacement] = <img className={styles.emoji} src={_buildImageUrl(hex)} />
+          messageReplacementDict[replacement] = <img className={styles.emoji} src={_buildImageUrl(hex)} />
           return replacement
         }
         return match
@@ -179,12 +207,12 @@ function formatText(text) {
   ]
 
   const formattedText = replace.strWithArr(text, replacements)
-  const delimiter = new RegExp(`(${_getEscapedKeys(messageReplaceMentDict)})`, 'g')
+  const delimiter = new RegExp(`(${_getEscapedKeys(messageReplacementDict)})`, 'g')
   return _.compact(
     formattedText.split(delimiter).map((word, index) => {
       const [match] = word.match(delimiter) || []
       if (match) {
-        return messageReplaceMentDict[match] || word
+        return messageReplacementDict[match] || word
       } else {
         return word
       }
