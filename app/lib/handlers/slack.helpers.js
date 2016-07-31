@@ -175,8 +175,12 @@ function formatText(text) {
             const user = match.replace(/<|>/g, '')
             const isValidUser = this.users[user.replace('@', '')]
             if (isValidUser) {
-              const isPing = user.startsWith('@')
-              messageReplacementDict[replacement] = <ChatInlineUser isPing={isPing} {...isValidUser} />
+              messageReplacementDict[replacement] = (
+                <ChatInlineUser
+                  isPing={this.user.id === isValidUser.id}
+                  {...isValidUser}
+                />
+              )
               return replacement
             }
             return match
