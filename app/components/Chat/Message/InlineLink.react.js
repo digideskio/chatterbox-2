@@ -25,7 +25,7 @@ class InlineLink extends Component {
 
   handleHover() {
     const { url, linkPreviews: { loaded, loading }, loadPreview } = this.props
-    if (loaded[url]) return this.setState({ popOverOpen: true })
+    if (loaded[url] || loading.includes(url)) return this.setState({ popOverOpen: true })
     loadPreview(url)
   }
 
@@ -36,7 +36,7 @@ class InlineLink extends Component {
       <div onClick={::this.handleClick} onMouseOver={::this.handleHover} className={styles.link}>
         {
           this.state.popOverOpen ? (
-            <img src={linkPreviews[url]} />
+            <div className={styles.linkImage} style={{background: `url(file://${encodeURIComponent(loaded[url])})`}} />
           ) : null
         }
         {label || url}
