@@ -9,7 +9,6 @@ import ChatInlineUser from 'components/Chat/Message/InlineUser.react'
 import ChatInlineChannel from 'components/Chat/Message/InlineChannel.react'
 import styles from 'styles/chat.css'
 
-
 export function santitizeUser({ tz: timezone, id, deleted, profile, name: handle, presence }) {
   return {
     handle,
@@ -101,11 +100,8 @@ const _getKey = key => key.match(/^:.*:$/) ? key.replace(/^:/, '').replace(/:$/,
 const _getEscapedKeys = hash => Object.keys(hash).map(x => escapeStringRegexp(x)).join('|')
 const emojiWithEmoticons = { delimiter: new RegExp(`(:(?:${_getEscapedKeys(annotations)}):)`, 'g'), dict: annotations }
 
-
 function formatText(text) {
-
   const messageReplacementDict = {}
-
   const replacements = [{
       pattern: codeBlockRegex,
       replacement: (match) => {
