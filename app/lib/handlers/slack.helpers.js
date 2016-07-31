@@ -140,7 +140,7 @@ function formatText(text) {
         match = match.trim().slice(1, -1)
         if (match.length > 0) {
           const replacement = uuid.v1()
-          messageReplacementDict[replacement] = <div className={styles['code-inline']}>{match}</div>
+          messageReplacementDict[replacement] = <span className={styles['code-inline']}>{match}</span>
           return replacement
         }
         return match
