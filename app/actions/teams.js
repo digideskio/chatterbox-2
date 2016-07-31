@@ -9,17 +9,10 @@ export const TEAMS_TEAM_CHANGE = 'TEAMS_TEAM_CHANGE'
 export const TEAMS_TEAM_REMOVE = 'TEAMS_TEAM_REMOVE'
 
 function parseHandler(Handler) {
-  const team = Handler.getTeam()
-  const user = Handler.getUser()
-  const users = Handler.getUsers()
-  const channels = Handler.getChannels()
-  const dms = Handler.getDMs()
-  const activeChannelorDMID = Handler.getInitialActiveChannelorDMID()
-  const { message } = Handler
-
-  const Team = { team, user, users, channels, dms, message, activeChannelorDMID }
-  console.log(Team)
-  return Team
+  return {
+    ...pick(Handler, ['users', 'user', 'team', 'channels', 'dms', 'message']),
+    activeChannelorDMID: Handler.initialActiveChannelorDMID
+  }
 }
 
 export function addTeam(Handler) {
