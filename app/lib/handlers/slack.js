@@ -43,7 +43,7 @@ export default class SlackHandler extends EventEmitter {
 
     this._slack.on(CLIENT_EVENTS.RTM.RTM_CONNECTION_OPENED, () => {
       this._canSend = true
-      const { channels } = this
+      const channels = this.getChannels()
       this._activeChannelorDMID = channels[_.findKey(channels, 'main')].id
       this.emit('connected')
     })
@@ -79,9 +79,9 @@ export default class SlackHandler extends EventEmitter {
     })
   }
 
-  get channels() {
+  getChannels() {
     const channels = {}
-    const { users } = this
+    const users = this.getUsers()
     _.forEach(this._slack.dataStore.channels, ({ is_archived, is_member: isMember, name, is_general: main, id, members, topic, purpose }) => {
       if (is_archived) return
       channels[id] = ({
@@ -96,9 +96,9 @@ export default class SlackHandler extends EventEmitter {
     return channels
   }
 
-  get dms() {
+  getDMs() {
     const dms = {}
-    const { users } = this
+    const users = this.getUsers()
     const readableDMs = _.pickBy(this._slack.dataStore.dms, ({ user, is_im }) => is_im && users[user])
     _.forEach(readableDMs, ({ is_open: isOpen, user, id }) => {
       const { name, presence, images, handle } = users[user]
@@ -116,12 +116,12 @@ export default class SlackHandler extends EventEmitter {
     return dms
   }
 
-  get team() {
+  getTeam() {
     const { name, icon, id } = this._slack.dataStore.teams[Object.keys(this._slack.dataStore.teams)[0]]
     return { name, id, image: icon.image_original, type: 'slack' }
   }
 
-  get users() {
+  getUsers() {
     const users = {}
     _.forEach(this._slack.dataStore.users, (user) => {
       if (!_.get(user, 'deleted', false)) users[user.id] = santitizeUser(user)
@@ -129,14 +129,13 @@ export default class SlackHandler extends EventEmitter {
     return users
   }
 
-  get user() {
-    const { id, ...user } = _.get(this._slack, `dataStore.users.${this._slack.activeUserId}`, {})
-    return santitizeUser({ id, ...user })
+  getUser() {
+    return santitizeUser(_.get(this._slack, `dataStore.users.${this._slack.activeUserId}`, {}))
   }
 
-  get _persistenceData() {
+  getPersistenceData() {
     return {
-      ..._.pick(this.team, 'name', 'id', 'type'),
+      ..._.pick(this.getTeam(), 'name', 'id', 'type'),
       args: { token: this._slack._token }
     }
   }
