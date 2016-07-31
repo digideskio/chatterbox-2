@@ -2,9 +2,8 @@
 [![Travis](https://travis-ci.org/luigiplr/chatterbox.svg)](https://travis-ci.org/luigiplr/chatterbox)
 [![Dependency Status](https://david-dm.org/luigiplr/chatterbox.svg)](https://david-dm.org/luigiplr/chatterbox)
 [![devDependency Status](https://david-dm.org/luigiplr/chatterbox/dev-status.svg)](https://david-dm.org/luigiplr/chatterbox#info=devDependencies)
-[![License](https://img.shields.io/badge/license-MPL%202.0-brightgreen.svg)](https://www.mozilla.org/en-US/MPL/2.0/) 
+[![License](https://img.shields.io/badge/license-MPL2.0-brightgreen.svg)](https://www.mozilla.org/en-US/MPL/2.0/)
 #### A chat client to unite them all.
-
 
 Chatterbox is an indevelopment chat client that will support various different platforms of messengers and put them all in a single nice client.
 
@@ -13,7 +12,7 @@ Chatterbox is an indevelopment chat client that will support various different p
 ```npm install```
 
 #### Run dev mode
-```npm run dev``` 
+```npm run dev```
 
 ## Contributors
  * [Luigiplr](https://github.com/luigiplr)
