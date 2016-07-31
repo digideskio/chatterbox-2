@@ -22,6 +22,12 @@ export default class SlackHandler extends EventEmitter {
       this.emit('authenticated')
     })
 
+    this._slack.on(CLIENT_EVENTS.RTM.ATTEMPTING_RECONNECT, () => {
+      this._connected = false
+      this._canSend = false
+      console.warn('O SHIT SLACK BE RECONNECTING')
+    })
+
     this._slack.on(CLIENT_EVENTS.RTM.DISCONNECT, () => {
       this._canSend = false
       this._connected = false
@@ -37,7 +43,8 @@ export default class SlackHandler extends EventEmitter {
 
     this._slack.on(CLIENT_EVENTS.RTM.RTM_CONNECTION_OPENED, () => {
       this._canSend = true
-      this._activeChannelorDMID = this.channels[_.findKey(this.channels, 'main')].id
+      const { channels } = this
+      this._activeChannelorDMID = channels[_.findKey(channels, 'main')].id
       this.emit('connected')
     })
 
@@ -74,7 +81,7 @@ export default class SlackHandler extends EventEmitter {
 
   get channels() {
     const channels = {}
-    const users = this.users
+    const { users } = this
     _.forEach(this._slack.dataStore.channels, ({ is_archived, is_member: isMember, name, is_general: main, id, members, topic, purpose }) => {
       if (is_archived) return
       channels[id] = ({
@@ -82,7 +89,7 @@ export default class SlackHandler extends EventEmitter {
         name: `# ${name}`,
         id,
         main,
-        members: members != undefined ? members.map(id => !users[id].deleted ? id : false).filter(Boolean) || [] : [],
+        members: members != undefined ? members.map(id => !users[id] ? id : false).filter(Boolean) || [] : [],
         meta: { topic: _.get(topic, 'value', null), purpose: _.get(purpose, 'value', null) }
       })
     })
@@ -91,9 +98,9 @@ export default class SlackHandler extends EventEmitter {
 
   get dms() {
     const dms = {}
-    const users = this.users
-    _.forEach(this._slack.dataStore.dms, ({ is_open: isOpen, is_im, user, id }) => {
-      if (!is_im) return
+    const { users } = this
+    const readableDMs = _.pickBy(this._slack.dataStore.dms, ({ user, is_im }) => is_im && users[user])
+    _.forEach(readableDMs, ({ is_open: isOpen, user, id }) => {
       const { name, presence, images, handle } = users[user]
       dms[id] = ({
         isOpen,
@@ -116,8 +123,8 @@ export default class SlackHandler extends EventEmitter {
 
   get users() {
     const users = {}
-    _.forEach(this._slack.dataStore.users, ({ deleted, id, ...user }) => {
-      users[id] = santitizeUser({ id, ...user })
+    _.forEach(this._slack.dataStore.users, (user) => {
+      if (!_.get(user, 'deleted', false)) users[user.id] = santitizeUser(user)
     })
     return users
   }

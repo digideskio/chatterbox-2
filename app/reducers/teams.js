@@ -10,17 +10,11 @@ const DEFAULT_STATE = {
 function teams(state = DEFAULT_STATE.teams, action) {
   switch (action.type) {
     case TEAMS_TEAM_ADD:
-      return {
-        ...state,
-        [action.team.team.id]: action.team
-      }
+      return { ...state, [action.team.team.id]: action.team }
     case TEAMS_ACTIVE_CHANNEL_OR_DM_CHANGE:
       const { team, teams } = extractTeamFromTeams(action.team, state)
       team.activeChannelorDMID = action.channel_or_dm_id
-      return {
-        ...teams,
-        [action.team]: team
-      }
+      return { ...teams, [action.team]: team }
     default:
       return state
   }
@@ -33,15 +27,12 @@ function activeTeamID(state = DEFAULT_STATE.activeTeamID, action) {
   return state
 }
 
+function extractTeamFromTeams(teamID, allTeams) {
+  const { [teamID]: team, ...teams } = allTeams
+  return { team, teams }
+}
+
 export default combineReducers({
   teams,
   activeTeamID
 })
-
-const extractTeamFromTeams = (teamID, allTeams) => {
-  const {
-    [teamID]: team,
-    ...teams
-  } = allTeams
-  return { team, teams }
-}
