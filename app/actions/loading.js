@@ -58,11 +58,12 @@ function loadTeams(dispatch) {
       const TeamHandler = createTeamHandler(type)
       const Team = new TeamHandler(args, dispatch, false)
       Team.once('connected', () => {
-        global.App.teams[Team.team.id] = Team
+        const team = Team.getTeam()
+        global.App.teams[team.id] = Team
         dispatch(TeamsActions.loadTeam(Team))
         if (!firstLoaded) {
           firstLoaded = true
-          resolve(Team.team.id)
+          resolve(team.id)
         }
       })
     })

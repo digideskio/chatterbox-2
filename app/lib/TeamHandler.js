@@ -23,7 +23,7 @@ export default function createTeamHandler(provider) {
 
     initHistory() {
       const {
-        [this.initialActiveChannelorDMID]: { id: mainChannelID }, ...channels
+        [this.getInitialActiveChannelorDMID()]: { id: mainChannelID }, ...channels
       } = this.getChannels()
 
       this._historyRequestQueue.push({ channel_or_dm_id: mainChannelID })

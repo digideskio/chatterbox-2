@@ -46,6 +46,7 @@ export default class SlackHandler extends EventEmitter {
       const channels = this.getChannels()
       this._activeChannelorDMID = channels[_.findKey(channels, 'main')].id
       this.emit('connected')
+      console.log(this)
     })
 
     this._slack.on(RTM_EVENTS.MESSAGE, parseMessage.bind(this))
