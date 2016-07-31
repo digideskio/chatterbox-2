@@ -32,7 +32,7 @@ export default class TeamInfo extends Component {
           <span className={styles.handle}>{this.props.user.handle}</span>
         </div>
         <div className={styles.channels}>
-          <div className={styles.title}>CHANNELS<span>{this.props.channels.length}</span></div>
+          <div className={styles.title}>CHANNELS<span>({Object.keys(this.props.channels).length})</span></div>
           {
             Object.keys(this.props.channels).map(channelID => (
               <Channel active={this.props.activeChannelorDMID === channelID} onClick={this.handleChannelorDMClick} select={::this.props.changeActiveTeamChannelOrDM} key={channelID} {...this.props.channels[channelID]} />
@@ -40,7 +40,7 @@ export default class TeamInfo extends Component {
           }
         </div>
         <div className={styles.dms}>
-          <div className={styles.title}>DIRECT MESSAGES<span>{this.props.dms.length}</span></div>
+          <div className={styles.title}>DIRECT MESSAGES<span>({Object.keys(this.props.dms).length})</span></div>
           {
             Object.keys(this.props.dms).map(DMID => (
               <DM active={this.props.activeChannelorDMID === DMID} onClick={this.handleChannelorDMClick} select={::this.props.changeActiveTeamChannelOrDM} key={DMID} {...this.props.dms[DMID]} />
