@@ -1,7 +1,7 @@
 import React, { Component, PropTypes } from 'react'
-import { bindActionCreators } from 'redux'
+// import { bindActionCreators } from 'redux'
 import { connect } from 'react-redux'
-import classnames from 'classnames'
+// import classnames from 'classnames'
 import { shell } from 'electron'
 import styles from 'styles/chat.css'
 
@@ -17,9 +17,8 @@ class InlineLink extends Component {
   }
 
   render() {
-    const { url, label } = this.props
     return (
-      <div onClick={::this.handleClick} className={styles.link}>{name || label}</div>
+      <div onClick={::this.handleClick} className={styles.link}>{this.props.label}</div>
     )
   }
 }
