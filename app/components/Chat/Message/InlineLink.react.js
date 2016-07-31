@@ -3,13 +3,17 @@ import { bindActionCreators } from 'redux'
 import { connect } from 'react-redux'
 import classnames from 'classnames'
 import { shell } from 'electron'
+import * as LinkPreviewsActions from 'actions/linkPreviews'
 import styles from 'styles/chat.css'
 
 
 class InlineLink extends Component {
   static propTypes = {
     url: PropTypes.string,
-    label: PropTypes.string
+    label: PropTypes.string,
+    loadPreview: PropTypes.func.isRequired,
+    settings: PropTypes.object.isRequired,
+    linkPreviews: PropTypes.object.isRequired
   }
 
   handleClick() {
@@ -25,8 +29,12 @@ class InlineLink extends Component {
 }
 
 
-function mapStateToProps({ settings }) {
-  return { settings }
+function mapStateToProps({ settings, linkPreviews }) {
+  return { settings, linkPreviews }
 }
 
-export default connect(mapStateToProps)(InlineLink)
+function mapDispatchToProps(dispatch) {
+  return bindActionCreators(LinkPreviewsActions, dispatch)
+}
+
+export default connect(mapStateToProps, mapDispatchToProps)(InlineLink)

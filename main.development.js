@@ -45,7 +45,7 @@ app.on('ready', async() => {
 
   mainWindow.loadURL(`file://${__dirname}/app/app.html`)
 
-  mainWindow.webContents.on('did-finish-load', () => {
+  mainWindow.webContents.on('ready-to-show', () => {
     mainWindow.show()
     mainWindow.focus()
   })
