@@ -3,13 +3,16 @@ import classnames from 'classnames'
 import _ from 'lodash'
 import styles from 'styles/chat.css'
 
-/* var attachments = [{
+/*var attachments = [{
   author: '',
   images: {
-    thumb, author, ...images
+    thumb,
+    author,
+    ...images
   },
   links: {
-    title, author
+    title,
+    author
   },
   title: '',
   'pretext': 'Hello lol',
@@ -51,7 +54,7 @@ export default class Attachments extends Component {
     return (
       <div className={styles.attachments}>
         {
-          this.props.attachments.map(({text, color: borderColor = 'gray', pretext, title, links = {}, images = {}, author}, idx) => (
+          this.props.attachments.map(({text, borderColor = 'gray', pretext, title, links = {}, images = {}, video = {}, author, service, fields = []}, idx) => (
             <div key={idx + 1} className={styles.attachment}>
               {pretext ? <div className={styles.attachmentPretext}>{_.unescape(this._sanitizeText(pretext))}</div> : null}
 

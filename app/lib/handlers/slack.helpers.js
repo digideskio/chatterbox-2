@@ -20,14 +20,41 @@ export function santitizeUser({ tz: timezone, id, deleted, profile, name: handle
 }
 
 function santitizeAttachments(attachments) {
-  return attachments.map(({ title, text, pretext, ...attachment }) => {
+  return attachments.map(({ title, text, pretext, color, fields, ...attachment }) => {
     return {
-      images: { thumb: attachment.thumb_url, author: attachment.author_icon },
-      links: { author: attachment.author_link, title: attachment.title_link },
+      original: { title, text, pretext, color, fields, ...attachment },
+      images: {
+        image: {
+          url: attachment.image_url,
+          height: attachment.image_height,
+          width: attachment.image_width,
+          size: attachment.image_bytes
+        },
+        thumb: {
+          url: attachment.thumb_url,
+          height: attachment.thumb_height,
+          width: attachment.thumb_width
+        },
+        author: attachment.author_icon,
+        service: attachment.service_icon
+      },
+      video: {
+        type: attachment.service_name,
+        url: attachment.from_url,
+        height: attachment.video_html_height,
+        width: attachment.video_html_width
+      },
+      links: {
+        author: attachment.author_link,
+        title: attachment.title_link
+      },
       author: attachment.author_name,
+      service: attachment.service_name,
+      borderColor: color ? `#${color}` : undefined,
       title,
       pretext,
-      text
+      text,
+      fields
     }
   })
 }
