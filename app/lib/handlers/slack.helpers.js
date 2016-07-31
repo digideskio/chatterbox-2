@@ -7,6 +7,7 @@ import escapeStringRegexp from 'escape-string-regexp'
 import annotations from 'emoji-annotation-to-unicode'
 import ChatInlineUser from 'components/Chat/Message/InlineUser.react'
 import ChatInlineChannel from 'components/Chat/Message/InlineChannel.react'
+import ChatInlineLink from 'components/Chat/Message/InlineLink.react'
 import styles from 'styles/chat.css'
 
 export function santitizeUser({ tz: timezone, id, deleted, profile, name: handle, presence }) {
@@ -111,11 +112,11 @@ function formatText(text) {
           const replacement = uuid.v1()
           if (match.charAt(0) == '@' || match.charAt(0) == '#') return `<${match}>`
           let split = match.split('|')
-          let label = split.length == 2 ? split[1] : split[0]
+          let label = split.length === 2 ? split[1] : split[0]
           let url = split[0]
           if (!url.match(/^https?:\/\//)) return match
 
-          messageReplacementDict[replacement] = <a className={styles['link']} href={url}>{label}</a>
+          messageReplacementDict[replacement] = <ChatInlineLink url={url} label={label} />
           return replacement
         }
         return match
