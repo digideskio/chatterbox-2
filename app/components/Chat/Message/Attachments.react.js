@@ -3,7 +3,7 @@ import classnames from 'classnames'
 import _ from 'lodash'
 import styles from 'styles/chat.css'
 
-/*var attachments = [{
+/* var attachments = [{
   author: '',
   images: {
     thumb,
