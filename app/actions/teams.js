@@ -8,7 +8,12 @@ export const TEAMS_TEAM_ADD = 'TEAMS_TEAM_ADD'
 export const TEAMS_TEAM_CHANGE = 'TEAMS_TEAM_CHANGE'
 export const TEAMS_TEAM_REMOVE = 'TEAMS_TEAM_REMOVE'
 
-const parseHandler = Handler => Object.assign(pick(Handler, ['users', 'user', 'team', 'channels', 'dms', 'message']), { activeChannelorDMID: Handler.initialActiveChannelorDMID })
+function parseHandler(Handler) {
+  return {
+    ...pick(Handler, ['users', 'user', 'team', 'channels', 'dms', 'message']),
+    activeChannelorDMID: Handler.initialActiveChannelorDMID
+  }
+}
 
 export function addTeam(Handler) {
   return (dispatch) => {

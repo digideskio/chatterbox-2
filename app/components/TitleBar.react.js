@@ -8,10 +8,10 @@ const { TitleBar } = platform() === 'win32' ? require('react-desktop/windows') :
 
 export default class TitleBarComponent extends Component {
   static propTypes = {
-    isMaximized: PropTypes.bool.isRequired,
-    isMinimized: PropTypes.bool.isRequired,
-    toggleMaximize: PropTypes.func.isRequired,
-    toggleMinimize: PropTypes.func.isRequired
+    isMaximized: PropTypes.bool,
+    isMinimized: PropTypes.bool,
+    toggleMaximize: PropTypes.func,
+    toggleMinimize: PropTypes.func
   }
 
   _toggleMaximize() {

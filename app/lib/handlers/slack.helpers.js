@@ -125,39 +125,40 @@ const _getKey = key => key.match(/^:.*:$/) ? key.replace(/^:/, '').replace(/:$/,
 const _getEscapedKeys = hash => Object.keys(hash).map(x => escapeStringRegexp(x)).join('|')
 const emojiWithEmoticons = { delimiter: new RegExp(`(:(?:${_getEscapedKeys(annotations)}):)`, 'g'), dict: annotations }
 
-
-const replacements = [{ pattern: codeBlockRegex,
+const replacements = [{
+    pattern: codeBlockRegex,
     replacement: (match) => {
-      match = match.slice(3, -3)
-      return match.trim().length > 0 ? ReactDOMServer.renderToStaticMarkup(<div className={styles['code-block']}>{match}</div>) : match
+      match = match.trim().slice(3, -3)
+      match = match.charAt(0) == '\n' ? match.replace('\n', '') : match
+      return match.length > 0 ? ` ${ReactDOMServer.renderToStaticMarkup(<div className={styles['code-block']}>{match}</div>)}` : match
     }
   },
   {
     pattern: codeRegex,
     replacement: (match) => {
-      match = match.slice(1, -1)
-      return match.trim().length > 0 ? ReactDOMServer.renderToStaticMarkup(<div className={styles['code-inline']}>{match}</div>) : match
+      match = match.trim().slice(1, -1)
+      return match.length > 0 ? ` ${ReactDOMServer.renderToStaticMarkup(<span className={styles['code-inline']}>{match}</span>)}` : match
     }
   },
   {
     pattern: boldRegex,
     replacement: (match) => {
-      match = match.slice(1, -1)
-      return match.trim().length > 0 ? ReactDOMServer.renderToStaticMarkup(<b>{match}</b>) : match
+      match = match.trim().slice(1, -1)
+      return match.length > 0 ? ` ${ReactDOMServer.renderToStaticMarkup(<b>{match}</b>)}` : match
     }
   },
   {
     pattern: italicRegex,
     replacement: (match) => {
-      match = match.slice(1, -1)
-      return match.trim().length > 0 ? ReactDOMServer.renderToStaticMarkup(<i>{match}</i>) : match
+      match = match.trim().slice(1, -1)
+      return match.length > 0 ? ` ${ReactDOMServer.renderToStaticMarkup(<i>{match}</i>)}` : match
     }
   },
   {
     pattern: strikeRegex,
     replacement: (match) => {
-      match = match.slice(1, -1)
-      return match.trim().length > 0 ? ReactDOMServer.renderToStaticMarkup(<em>{match}</em>) : match
+      match = match.trim().slice(1, -1)
+      return match.length > 0 ? ` ${ReactDOMServer.renderToStaticMarkup(<em>{match}</em>)}` : match
     }
   },
   {
