@@ -37,7 +37,7 @@ function santitizeMessage({ user, text, ts: timestamp, user_profile: userProfile
   return {
     attachments: santitizeAttachments(attachments),
     user,
-    text: formatText(text),
+    text: formatText.bind(this)(text),
     userProfile,
     timestamp,
     friendlyTimestamp: moment.unix(timestamp).format('h:mm a')
@@ -67,14 +67,14 @@ export function parseMessage({ type, subtype, bot_id, channel = null, ...message
           }
         }
 
-        const msg = _.omitBy({ channel, isBot, ...santitizeMessage(messageData) }, _.isNil)
+        const msg = _.omitBy({ channel, isBot, ...santitizeMessage.bind(this)(messageData) }, _.isNil)
         if (overrideEvent) return msg
         else this.emit('message', msg)
       })()
     case 'message:message_changed':
       return (() => {
         const { message, event_ts: eventTimestamp, previous_message: { ts: previousMessageTimestamp } } = messageData
-        const msg = { channel, message: santitizeMessage(message), edit: { eventTimestamp, previousMessageTimestamp } }
+        const msg = { channel, message: santitizeMessage.bind(this)(message), edit: { eventTimestamp, previousMessageTimestamp } }
 
         if (overrideEvent) return msg
         else this.emit('message:changed', msg)
