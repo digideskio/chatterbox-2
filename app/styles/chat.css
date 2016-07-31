@@ -161,9 +161,19 @@
   line-height: 20px;
   font-weight: 00;
 }
+.chat .messages .message .body .message_text .link .linkImage {
+  width: 150px;
+  height: 100px;
+  background-position: center;
+  background-size: cover;
+  position: absolute;
+  bottom: calc(100% + 10px);
+}
 .chat .messages .message .body .message_text .link {
   cursor: pointer;
   color: #08c;
+  display: inline-block;
+  position: relative;
 }
 .chat .messages .message .body .message_text .link:hover {
   color: rgba(0, 136, 204, 0.81);

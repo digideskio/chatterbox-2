@@ -1,4 +1,5 @@
 import React, { Component, PropTypes } from 'react'
+import path from 'path'
 import { bindActionCreators } from 'redux'
 import { connect } from 'react-redux'
 import { shell } from 'electron'
@@ -24,19 +25,28 @@ class InlineLink extends Component {
   }
 
   handleHover() {
+    this.setState({ popOverOpen: true })
     const { url, linkPreviews: { loaded, loading }, loadPreview } = this.props
-    if (loaded[url] || loading.includes(url)) return this.setState({ popOverOpen: true })
-    loadPreview(url)
+    if (!loaded[url] && !loading.includes(url)) {
+      console.log('REQUESTING URL', url)
+      loadPreview(url)
+    }
   }
 
+  handleHoverOut = () => this.setState({ popOverOpen: false })
+
   render() {
-    const { url, label, linkPreviews: { loaded, loading } } = this.props
-    console.log(loaded, loading, url)
+    const { url, label, linkPreviews: { loaded } } = this.props
     return (
-      <div onClick={::this.handleClick} onMouseOver={::this.handleHover} className={styles.link}>
+      <div
+        onClick={::this.handleClick}
+        onMouseEnter={::this.handleHover}
+        onMouseLeave={this.handleHoverOut}
+        className={styles.link}
+      >
         {
-          this.state.popOverOpen ? (
-            <div className={styles.linkImage} style={{background: `url(file://${encodeURIComponent(loaded[url])})`}} />
+          this.state.popOverOpen && loaded[url] ? (
+            <div className={styles.linkImage} style={{backgroundImage: `url(data:image/png;base64,${loaded[url]})`}} />
           ) : null
         }
         {label || url}
