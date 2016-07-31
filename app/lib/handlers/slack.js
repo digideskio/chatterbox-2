@@ -3,18 +3,18 @@ import _ from 'lodash'
 import { WebClient, RtmClient, MemoryDataStore, CLIENT_EVENTS, RTM_EVENTS } from '@slack/client'
 import { santitizeUser, parseMessage } from './slack.helpers'
 
-const DEFAULT_OPTIONS = {
-  logLevel: 'error',
-  dataStore: new MemoryDataStore(),
-  autoReconnect: true,
-  autoJoinNewChannels: false
-}
+
 
 export default class SlackHandler extends EventEmitter {
   constructor({ token }) {
     super()
 
-    this._slack = new RtmClient(token, DEFAULT_OPTIONS)
+    this._slack = new RtmClient(token, {
+      logLevel: 'error',
+      dataStore: new MemoryDataStore(),
+      autoReconnect: true,
+      autoJoinNewChannels: false
+    })
 
     this._slack.on(CLIENT_EVENTS.RTM.AUTHENTICATED, () => {
       this._connected = true
