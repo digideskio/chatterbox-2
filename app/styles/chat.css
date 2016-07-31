@@ -162,8 +162,8 @@
   font-weight: 00;
 }
 .chat .messages .message .body .message_text .link .linkImage {
-  width: 150px;
-  height: 100px;
+  width: 250px;
+  height: 150px;
   background-position: center;
   background-size: cover;
   position: absolute;

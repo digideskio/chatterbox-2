@@ -9,7 +9,15 @@ export function loadPreview(linkURL) {
     if (getState().linkPreviews.loading.includes(linkURL)) return
     dispatch({ type: LINK_PREVIEW_LOADING, payload: linkURL })
 
-    const previewTakingWindow = new remote.BrowserWindow({ show: false, fullscreen: true, useContentSize: true, webPreferences: { nodeIntegration: false } })
+    const previewTakingWindow = new remote.BrowserWindow({
+      show: false,
+      fullscreen: true,
+      useContentSize: true,
+      webPreferences: {
+        nodeIntegration: false,
+        zoomFactor: 2.0
+      }
+    })
     previewTakingWindow.loadURL(linkURL)
     previewTakingWindow.webContents.setAudioMuted(true)
 
