@@ -107,8 +107,8 @@ function formatText(text) {
   const replacements = [{
       pattern: urlRegex,
       replacement: (match) => {
-        match = match.slice(1, -1)
-        if (match.trim().length > 0) {
+        match = match.trim().slice(1, -1)
+        if (match.length > 0) {
           const replacement = uuid.v1()
           if (match.charAt(0) == '@' || match.charAt(0) == '#') return `<${match}>`
           let split = match.split('|')
@@ -125,8 +125,8 @@ function formatText(text) {
     {
       pattern: codeBlockRegex,
       replacement: (match) => {
-        match = match.slice(3, -3)
-        if (match.trim().length > 0) {
+        match = match.trim().slice(3, -3)
+        if (match.length > 0) {
           const replacement = uuid.v1()
           messageReplacementDict[replacement] = <div className={styles['code-block']}>{match}</div>
           return replacement
@@ -137,8 +137,8 @@ function formatText(text) {
     {
       pattern: codeRegex,
       replacement: (match) => {
-        match = match.slice(1, -1)
-        if (match.trim().length > 0) {
+        match = match.trim().slice(1, -1)
+        if (match.length > 0) {
           const replacement = uuid.v1()
           messageReplacementDict[replacement] = <div className={styles['code-inline']}>{match}</div>
           return replacement
@@ -149,8 +149,8 @@ function formatText(text) {
     {
       pattern: boldRegex,
       replacement: (match) => {
-        match = match.slice(1, -1)
-        if (match.trim().length > 0) {
+        match = match.trim().slice(1, -1)
+        if (match.length > 0) {
           const replacement = uuid.v1()
           messageReplacementDict[replacement] = <b>{match}</b>
           return replacement
@@ -161,8 +161,8 @@ function formatText(text) {
     {
       pattern: italicRegex,
       replacement: (match) => {
-        match = match.slice(1, -1)
-        if (match.trim().length > 0) {
+        match = match.trim().slice(1, -1)
+        if (match.length > 0) {
           const replacement = uuid.v1()
           messageReplacementDict[replacement] = <i>{match}</i>
           return replacement
@@ -173,8 +173,8 @@ function formatText(text) {
     {
       pattern: strikeRegex,
       replacement: (match) => {
-        match = match.slice(1, -1)
-        if (match.trim().length > 0) {
+        match = match.trim().slice(1, -1)
+        if (match.length > 0) {
           const replacement = uuid.v1()
           messageReplacementDict[replacement] = <em>{match}</em>
           return replacement
@@ -185,7 +185,8 @@ function formatText(text) {
     {
       pattern: userOrChannelRegex,
       replacement: (match) => {
-        if (match.trim().length > 0) {
+        match = match.trim()
+        if (match.length > 0) {
           const replacement = uuid.v1()
           if (match.includes('<@')) {
             const user = match.replace(/<|>/g, '')
