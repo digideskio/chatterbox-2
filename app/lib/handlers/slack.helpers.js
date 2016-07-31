@@ -1,10 +1,12 @@
 import React from 'react'
-import ReactDOMServer from 'react-dom/server'
+import uuid from 'node-uuid'
 import moment from 'moment'
 import _ from 'lodash'
 import replace from 'frep'
 import escapeStringRegexp from 'escape-string-regexp'
 import annotations from 'emoji-annotation-to-unicode'
+import ChatInlineUser from 'components/Chat/Message/InlineUser.react'
+import ChatInlineChannel from 'components/Chat/Message/InlineChannel.react'
 import styles from 'styles/chat.css'
 
 
@@ -63,7 +65,7 @@ function santitizeMessage({ user, text, ts: timestamp, user_profile: userProfile
   return {
     attachments: santitizeAttachments(attachments),
     user,
-    text: formatText(text),
+    text: formatText.bind(this)(text),
     userProfile,
     timestamp,
     friendlyTimestamp: moment.unix(timestamp).format('h:mm a')
@@ -93,14 +95,14 @@ export function parseMessage({ type, subtype, bot_id, channel = null, ...message
           }
         }
 
-        const msg = _.omitBy({ channel, isBot, ...santitizeMessage(messageData) }, _.isNil)
+        const msg = _.omitBy({ channel, isBot, ...santitizeMessage.bind(this)(messageData) }, _.isNil)
         if (overrideEvent) return msg
         else this.emit('message', msg)
       })()
     case 'message:message_changed':
       return (() => {
         const { message, event_ts: eventTimestamp, previous_message: { ts: previousMessageTimestamp } } = messageData
-        const msg = { channel, message: santitizeMessage(message), edit: { eventTimestamp, previousMessageTimestamp } }
+        const msg = { channel, message: santitizeMessage.bind(this)(message), edit: { eventTimestamp, previousMessageTimestamp } }
 
         if (overrideEvent) return msg
         else this.emit('message:changed', msg)
@@ -114,6 +116,7 @@ export function parseMessage({ type, subtype, bot_id, channel = null, ...message
 const codeBlockRegex = /(^|\s|[_*\?\.,\-!\^;:{(\[%$#+=\u2000-\u206F\u2E00-\u2E7F"])```([\s\S]*?)?```(?=$|\s|[_*\?\.,\-!\^;:})\]%$#+=\u2000-\u206F\u2E00-\u2E7F…"])/g
 const codeRegex = /(^|\s|[\?\.,\-!\^;:{(\[%$#+=\u2000-\u206F\u2E00-\u2E7F"])`(.*?\S *)?`/g
 
+const userOrChannelRegex = /<[#@]+(.*?)>/g
 const boldRegex = /(^|\s|[\?\.,\-!\^;:{(\[%$#+=\u2000-\u206F\u2E00-\u2E7F"])\*(.*?\S *)?\*(?=$|\s|[\?\.,'\-!\^;:})\]%$~{\[<#+=\u2000-\u206F\u2E00-\u2E7F…"\uE022])/g
 const italicRegex = /(?!:.+:)(^|\s|[\?\.,\-!\^;:{(\[%$#+=\u2000-\u206F\u2E00-\u2E7F"])_(.*?\S *)?_(?=$|\s|[\?\.,'\-!\^;:})\]%$~{\[<#+=\u2000-\u206F\u2E00-\u2E7F…"\uE022])/g
 const strikeRegex = /(^|\s|[\?\.,\-!\^;:{(\[%$#+=\u2000-\u206F\u2E00-\u2E7F"])~(.*? *\S)?~(?=$|\s|[\?\.,'\-!\^;:})\]%$~{\[<#+=\u2000-\u206F\u2E00-\u2E7F…"\uE022])/g
@@ -125,51 +128,125 @@ const _getKey = key => key.match(/^:.*:$/) ? key.replace(/^:/, '').replace(/:$/,
 const _getEscapedKeys = hash => Object.keys(hash).map(x => escapeStringRegexp(x)).join('|')
 const emojiWithEmoticons = { delimiter: new RegExp(`(:(?:${_getEscapedKeys(annotations)}):)`, 'g'), dict: annotations }
 
-const replacements = [{
-    pattern: codeBlockRegex,
-    replacement: (match) => {
-      match = match.trim().slice(3, -3)
-      match = match.charAt(0) == '\n' ? match.replace('\n', '') : match
-      return match.length > 0 ? ` ${ReactDOMServer.renderToStaticMarkup(<div className={styles['code-block']}>{match}</div>)}` : match
-    }
-  },
-  {
-    pattern: codeRegex,
-    replacement: (match) => {
-      match = match.trim().slice(1, -1)
-      return match.length > 0 ? ` ${ReactDOMServer.renderToStaticMarkup(<span className={styles['code-inline']}>{match}</span>)}` : match
-    }
-  },
-  {
-    pattern: boldRegex,
-    replacement: (match) => {
-      match = match.trim().slice(1, -1)
-      return match.length > 0 ? ` ${ReactDOMServer.renderToStaticMarkup(<b>{match}</b>)}` : match
-    }
-  },
-  {
-    pattern: italicRegex,
-    replacement: (match) => {
-      match = match.trim().slice(1, -1)
-      return match.length > 0 ? ` ${ReactDOMServer.renderToStaticMarkup(<i>{match}</i>)}` : match
-    }
-  },
-  {
-    pattern: strikeRegex,
-    replacement: (match) => {
-      match = match.trim().slice(1, -1)
-      return match.length > 0 ? ` ${ReactDOMServer.renderToStaticMarkup(<em>{match}</em>)}` : match
-    }
-  },
-  {
-    pattern: emojiWithEmoticons.delimiter,
-    replacement: (match) => {
-      const hex = emojiWithEmoticons.dict[_getKey(match)]
-      return hex ? ReactDOMServer.renderToStaticMarkup(<img className={styles.emoji} src={_buildImageUrl(hex)} />) : match
-    }
-  }
-]
 
 function formatText(text) {
-  return replace.strWithArr(text, replacements)
+
+  const messageReplacementDict = {}
+
+  const replacements = [{
+      pattern: codeBlockRegex,
+      replacement: (match) => {
+        match = match.slice(3, -3)
+        if (match.trim().length > 0) {
+          const replacement = uuid.v1()
+          messageReplacementDict[replacement] = <div className={styles['code-block']}>{match}</div>
+          return replacement
+        }
+        return match
+      }
+    },
+    {
+      pattern: codeRegex,
+      replacement: (match) => {
+        match = match.slice(1, -1)
+        if (match.trim().length > 0) {
+          const replacement = uuid.v1()
+          messageReplacementDict[replacement] = <div className={styles['code-inline']}>{match}</div>
+          return replacement
+        }
+        return match
+      }
+    },
+    {
+      pattern: boldRegex,
+      replacement: (match) => {
+        match = match.slice(1, -1)
+        if (match.trim().length > 0) {
+          const replacement = uuid.v1()
+          messageReplacementDict[replacement] = <b>{match}</b>
+          return replacement
+        }
+        return match
+      }
+    },
+    {
+      pattern: italicRegex,
+      replacement: (match) => {
+        match = match.slice(1, -1)
+        if (match.trim().length > 0) {
+          const replacement = uuid.v1()
+          messageReplacementDict[replacement] = <i>{match}</i>
+          return replacement
+        }
+        return match
+      }
+    },
+    {
+      pattern: strikeRegex,
+      replacement: (match) => {
+        match = match.slice(1, -1)
+        if (match.trim().length > 0) {
+          const replacement = uuid.v1()
+          messageReplacementDict[replacement] = <em>{match}</em>
+          return replacement
+        }
+        return match
+      }
+    },
+    {
+      pattern: userOrChannelRegex,
+      replacement: (match) => {
+        if (match.trim().length > 0) {
+          const replacement = uuid.v1()
+          if (match.includes('<@')) {
+            const user = match.replace(/<|>/g, '')
+            const isValidUser = this.users[user.replace('@', '')]
+            if (isValidUser) {
+              messageReplacementDict[replacement] = (
+                <ChatInlineUser
+                  isPing={this.user.id === isValidUser.id}
+                  {...isValidUser}
+                />
+              )
+              return replacement
+            }
+            return match
+          } else {
+            const channel = match.replace(/<|>|#/g, '')
+            const isValidChannel = this.channels[channel]
+            if (isValidChannel) {
+              messageReplacementDict[replacement] = <ChatInlineChannel {...isValidChannel} />
+              return replacement
+            }
+            return match
+          }
+        }
+        return match
+      }
+    }, {
+      pattern: emojiWithEmoticons.delimiter,
+      replacement: (match) => {
+        const hex = emojiWithEmoticons.dict[_getKey(match)]
+        if (hex) {
+          const replacement = uuid.v1()
+          messageReplacementDict[replacement] = <img className={styles.emoji} src={_buildImageUrl(hex)} />
+          return replacement
+        }
+        return match
+      }
+    }
+  ]
+
+  const formattedText = replace.strWithArr(text, replacements)
+  const delimiter = new RegExp(`(${_getEscapedKeys(messageReplacementDict)})`, 'g')
+  return _.compact(
+    formattedText.split(delimiter).map((word, index) => {
+      const [match] = word.match(delimiter) || []
+      if (match) {
+        return messageReplacementDict[match] || word
+      } else {
+        return word
+      }
+    })
+  )
 }
