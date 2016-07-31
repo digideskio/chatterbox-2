@@ -16,7 +16,7 @@ export default function linkPreviews(state = defaultState, { type, payload }) {
       const newState = {...state }
       const { link, src } = payload
       newState.loaded[link] = src
-      newState.loaded = without(link)
+      newState.loading = without(link)
       return newState
     case LINK_PREVIEW_LOADING:
       return {...state, loading: [...state.loading, payload] }

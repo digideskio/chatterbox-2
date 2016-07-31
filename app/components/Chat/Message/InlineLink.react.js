@@ -15,20 +15,32 @@ class InlineLink extends Component {
     linkPreviews: PropTypes.object.isRequired
   }
 
+  state = {
+    popOverOpen: false
+  }
+
   handleClick() {
     shell.openExternal(this.props.url)
   }
 
   handleHover() {
-    const { url, linkPreviews, loadPreview } = this.props
-    console.log(linkPreviews)
+    const { url, linkPreviews: { loaded, loading }, loadPreview } = this.props
+    if (loaded[url]) return this.setState({ popOverOpen: true })
     loadPreview(url)
   }
 
   render() {
-    const { url, label } = this.props
+    const { url, label, linkPreviews: { loaded, loading } } = this.props
+    console.log(loaded, loading, url)
     return (
-      <div onClick={::this.handleClick} onMouseOver={::this.handleHover} className={styles.link}>{label || url}</div>
+      <div onClick={::this.handleClick} onMouseOver={::this.handleHover} className={styles.link}>
+        {
+          this.state.popOverOpen ? (
+            <img src={linkPreviews[url]} />
+          ) : null
+        }
+        {label || url}
+      </div>
     )
   }
 }
