@@ -1,5 +1,6 @@
 import React from 'react'
 import ReactDOMServer from 'react-dom/server'
+import uuid from 'node-uuid'
 import moment from 'moment'
 import _ from 'lodash'
 import replace from 'frep'
@@ -98,51 +99,62 @@ const _getKey = key => key.match(/^:.*:$/) ? key.replace(/^:/, '').replace(/:$/,
 const _getEscapedKeys = hash => Object.keys(hash).map(x => escapeStringRegexp(x)).join('|')
 const emojiWithEmoticons = { delimiter: new RegExp(`(:(?:${_getEscapedKeys(annotations)}):)`, 'g'), dict: annotations }
 
-const replacements = [{
-    pattern: codeBlockRegex,
-    replacement: (match) => {
-      match = match.trim().slice(3, -3)
-      match = match.charAt(0) == '\n' ? match.replace('\n', '') : match
-      return match.length > 0 ? ` ${ReactDOMServer.renderToStaticMarkup(<div className={styles['code-block']}>{match}</div>)}` : match
-    }
-  },
-  {
-    pattern: codeRegex,
-    replacement: (match) => {
-      match = match.trim().slice(1, -1)
-      return match.length > 0 ? ` ${ReactDOMServer.renderToStaticMarkup(<span className={styles['code-inline']}>{match}</span>)}` : match
-    }
-  },
-  {
-    pattern: boldRegex,
-    replacement: (match) => {
-      match = match.trim().slice(1, -1)
-      return match.length > 0 ? ` ${ReactDOMServer.renderToStaticMarkup(<b>{match}</b>)}` : match
-    }
-  },
-  {
-    pattern: italicRegex,
-    replacement: (match) => {
-      match = match.trim().slice(1, -1)
-      return match.length > 0 ? ` ${ReactDOMServer.renderToStaticMarkup(<i>{match}</i>)}` : match
-    }
-  },
-  {
-    pattern: strikeRegex,
-    replacement: (match) => {
-      match = match.trim().slice(1, -1)
-      return match.length > 0 ? ` ${ReactDOMServer.renderToStaticMarkup(<em>{match}</em>)}` : match
-    }
-  },
-  {
-    pattern: emojiWithEmoticons.delimiter,
-    replacement: (match) => {
-      const hex = emojiWithEmoticons.dict[_getKey(match)]
-      return hex ? ReactDOMServer.renderToStaticMarkup(<img className={styles.emoji} src={_buildImageUrl(hex)} />) : match
-    }
-  }
-]
 
 function formatText(text) {
-  return replace.strWithArr(text, replacements)
+  let codeBlocks = []
+
+  const replacements = [{
+      pattern: codeBlockRegex,
+      replacement: (match) => {
+        match = match.slice(3, -3)
+        if (match.trim().length > 0) {
+          const replacement = `---CHATTERBOX-CODEBLOCK-${uuid.v1()}---`
+          codeBlocks.push({ replacement, html: ReactDOMServer.renderToStaticMarkup(<div className={styles['code-block']}>{match}</div>) })
+          return replacement
+        }
+        return match
+      }
+    },
+    {
+      pattern: codeRegex,
+      replacement: (match) => {
+        match = match.slice(1, -1)
+        return match.trim().length > 0 ? ReactDOMServer.renderToStaticMarkup(<div className={styles['code-inline']}>{match}</div>) : match
+      }
+    },
+    {
+      pattern: boldRegex,
+      replacement: (match) => {
+        match = match.slice(1, -1)
+        return match.trim().length > 0 ? ReactDOMServer.renderToStaticMarkup(<b>{match}</b>) : match
+      }
+    },
+    {
+      pattern: italicRegex,
+      replacement: (match) => {
+        match = match.slice(1, -1)
+        return match.trim().length > 0 ? ReactDOMServer.renderToStaticMarkup(<i>{match}</i>) : match
+      }
+    },
+    {
+      pattern: strikeRegex,
+      replacement: (match) => {
+        match = match.slice(1, -1)
+        return match.trim().length > 0 ? ReactDOMServer.renderToStaticMarkup(<em>{match}</em>) : match
+      }
+    },
+    {
+      pattern: emojiWithEmoticons.delimiter,
+      replacement: (match) => {
+        const hex = emojiWithEmoticons.dict[_getKey(match)]
+        return hex ? ReactDOMServer.renderToStaticMarkup(<img className={styles.emoji} src={_buildImageUrl(hex)} />) : match
+      }
+    }
+  ]
+
+  let formattedText = replace.strWithArr(text, replacements)
+  codeBlocks.forEach(({ replacement, html }) => {
+    formattedText = formattedText.replace(replacement, html)
+  })
+  return formattedText
 }
