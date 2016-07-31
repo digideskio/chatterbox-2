@@ -89,6 +89,7 @@ const codeBlockRegex = /(^|\s|[_*\?\.,\-!\^;:{(\[%$#+=\u2000-\u206F\u2E00-\u2E7F
 const codeRegex = /(^|\s|[\?\.,\-!\^;:{(\[%$#+=\u2000-\u206F\u2E00-\u2E7F"])`(.*?\S *)?`/g
 
 const userOrChannelRegex = /<[#@]+(.*?)>/g
+const urlRegex = /<(.*?)>/g
 const boldRegex = /(^|\s|[\?\.,\-!\^;:{(\[%$#+=\u2000-\u206F\u2E00-\u2E7F"])\*(.*?\S *)?\*(?=$|\s|[\?\.,'\-!\^;:})\]%$~{\[<#+=\u2000-\u206F\u2E00-\u2E7F…"\uE022])/g
 const italicRegex = /(?!:.+:)(^|\s|[\?\.,\-!\^;:{(\[%$#+=\u2000-\u206F\u2E00-\u2E7F"])_(.*?\S *)?_(?=$|\s|[\?\.,'\-!\^;:})\]%$~{\[<#+=\u2000-\u206F\u2E00-\u2E7F…"\uE022])/g
 const strikeRegex = /(^|\s|[\?\.,\-!\^;:{(\[%$#+=\u2000-\u206F\u2E00-\u2E7F"])~(.*? *\S)?~(?=$|\s|[\?\.,'\-!\^;:})\]%$~{\[<#+=\u2000-\u206F\u2E00-\u2E7F…"\uE022])/g
@@ -103,6 +104,24 @@ const emojiWithEmoticons = { delimiter: new RegExp(`(:(?:${_getEscapedKeys(annot
 function formatText(text) {
   const messageReplacementDict = {}
   const replacements = [{
+      pattern: urlRegex,
+      replacement: (match) => {
+        match = match.slice(1, -1)
+        if (match.trim().length > 0) {
+          const replacement = uuid.v1()
+          if (match.charAt(0) == '@' || match.charAt(0) == '#') return `<${match}>`
+          let split = match.split('|')
+          let label = split.length == 2 ? split[1] : split[0]
+          let url = split[0]
+          if (!url.match(/^https?:\/\//)) return match
+
+          messageReplacementDict[replacement] = <a className={styles['link']} href={url}>{label}</a>
+          return replacement
+        }
+        return match
+      }
+    },
+    {
       pattern: codeBlockRegex,
       replacement: (match) => {
         match = match.slice(3, -3)
