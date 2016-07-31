@@ -23,3 +23,4 @@ Chatterbox is an indevelopment chat client that will support various different p
 ## Memes
 [![forthebadge](http://forthebadge.com/images/badges/fuck-it-ship-it.svg)](http://forthebadge.com)
 [![forthebadge](http://forthebadge.com/images/badges/built-with-love.svg)](http://forthebadge.com)
+ 
