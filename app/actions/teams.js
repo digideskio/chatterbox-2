@@ -25,6 +25,7 @@ function parseHandler(Handler) {
 export function addTeam(Handler) {
   return (dispatch) => {
     const team = parseHandler(Handler)
+    console.log(team)
     dispatch({ type: TEAMS_TEAM_ADD, team })
     dispatch(changeActiveTeam(team.team.id))
     dispatch(locationPush('/chat'))

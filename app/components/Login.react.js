@@ -11,7 +11,7 @@ export default class Login extends Component {
   static propTypes = {
     routeParams: PropTypes.object.isRequired,
     provider: PropTypes.shape({ loaded: PropTypes.bool, name: PropTypes.string }),
-    providers: PropTypes.array.isRequired,
+    providers: PropTypes.array,
     addTeam: PropTypes.func.isRequired
   }
 
