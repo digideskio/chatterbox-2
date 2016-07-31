@@ -16,20 +16,18 @@ export default function createTeamHandler(provider) {
 
     _historyRequestQueue = queue(({ channel_or_dm_id, args }, next) => {
       this._getHistoryByID({ channel_or_dm_id, ...args })
-        .then(messages => this._dispatch(addHistory({ messages, channel: channel_or_dm_id, team: this.getTeam().id })))
+        .then(messages => this._dispatch(addHistory({ messages, channel: channel_or_dm_id, team: this.team.id })))
         .then(() => process.nextTick(next))
         .catch(next) // yes we should deal with any errors here later
     })
 
     initHistory() {
-      const {
-        [this.initialActiveChannelorDMID]: { id: mainChannelID }, ...channels
-      } = this.getChannels()
+      const { [this.initialActiveChannelorDMID]: { id: mainChannelID }, ...channels } = this.channels
 
       this._historyRequestQueue.push({ channel_or_dm_id: mainChannelID })
       _.forEach({
         ..._.pickBy(channels, ({ isMember }) => isMember),
-        ..._.pickBy(this.getDMs(), ({ isOpen }) => isOpen)
+        ..._.pickBy(this.dms, ({ isOpen }) => isOpen)
       }, ({ id }) => this._historyRequestQueue.push({ channel_or_dm_id: id }))
     }
 
@@ -37,7 +35,7 @@ export default function createTeamHandler(provider) {
       return this._getHistoryByID({ channel_or_dm_id })
     }
 
-    getInitialActiveChannelorDMID() {
+    get initialActiveChannelorDMID() {
       return this._activeChannelorDMID
     }
 
@@ -52,18 +50,15 @@ export default function createTeamHandler(provider) {
 
       this.on('connected', () => {
         this.initHistory()
-        const { type, name } = this.getTeam()
-        console.log(`Connected to ${type} team: ${name} via ${this.getUser().handle}`)
+        console.log(`Connected to ${this.team.type} team: ${this.team.name} via ${this.user.handle}`)
       })
 
       this.on('message', ({ channel, ...message }) => {
-        const { id: team } = this.getTeam()
-        this._dispatch(newMessage({ channel, message, team }))
+        this._dispatch(newMessage({ channel, message, team: this.team.id }))
       })
 
       this.on('message:changed', ({ channel, ...editData }) => {
-        const { id: team } = this.getTeam()
-        this._dispatch(editMessage({ channel, team, ...editData }))
+        this._dispatch(editMessage({ channel, team: this.team.id, ...editData }))
       })
     }
   }
