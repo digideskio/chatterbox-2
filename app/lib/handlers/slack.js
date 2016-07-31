@@ -4,7 +4,6 @@ import { WebClient, RtmClient, MemoryDataStore, CLIENT_EVENTS, RTM_EVENTS } from
 import { santitizeUser, parseMessage } from './slack.helpers'
 
 
-
 export default class SlackHandler extends EventEmitter {
   constructor({ token }) {
     super()

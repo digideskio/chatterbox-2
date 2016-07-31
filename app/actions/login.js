@@ -10,10 +10,7 @@ export function addTeam(provider, opts = {}) {
   return (dispatch, getState) => {
     const TeamHandler = createTeamHandler(provider)
     const Team = new TeamHandler(opts, dispatch, true)
-    Team.once('connected', () => {
-      console.log(Team)
-      dispatch(TeamsActions.addTeam(Team))
-    })
+    Team.once('connected', () => dispatch(TeamsActions.addTeam(Team)))
   }
 }
 
