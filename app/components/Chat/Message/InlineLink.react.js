@@ -20,10 +20,17 @@ class InlineLink extends Component {
     shell.openExternal(this.props.url)
   }
 
+
+  handleHover() {
+    const { url, linkPreviews, loadPreview } = this.props
+    console.log(linkPreviews)
+    loadPreview(url)
+  }
+
   render() {
     const { url, label } = this.props
     return (
-      <div onClick={::this.handleClick} className={styles.link}>{name || label}</div>
+      <div onClick={::this.handleClick} onMouseOver={::this.handleHover} className={styles.link}>{name || label}</div>
     )
   }
 }
