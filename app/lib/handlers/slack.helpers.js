@@ -26,26 +26,26 @@ function santitizeAttachments(attachments) {
     return {
       original: { title, text, pretext, color, fields, ...attachment },
       images: {
-        image: {
+        image: attachment.image_url ? {
           url: attachment.image_url,
           height: attachment.image_height,
           width: attachment.image_width,
           size: attachment.image_bytes
-        },
-        thumb: {
+        } : undefined,
+        thumb: attachment.thumb_url ? {
           url: attachment.thumb_url,
           height: attachment.thumb_height,
           width: attachment.thumb_width
-        },
+        } : undefined,
         author: attachment.author_icon,
         service: attachment.service_icon
       },
-      video: {
+      video: attachment.video_html ? {
         type: attachment.service_name,
         url: attachment.from_url,
         height: attachment.video_html_height,
         width: attachment.video_html_width
-      },
+      } : undefined,
       links: {
         author: attachment.author_link,
         title: attachment.title_link
