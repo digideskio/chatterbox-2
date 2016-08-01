@@ -1,7 +1,4 @@
 import React, { Component, PropTypes } from 'react'
-import classnames from 'classnames'
-import { platform } from 'os'
-import TitleBar from './TitleBar'
 
 export default class App extends Component {
   static contextTypes = {
