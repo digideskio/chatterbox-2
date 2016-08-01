@@ -8,5 +8,6 @@
   flex-flow: column;
 
   @import './header';
+  @import './sender';
   @import './messages/messages';
 }
