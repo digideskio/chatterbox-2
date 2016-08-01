@@ -1,0 +1,32 @@
+.attachments {
+  margin-top: 10px;
+  display: block;
+
+  .attachment {
+    .attachment-container {
+      position: relative;
+      padding-left: 13px;
+      max-width: 1000px;
+      margin-top: 5px;
+      .attachment-body {
+        padding: 3px 0;
+      }
+      &.withThumb {
+        display: flex;
+        .attachment-body {
+          width: calc(100% - 100px);
+        }
+      }
+    }
+
+    @import 'inline/code';
+    @import 'inline/codeblock';
+    @import 'inline/link';
+    
+    @import 'attachments/text';
+    @import 'attachments/image';
+    @import 'attachments/thumb';
+    @import 'attachments/sidebar';
+    @import 'attachments/author';
+  }
+}

@@ -3,18 +3,25 @@ import { bindActionCreators } from 'redux'
 import { connect } from 'react-redux'
 import classnames from 'classnames'
 import * as TeamsActions from 'actions/teams'
-import styles from 'styles/chat.css'
 
-
-class InlineChannel extends Component {
+class InlineUser extends Component {
   static propTypes = {
+    isPing: PropTypes.bool,
     name: PropTypes.string,
+    handle: PropTypes.string,
     id: PropTypes.string
   }
 
+  static defaultProps = {
+    isPing: false
+  }
+
   render() {
+    const { isPing } = this.props
     return (
-      <div className={classnames(styles.channel)}>{this.props.name}</div>
+      <div className={classnames('user', {isPing})}>
+        @{this.props.handle}
+      </div>
     )
   }
 }
@@ -28,4 +35,4 @@ function mapDispatchToProps(dispatch) {
   return bindActionCreators(TeamsActions, dispatch)
 }
 
-export default connect(mapStateToProps, mapDispatchToProps)(InlineChannel)
+export default connect(mapStateToProps, mapDispatchToProps)(InlineUser)

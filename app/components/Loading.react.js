@@ -1,5 +1,4 @@
 import React, { Component, PropTypes } from 'react'
-import styles from 'styles/loading.css'
 
 export default class Loading extends Component {
   static contextTypes = {
@@ -31,11 +30,14 @@ export default class Loading extends Component {
 
   render() {
     return (
-      <div className={styles.loading}>
-        <img className={styles.gif} src='images/buildbox.gif' />
-        <div className={styles.info}>
-          <div className={styles.title}>{this.props.task}<span>{this.state.dots}</span></div>
-          <div className={styles.progress_bar}>
+      <div className='loading'>
+        <img className='gif' src='images/buildbox.gif' />
+        <div className='info'>
+          <div className='title'>
+            {this.props.task}
+            <span>{this.state.dots}</span>
+          </div>
+          <div className='progress_bar'>
             <div style={{width: `${this.props.loaded}%`}} />
           </div>
         </div>

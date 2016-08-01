@@ -1,0 +1,158 @@
+.teamInfo {
+  width: calc(100% - 90px - 20px);
+  height: 100%;
+  position: absolute;
+  right: 10px;
+  .team {
+    display: block;
+    padding-top: 25px;
+    margin-bottom: 35px;
+    .name {
+      font-size: 18px;
+      margin-bottom: 2px;
+      font-weight: 600;
+      text-rendering: optimizeLegibility;
+      letter-spacing: 0.5px;
+    }
+    .status {
+      width: 10px;
+      height: 10px;
+      border-radius: 50%;
+      display: inline-block;
+      &.online {
+        background-color: #7fd421;
+      }
+      &.offline {
+        background-color: gray;
+      }
+      &.away {
+        background-color: yellow;
+      }
+    }
+    .handle {
+      margin-left: 4px;
+      position: relative;
+      font-weight: 400;
+      top: 1px;
+      color: rgba(255, 255, 255, 0.69);
+    }
+  }
+  .channelsContainer {
+    height: calc(100% - 109px);
+    overflow: hidden;
+    &:hover {
+      overflow: auto;
+    }
+    &::-webkit-scrollbar-thumb {
+      border-radius: 5px;
+      -webkit-box-shadow: inset 0 0 2px rgba(0, 0, 0, 0.55);
+      background-color: rgba(255, 255, 255, 0.1);
+    }
+  }
+  .channels {
+    display: block;
+    margin-bottom: 30px;
+    margin-right: 3px;
+  }
+  .dms {
+    display: block;
+    margin-bottom: 30px;
+    margin-right: 3px;
+    margin-bottom: 20px;
+  }
+  .channels .title,
+  .dms .title {
+    text-transform: uppercase;
+    font-size: 14px;
+    font-weight: 400;
+    letter-spacing: 0.5px;
+    color: rgba(255, 255, 255, 0.58);
+    margin-bottom: 6px;
+  }
+  .channels .title span,
+  .dms .title span {
+    margin-left: 4px;
+    color: rgba(255, 255, 255, 0.41);
+  }
+  .channel {
+    &:hover {
+      background-color: rgba(255, 255, 255, 0.06);
+    }
+    padding: 4px 0 5px 3px;
+    cursor: pointer;
+    border-radius: 3px;
+    transition: background-color 100ms ease-in-out;
+    p {
+      padding: 0;
+      margin: 0;
+      font-size: 14px;
+      display: inline-block;
+      color: rgba(255, 255, 255, 0.58);
+      font-weight: 400;
+      letter-spacing: 0.5px;
+    }
+    .missed_pings {
+      width: 22px;
+      height: 20px;
+      display: inline-block;
+      background-color: #fb3c4c;
+      border-radius: 40%;
+      font-size: 14px;
+      font-weight: 600;
+      line-height: 20px;
+      text-align: center;
+      color: #feecec;
+      margin-left: 10px;
+    }
+    &.attention p {
+      font-size: 14px;
+      color: rgba(255, 255, 255, 0.85);
+      font-weight: 600;
+    }
+    &.active {
+      background-color: rgba(255, 255, 255, 0.12);
+      p {
+        color: rgba(255, 255, 255, 0.85);
+      }
+    }
+  }
+  .dms .dm {
+    &.active .name {
+      color: rgba(255, 255, 255, 0.85);
+    }
+    padding: 5px 0 5px 3px;
+    margin-left: 2px;
+    height: auto;
+    position: relative;
+    .image {
+      width: 35px;
+      border-radius: 50%;
+      vertical-align: text-top;
+      height: 35px;
+      display: inline-block;
+      background-position: center;
+      background-size: contain;
+    }
+    .status {
+      width: 10px;
+      height: 10px;
+      position: absolute;
+      margin-top: 12px;
+      left: -15px;
+      border-radius: 50%;
+      &.online {
+        background-color: #7ed320;
+      }
+    }
+    .name {
+      display: inline-block;
+      font-size: 14px;
+      line-height: 35px;
+      color: rgba(255, 255, 255, 0.58);
+      font-weight: 400;
+      letter-spacing: 0.5px;
+      margin-left: 10px;
+      position: absolute;
+    }
+  }
+}

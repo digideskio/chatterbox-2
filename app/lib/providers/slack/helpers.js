@@ -5,10 +5,9 @@ import _ from 'lodash'
 import replace from 'frep'
 import escapeStringRegexp from 'escape-string-regexp'
 import annotations from 'emoji-annotation-to-unicode'
-import ChatInlineUser from 'components/Chat/Message/InlineUser.react'
-import ChatInlineChannel from 'components/Chat/Message/InlineChannel.react'
-import ChatInlineLink from 'components/Chat/Message/InlineLink.react'
-import styles from 'styles/chat.css'
+import ChatInlineUser from 'components/Chat/Message/Inline/User.react'
+import ChatInlineChannel from 'components/Chat/Message/Inline/Channel.react'
+import ChatInlineLink from 'components/Chat/Message/Inline/Link.react'
 
 export function santitizeUser({ tz: timezone, id, deleted, profile, name: handle, presence }) {
   return {
@@ -22,14 +21,41 @@ export function santitizeUser({ tz: timezone, id, deleted, profile, name: handle
 }
 
 function santitizeAttachments(attachments) {
-  return attachments.map(({ title, text, pretext, ...attachment }) => {
+  return attachments.map(({ title, text, pretext, color, fields, ...attachment }) => {
     return {
-      images: { thumb: attachment.thumb_url, author: attachment.author_icon },
-      links: { author: attachment.author_link, title: attachment.title_link },
+      original: { title, text, pretext, color, fields, ...attachment },
+      images: {
+        image: attachment.image_url ? {
+          url: attachment.image_url,
+          height: attachment.image_height,
+          width: attachment.image_width,
+          size: attachment.image_bytes
+        } : undefined,
+        thumb: attachment.thumb_url ? {
+          url: attachment.thumb_url,
+          height: attachment.thumb_height,
+          width: attachment.thumb_width
+        } : undefined,
+        author: attachment.author_icon,
+        service: attachment.service_icon
+      },
+      video: attachment.video_html ? {
+        type: attachment.service_name,
+        url: attachment.from_url,
+        height: attachment.video_html_height,
+        width: attachment.video_html_width
+      } : undefined,
+      links: {
+        author: attachment.author_link,
+        title: formatText(attachment.title_link)
+      },
       author: attachment.author_name,
-      title,
-      pretext,
-      text
+      service: attachment.service_name,
+      borderColor: color ? `#${color}` : undefined,
+      title: formatText(title),
+      pretext: formatText(pretext),
+      text: formatText(text),
+      fields
     }
   })
 }
@@ -103,6 +129,8 @@ const _getEscapedKeys = hash => Object.keys(hash).map(x => escapeStringRegexp(x)
 const emojiWithEmoticons = { delimiter: new RegExp(`(:(?:${_getEscapedKeys(annotations)}):)`, 'g'), dict: annotations }
 
 function formatText(text) {
+  if (!text) return text
+
   const messageReplacementDict = {}
   const replacements = [{
       pattern: urlRegex,
@@ -128,7 +156,7 @@ function formatText(text) {
         match = match.trim().slice(3, -3)
         if (match.length > 0) {
           const replacement = uuid.v1()
-          messageReplacementDict[replacement] = <div className={styles['code-block']}>{match}</div>
+          messageReplacementDict[replacement] = <div className='codeblock'>{match}</div>
           return ` ${replacement}`
         }
         return match
@@ -140,7 +168,7 @@ function formatText(text) {
         match = match.trim().slice(1, -1)
         if (match.length > 0) {
           const replacement = uuid.v1()
-          messageReplacementDict[replacement] = <span className={styles['code-inline']}>{match}</span>
+          messageReplacementDict[replacement] = <span className='code'>{match}</span>
           return ` ${replacement}`
         }
         return match
@@ -219,7 +247,7 @@ function formatText(text) {
         const hex = emojiWithEmoticons.dict[_getKey(match)]
         if (hex) {
           const replacement = uuid.v1()
-          messageReplacementDict[replacement] = <img className={styles.emoji} src={_buildImageUrl(hex)} />
+          messageReplacementDict[replacement] = <img className='emoji' src={_buildImageUrl(hex)} />
           return ` ${replacement}`
         }
         return match

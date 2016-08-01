@@ -2,7 +2,6 @@ import React, { Component, PropTypes } from 'react'
 import _ from 'lodash'
 import Message from './Message'
 import Sender from './Sender.react'
-import styles from 'styles/chat.css'
 
 export default class Chat extends Component {
   static propTypes = {
@@ -47,22 +46,22 @@ export default class Chat extends Component {
 
   render() {
     return (
-      <div className={styles.chat}>
+      <div className='chat'>
         <header>
-          <div className={styles.info}>
-            <span className={styles.channel}>{this.props.channel.name}</span>
-            <span className={styles.meta}>{_.get(this.props, 'channel.meta.members') || `${this.props.channelUsers.length} Members`}</span>
+          <div className='info'>
+            <span className='channel'>{this.props.channel.name}</span>
+            <span className='meta'>{_.get(this.props, 'channel.meta.members') || `${this.props.channelUsers.length} Members`}</span>
             {
               _.get(this.props, 'channel.meta.topic') ? (
                 <div>
-                  <span className={styles.spacer}>|</span>
-                  <span className={styles.meta}>{this.props.channel.meta.topic}</span>
+                  <span className='spacer'>|</span>
+                  <span className='meta'>{this.props.channel.meta.topic}</span>
                 </div>
               ) : null
             }
           </div>
         </header>
-        <section ref='messagesContainer' className={styles.messages}>
+        <section ref='messagesContainer' className='messages'>
           {
             this.props.messages.map(({text, user, timestamp, friendlyTimestamp, ...message}, idx) => (
               <Message

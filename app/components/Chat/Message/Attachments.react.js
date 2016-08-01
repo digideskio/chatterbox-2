@@ -1,19 +1,45 @@
 import React, { Component, PropTypes } from 'react'
 import classnames from 'classnames'
 import _ from 'lodash'
-import styles from 'styles/chat.css'
+
+import ThumbImage from './Attachments/ThumbImage.react'
+import Image from './Attachments/Image.react'
+import Text from './Attachments/Text.react'
+import Author from './Attachments/Author.react'
 
 /* var attachments = [{
   author: '',
   images: {
-    thumb, author, ...images
+    image: {
+      url: '',
+      width: x,
+      height: x,
+      size: x
+    },
+    thumb: {
+      url: '',
+      width: x,
+      height: x
+    },
+    author: '',
+    service: ''
   },
   links: {
-    title, author
+    title,
+    author
+  },
+  video: {
+    url: '',
+    width: x,
+    height: x,
+    type: ''
   },
   title: '',
-  'pretext': 'Hello lol',
-  'text': 'The map() method creates a new array with the results of calling a provided function on every element…element in this array.'
+  pretext: '',
+  text: '',
+  fields: [],
+  color: '',
+  service: ''
 }]*/
 
 export default class Attachments extends Component {
@@ -21,50 +47,51 @@ export default class Attachments extends Component {
     attachments: PropTypes.array.isRequired
   }
 
-  _renderImage(imageURL) {
+  _renderAttachments({ text, borderColor = 'gray', pretext, title, links = {}, images = {}, video, author, service, fields }) {
+    // console.log(text, borderColor, pretext, title, links, images, video, author, service, fields)
+    const renderSidebar = !(!text && !pretext && !title && !images.thumb && !video && !author && !fields)
 
-  }
-
-  _renderAuthor(name, authorLink, authorImage) {
     return (
-      <div className={styles.authorBody}>
-        {authorImage ? <div className={styles.authImg} style={{backgroundImage: `url(${authorImage})`}}></div> : null}
-        <div className={styles.authName}>{name}</div>
+      <div>
+        {pretext ? <Text text={pretext} /> : null}
+
+        <div className={classnames('attachment-container', {withThumb: images.thumb})}>
+          {renderSidebar ? <div className='attachment-sidebar' style={{borderColor}} /> : null}
+
+          {(author || text || service) ? (
+            <div className='attachment-body'>
+              {author ? (
+                <Author
+                  name={author}
+                  image={images.author}
+                  link={links.author}
+                  service={{ name: service, image: images.service }}
+                />
+              ) : null}
+              {text ? <Text isPretext={false} text={text} /> : null}
+            </div>
+          ) : null}
+
+          {images.thumb ? <ThumbImage url={images.thumb} /> : null}
+          {images.image ? (
+            <Image
+              url={_.get(images.image, 'url')}
+              {..._.pick(images.image, ['width', 'height'])}
+            />
+          ) : null}
+
+        </div>
       </div>
     )
-  }
-
-  _renderThumb(thumbURL) {
-    return (
-      <div className={styles.thumbCont}>
-        <div className={styles.thumb} style={{backgroundImage: `url(${thumbURL})`}}></div>
-      </div>
-    )
-  }
-
-  // Remove links for dev only
-  _sanitizeText(text) {
-    return text.replace(/<.+\|/g, ' [LINK REMOVED]')
   }
 
   render() {
     return (
-      <div className={styles.attachments}>
+      <div className='attachments'>
         {
-          this.props.attachments.map(({text, color: borderColor = 'gray', pretext, title, links = {}, images = {}, author}, idx) => (
-            <div key={idx + 1} className={styles.attachment}>
-              {pretext ? <div className={styles.attachmentPretext}>{_.unescape(this._sanitizeText(pretext))}</div> : null}
-
-              <div className={classnames(styles.attachmentContainer, {[styles.withThumb]: images.thumb})}>
-                <div className={styles.sidebar} style={{borderColor}} />
-                <div className={styles.attachmentBody}>
-
-                  {author ? this._renderAuthor(author, links.author, images.author) : null}
-
-                  {text ? <div className={styles.text}>{_.unescape(this._sanitizeText(text))}</div> : null}
-                </div>
-                {images.thumb ? this._renderThumb(images.thumb) : null}
-              </div>
+          this.props.attachments.map((attachment, idx) => (
+            <div key={idx + 1} className='attachment'>
+              {this._renderAttachments(attachment)}
             </div>
           ))
         }
