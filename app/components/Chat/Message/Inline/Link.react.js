@@ -4,7 +4,6 @@ import { bindActionCreators } from 'redux'
 import { connect } from 'react-redux'
 import { shell } from 'electron'
 import * as LinkPreviewsActions from 'actions/linkPreviews'
-import styles from 'styles/chat.css'
 
 
 class InlineLink extends Component {
@@ -42,11 +41,11 @@ class InlineLink extends Component {
         onClick={::this.handleClick}
         onMouseEnter={::this.handleHover}
         onMouseLeave={this.handleHoverOut}
-        className={styles.link}
+        className='link'
       >
         {
           this.state.popOverOpen && loaded[url] ? (
-            <div className={styles.linkImage} style={{backgroundImage: `url(data:image/png;base64,${loaded[url]})`}} />
+            <div className='popover' style={{backgroundImage: `url(data:image/png;base64,${loaded[url]})`}} />
           ) : null
         }
         {label || url}

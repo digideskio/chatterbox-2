@@ -1,8 +1,6 @@
 import React, { Component, PropTypes } from 'react'
 import classnames from 'classnames'
-// import prettyBytes from 'pretty-bytes'
 import ImageLoader from 'react-imageloader'
-import styles from 'styles/chat.css'
 
 /* var attachments = [{
   author: '',
@@ -60,7 +58,7 @@ export default class Attachments extends Component {
       height = 300
     }
     return (
-      <div className={styles.bigImage}>
+      <div className='bigImage'>
         <ImageLoader src={image.url} style={{ width: `${width}px`, height: `${height}px` }} />
       </div>
     )
@@ -68,19 +66,19 @@ export default class Attachments extends Component {
 
   _renderAuthor(author, authorLink, authorImage, service, serviceImage) {
     return (
-      <div className={styles.authorBody}>
-        {serviceImage ? <div className={styles.authImg} style={{backgroundImage: `url(${serviceImage})`}}></div> : null}
-        {service ? <div className={styles.servName}>{service} |</div> : null}
-        {authorImage ? <div className={styles.authImg} style={{backgroundImage: `url(${authorImage})`}}></div> : null}
-        {author ? <div className={styles.authName}>{author}</div> : null}
+      <div className='author-body'>
+        {serviceImage ? <div className='auth-img' style={{backgroundImage: `url(${serviceImage})`}}></div> : null}
+        {service ? <div className='serv-name'>{service} |</div> : null}
+        {authorImage ? <div className='auth-img' style={{backgroundImage: `url(${authorImage})`}}></div> : null}
+        {author ? <div className='auth-name'>{author}</div> : null}
       </div>
     )
   }
 
   _renderThumb(thumbURL) {
     return (
-      <div className={styles.thumbCont}>
-        <div className={styles.thumb} style={{backgroundImage: `url(${thumbURL})`}}></div>
+      <div className='thumb-cont'>
+        <div className='thumb' style={{backgroundImage: `url(${thumbURL})`}}></div>
       </div>
     )
   }
@@ -97,13 +95,13 @@ export default class Attachments extends Component {
 
     return (
       <div>
-        {pretext ? <div className={styles.attachmentPretext}>{this._sanitizeText(pretext)}</div> : null}
-        <div className={classnames(styles.attachmentContainer, {[styles.withThumb]: images.thumb}, {[styles.noColorBar]: !attachments})}>
-          <div className={styles.sidebar} style={{borderColor}}></div>
+        {pretext ? <div className='attachment-pretext'>{this._sanitizeText(pretext)}</div> : null}
+        <div className={classnames('attachment-container', {withThumb: images.thumb}, {noColorBar: !attachments})}>
+          <div className='attachment-sidebar' style={{borderColor}}></div>
           {author || text || service
-            ? <div className={styles.attachmentBody}>
+            ? <div className='attachment-body'>
               {author ? this._renderAuthor(author, links.author, images.author, service, images.service) : null}
-              {text ? <div className={styles.text}>{this._sanitizeText(text)}</div> : null}
+              {text ? <div className='text'>{this._sanitizeText(text)}</div> : null}
             </div>
           : null}
           {images.thumb ? this._renderThumb(images.thumb) : null}
@@ -115,10 +113,10 @@ export default class Attachments extends Component {
 
   render() {
     return (
-      <div className={styles.attachments}>
+      <div className='attachments'>
         {
           this.props.attachments.map((attachment, idx) => (
-            <div key={idx + 1} className={styles.attachment}>
+            <div key={idx + 1} className='attachment'>
               {this._renderAttachments(attachment)}
             </div>
           ))

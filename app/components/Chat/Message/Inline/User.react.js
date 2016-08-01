@@ -4,7 +4,6 @@ import { connect } from 'react-redux'
 import classnames from 'classnames'
 import * as TeamsActions from 'actions/teams'
 
-
 class InlineUser extends Component {
   static propTypes = {
     isPing: PropTypes.bool,
