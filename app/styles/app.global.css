@@ -1,14 +1,22 @@
+html,
+body {
+    -webkit-font-smoothing: subpixel-antialiased;
+    -webkit-touch-callout: none;
+    -webkit-user-select: none;
+    -webkit-user-drag: none;
+    cursor: default;
+    -webkit-font-smoothing: subpixel-antialiased;
+    text-rendering: optimizelegibility;
+    img {
+        pointer-events: none;
+    }
+}
+
 .app-frame {
   height: 100vh;
   width: 100vw;
   position: fixed;
   font-family: 'Lato', sans-serif;
-}
-
-.app-frame.win32 {}
-
-.app-frame.darwin {
-  border-radius: 5px;
 }
 
 *::-webkit-scrollbar {

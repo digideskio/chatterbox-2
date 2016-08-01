@@ -37,7 +37,6 @@
     "pretty-bytes": "^3.0.1",
     "qs": "^6.2.1",
     "react": "^15.1.0",
-    "react-desktop": "^0.2.5",
     "react-dom": "^15.1.0",
     "react-imageloader": "^2.1.0",
     "react-redux": "^4.4.5",

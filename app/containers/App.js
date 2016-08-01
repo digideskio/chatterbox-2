@@ -1,7 +1,4 @@
 import React, { Component, PropTypes } from 'react'
-import classnames from 'classnames'
-import { platform } from 'os'
-import TitleBar from './TitleBar'
 
 export default class App extends Component {
   static contextTypes = {
@@ -21,8 +18,7 @@ export default class App extends Component {
 
   render() {
     return (
-      <div className={classnames('app-frame', platform())}>
-        <TitleBar />
+      <div className={'app-frame'}>
         {this.props.children}
       </div>
     )

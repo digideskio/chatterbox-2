@@ -33,13 +33,13 @@ app.on('ready', async() => {
   mainWindow = new BrowserWindow({
     ...mainWindowState,
     show: false,
-    frame: false,
-    transparent: true,
-    thickFrame: true,
+    frame: true,
     center: true,
     minWidth: 1060,
     minHeight: 600
   })
+
+  mainWindow.setMenu(null)
 
   manage(mainWindow)
 
