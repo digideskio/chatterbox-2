@@ -1,0 +1,26 @@
+.author-body {
+  color: grey;
+  font-size: 15px;
+  margin-bottom: 3px;
+  display: flex;
+  height: 18px;
+  .author-name {
+    color: grey;
+    font-size: 15px;
+  }
+  .author-text {}
+  .author-img {
+    background-size: contain;
+    width: 18px;
+    height: 18px;
+    background-repeat: no-repeat;
+    margin-right: 5px;
+    margin-left: 1px;
+    margin-top: 1px;
+  }
+  .service-name {
+    color: grey;
+    font-size: 15px;
+    margin-right: 2px;
+  }
+}
