@@ -1,4 +1,5 @@
 export default {
   theme: 'light',
-  closeToTray: true
+  closeToTray: true,
+  linkPopoverPreview: true
 }

@@ -26,7 +26,7 @@ class InlineUser extends Component {
 }
 
 
-function mapStateToProps({ settings, loading, teams }) {
+function mapStateToProps({ settings }) {
   return { settings }
 }
 
