@@ -7,8 +7,11 @@ import loading from './loading'
 import teams from './teams'
 import messages from './messages'
 import login from './login'
+import linkPreviews from './linkPreviews'
 
-const rootReducer = combineReducers({
+
+export default combineReducers({
+  linkPreviews,
   teams,
   login,
   messages,
@@ -17,5 +20,3 @@ const rootReducer = combineReducers({
   loading,
   routing
 })
-
-export default rootReducer
