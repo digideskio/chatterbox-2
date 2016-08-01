@@ -1,5 +1,4 @@
 import React, { Component, PropTypes } from 'react'
-import styles from 'styles/login.css'
 import SlackLogin from './Logins/Slack.react'
 
 
@@ -34,7 +33,7 @@ export default class Login extends Component {
 
   render() {
     return (
-      <div className={styles.login}>
+      <div className='login'>
         {::this._renderTeamLogin()}
       </div>
     )

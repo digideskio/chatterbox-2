@@ -4,7 +4,6 @@ import url from 'url'
 import qs from 'qs'
 import { shell } from 'electron'
 import request from 'request'
-import styles from 'styles/login.css'
 
 
 export default class SlackLogin extends Component {
@@ -96,11 +95,11 @@ export default class SlackLogin extends Component {
   render() {
     const { webviewShown } = this.state
     return (
-      <div className={styles.logininner}>
-        <div className={classnames(styles.sidebar, styles.full)}>
-          <object className={styles.slack} data='images/logins/slack.svg' type='image/svg+xml' />
+      <div className='slack'>
+        <div className='sidebar full'>
+          <object className='slack' data='images/logins/slack.svg' type='image/svg+xml' />
         </div>
-        <div className={classnames(styles.webview, {[styles.show]: webviewShown})}>
+        <div className={classnames('webview', {show: webviewShown})}>
           <webview preload='components/Logins/slack.injected.js' ref='webview' src={`https://slack.com/oauth/pick_reflow?${::this.getOAuthQuery()}`} />
         </div>
       </div>

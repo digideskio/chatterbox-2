@@ -1,7 +1,5 @@
 import React, { Component, PropTypes } from 'react'
 import classnames from 'classnames'
-import styles from 'styles/sidebar.css'
-
 
 export default class Channel extends Component {
   static propTypes = {
@@ -17,10 +15,10 @@ export default class Channel extends Component {
   render() {
     const { missedPings, active, name } = this.props
     return (
-      <div onClick={this.handleOnClick} className={classnames(styles.channel, {[styles.active]: active}, {[styles.attention]: missedPings})}>
+      <div onClick={this.handleOnClick} className={classnames('channel', {active}, {attention: missedPings})}>
         <p>{name}</p>
         {
-          missedPings ? <span className={styles.missed_pings}>{missedPings}</span> : null
+          missedPings ? <span className='missed_pings'>{missedPings}</span> : null
         }
       </div>
     )

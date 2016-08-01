@@ -3,7 +3,6 @@ import { bindActionCreators } from 'redux'
 import { connect } from 'react-redux'
 import classnames from 'classnames'
 import * as TeamsActions from 'actions/teams'
-import styles from 'styles/chat.css'
 
 
 class InlineUser extends Component {
@@ -19,8 +18,9 @@ class InlineUser extends Component {
   }
 
   render() {
+    const {isPing} = this.props
     return (
-      <div className={classnames(styles.user, { [styles.isPing]: this.props.isPing })}>@{this.props.handle}</div>
+      <div className={classnames('user', {isPing})}>@{this.props.handle}</div>
     )
   }
 }

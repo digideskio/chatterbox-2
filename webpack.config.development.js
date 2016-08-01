@@ -21,23 +21,13 @@ export default {
       ...baseConfig.module.loaders,
       {
         test: /\.css$/,
-        loaders: ['style-loader', 'css-loader'],
-        include: path.resolve('app/styles/vender')
+        loaders: ['style', 'css'],
+        include: path.resolve('app/styles')
       },
       {
-        test: /\.global\.css$/,
-        loaders: [
-          'style-loader',
-          'css-loader?sourceMap'
-        ]
-      },
-      {
-        test: /^((?!\.global).)*\.css$/,
-        loaders: [
-          'style-loader',
-          'css-loader?modules&sourceMap&importLoaders=1&localIdentName=[name]__[local]___[hash:base64:5]'
-        ],
-        exclude: path.resolve('app/styles/vender')
+        test: /\.scss/,
+        loaders: ['style', 'css?sourceMap', 'sass?sourceMap'],
+        include: path.resolve('app/styles')
       }
     ]
   },
