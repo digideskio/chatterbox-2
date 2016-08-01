@@ -8,6 +8,35 @@ export default class GitterHandler extends EventEmitter {
     super()
 
     this._gitter = new GitterClient(token)
+
+
+    this._gitter.currentUser()
+      .then((user) => {
+        const rooms = user.rooms()
+        const repos = user.repos()
+        const orgs = user.orgs()
+        const channels = user.channels()
+        console.log(user, rooms, repos, orgs, channels)
+      })
+  }
+
+  _initGitterEvents() {
+    //this will be intresting
+    gitter.rooms.find(roomId).then((room) => {
+
+      var events = room.streaming().chatMessages();
+
+      // The 'snapshot' event is emitted once, with the last messages in the room
+      events.on('snapshot', function(snapshot) {
+        console.log(snapshot.length + ' messages in the snapshot');
+      });
+
+      // The 'chatMessages' event is emitted on each new message
+      events.on('chatMessages', function(message) {
+        console.log('A message was ' + message.operation);
+        console.log('Text: ', message.model.text);
+      });
+    });
   }
 
   message = {
