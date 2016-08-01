@@ -26,7 +26,7 @@ export default class Attachments extends Component {
 
   _renderAuthor(name, authorLink, authorImage) {
     return (
-      <div className='authorBody'>
+      <div className='author-body'>
         {authorImage ? <div className='authImg' style={{backgroundImage: `url(${authorImage})`}}></div> : null}
         <div className='authName'>{name}</div>
       </div>
@@ -35,7 +35,7 @@ export default class Attachments extends Component {
 
   _renderThumb(thumbURL) {
     return (
-      <div className='thumbCont'>
+      <div className='thumb-cont'>
         <div className='thumb' style={{backgroundImage: `url(${thumbURL})`}}></div>
       </div>
     )
@@ -52,11 +52,11 @@ export default class Attachments extends Component {
         {
           this.props.attachments.map(({text, color: borderColor = 'gray', pretext, title, links = {}, images = {}, author}, idx) => (
             <div key={idx + 1} className='attachment'>
-              {pretext ? <div className='attachmentPretext'>{_.unescape(this._sanitizeText(pretext))}</div> : null}
+              {pretext ? <div className='attachment-pretext'>{_.unescape(this._sanitizeText(pretext))}</div> : null}
 
-              <div className={classnames('attachmentContainer', {withThumb: images.thumb})}>
-                <div className='sidebar' style={{borderColor}} />
-                <div className='attachmentBody'>
+              <div className={classnames('attachment-container', {withThumb: images.thumb})}>
+                <div className='attachment-sidebar' style={{borderColor}} />
+                <div className='attachment-body'>
 
                   {author ? this._renderAuthor(author, links.author, images.author) : null}
 

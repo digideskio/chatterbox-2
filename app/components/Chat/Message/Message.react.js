@@ -39,7 +39,7 @@ export default class Message extends Component {
           }
           {
             text ? (
-              <div className='message_text'>{text}</div>
+              <div className='text'>{text}</div>
             ) : null
           }
           {

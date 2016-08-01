@@ -11,7 +11,7 @@
   .attachmentPretext {
     margin-bottom: 2px;
   }
-  .attachmentContainer {
+  .attachment-container {
     position: relative;
     padding-left: 13px;
     max-width: 1000px;
@@ -19,7 +19,7 @@
     &.withThumb {
       display: flex;
     }
-    .thumbCont {
+    .thumb-cont {
       width: 100px;
       display: flex;
       justify-content: center;
@@ -32,26 +32,34 @@
       }
     }
   }
-  .sidebar {
+  .attachment-sidebar {
     border-right: 4px solid;
     border-radius: 3px;
     position: absolute;
     height: 100%;
     left: 2px;
   }
-  .attachmentContainer {
+  .attachment-container {
     .attachmentBody {
       padding: 3px 0;
     }
-    &.withThumb .attachmentBody {
+    &.withThumb .attachment-body {
       width: calc(100% - 100px);
     }
   }
-  .attachmentBody .authorBody {
+  .attachment-body .author-body {
+    color: grey;
+    font-size: 15px;
     margin-bottom: 3px;
     display: flex;
     height: 18px;
-    .authImg {
+    .auth-name {
+      &.link:hover {
+        text-decoration: underline;
+      }
+    }
+    .text {}
+    .auth-img {
       background-size: contain;
       width: 18px;
       height: 18px;
@@ -61,12 +69,4 @@
       margin-top: 1px;
     }
   }
-  .authorBody .authName {
-    color: grey;
-    font-size: 15px;
-    &.link:hover {
-      text-decoration: underline;
-    }
-  }
-  .text {}
 }
