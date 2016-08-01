@@ -1,6 +1,6 @@
 import React, { Component, PropTypes } from 'react'
 import styles from 'styles/login.css'
-import SlackLogin from './Logins/Slack.react'
+import SlackLogin from './Slack/Login.react'
 
 
 export default class Login extends Component {

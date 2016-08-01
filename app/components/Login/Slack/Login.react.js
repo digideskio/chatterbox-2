@@ -101,7 +101,7 @@ export default class SlackLogin extends Component {
           <object className={styles.slack} data='images/logins/slack.svg' type='image/svg+xml' />
         </div>
         <div className={classnames(styles.webview, {[styles.show]: webviewShown})}>
-          <webview preload='components/Logins/slack.injected.js' ref='webview' src={`https://slack.com/oauth/pick_reflow?${::this.getOAuthQuery()}`} />
+          <webview preload='components/Logins/Slack/webview.injected.js' ref='webview' src={`https://slack.com/oauth/pick_reflow?${::this.getOAuthQuery()}`} />
         </div>
       </div>
     )

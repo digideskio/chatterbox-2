@@ -9,7 +9,6 @@ export default class GitterHandler extends EventEmitter {
 
     this._gitter = new GitterClient(token)
 
-
     this._gitter.currentUser()
       .then((user) => {
         const rooms = user.rooms()
