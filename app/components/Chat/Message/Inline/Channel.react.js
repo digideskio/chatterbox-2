@@ -12,7 +12,9 @@ class InlineChannel extends Component {
 
   render() {
     return (
-      <div className='channel'>{this.props.name}</div>
+      <div className='channel'>
+        {this.props.name}
+      </div>
     )
   }
 }
