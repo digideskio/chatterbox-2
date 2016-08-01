@@ -48,7 +48,7 @@ export default class Attachments extends Component {
   }
 
   _renderAttachments({ text, borderColor = 'gray', pretext, title, links = {}, images = {}, video, author, service, fields }) {
-    console.log(text, borderColor, pretext, title, links, images, video, author, service, fields)
+    // console.log(text, borderColor, pretext, title, links, images, video, author, service, fields)
     const renderSidebar = !(!text && !pretext && !title && !images.thumb && !video && !author && !fields)
 
     return (
