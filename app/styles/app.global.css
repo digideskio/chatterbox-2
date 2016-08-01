@@ -5,12 +5,6 @@
   font-family: 'Lato', sans-serif;
 }
 
-.app-frame.win32 {}
-
-.app-frame.darwin {
-  border-radius: 5px;
-}
-
 *::-webkit-scrollbar {
   width: 12px;
 }

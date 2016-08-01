@@ -21,8 +21,7 @@ export default class App extends Component {
 
   render() {
     return (
-      <div className={classnames('app-frame', platform())}>
-        <TitleBar />
+      <div className={'app-frame'}>
         {this.props.children}
       </div>
     )
