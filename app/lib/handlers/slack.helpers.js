@@ -5,9 +5,9 @@ import _ from 'lodash'
 import replace from 'frep'
 import escapeStringRegexp from 'escape-string-regexp'
 import annotations from 'emoji-annotation-to-unicode'
-import ChatInlineUser from 'components/Chat/Message/InlineUser.react'
-import ChatInlineChannel from 'components/Chat/Message/InlineChannel.react'
-import ChatInlineLink from 'components/Chat/Message/InlineLink.react'
+import ChatInlineUser from 'components/Chat/Message/Inline/User.react'
+import ChatInlineChannel from 'components/Chat/Message/Inline/Channel.react'
+import ChatInlineLink from 'components/Chat/Message/Inline/Link.react'
 import styles from 'styles/chat.css'
 
 export function santitizeUser({ tz: timezone, id, deleted, profile, name: handle, presence }) {
