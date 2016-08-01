@@ -4,7 +4,7 @@ import Database from 'lib/database'
 import { addHistory, newMessage, editMessage } from 'actions/messages'
 
 export default function createTeamHandler(provider) {
-  const Provider = require(`lib/handlers/${provider}`)
+  const Provider = require(`./providers/${provider}/adaptor.js`)
 
   return class Team extends Provider {
     constructor(providerOpts, dispatch, firstLoad = false) {
@@ -22,7 +22,8 @@ export default function createTeamHandler(provider) {
     })
 
     initHistory() {
-      const { [this.initialActiveChannelorDMID]: { id: mainChannelID }, ...channels } = this.channels
+      const {
+        [this.initialActiveChannelorDMID]: { id: mainChannelID }, ...channels } = this.channels
 
       this._historyRequestQueue.push({ channel_or_dm_id: mainChannelID })
       _.forEach({

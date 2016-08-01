@@ -1,7 +1,7 @@
 import { EventEmitter } from 'events'
 import _ from 'lodash'
 import { WebClient, RtmClient, MemoryDataStore, CLIENT_EVENTS, RTM_EVENTS } from '@slack/client'
-import { santitizeUser, parseMessage } from './slack.helpers'
+import { santitizeUser, parseMessage } from './helpers'
 
 
 export default class SlackHandler extends EventEmitter {
