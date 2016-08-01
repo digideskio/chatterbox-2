@@ -49,14 +49,14 @@ export default class Attachments extends Component {
 
   _renderAttachments({ text, borderColor = 'gray', pretext, title, links = {}, images = {}, video, author, service, fields }) {
     console.log(text, borderColor, pretext, title, links, images, video, author, service, fields)
-    const attachments = !text && !pretext && !title && !images.thumb && !video && !author && !fields
+    const renderSidebar = !(!text && !pretext && !title && !images.thumb && !video && !author && !fields)
 
     return (
       <div>
         {pretext ? <Text text={pretext} /> : null}
-        <div className={classnames('attachment-container', {withThumb: images.thumb}, {noColorBar: !attachments})}>
 
-          <div className='attachment-sidebar' style={{borderColor}} />
+        <div className={classnames('attachment-container', {withThumb: images.thumb})}>
+          {renderSidebar ? <div className='attachment-sidebar' style={{borderColor}} /> : null}
 
           {(author || text || service) ? (
             <div className='attachment-body'>

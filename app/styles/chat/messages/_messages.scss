@@ -5,6 +5,6 @@
   flex: 1;
   overflow-y: scroll;
 
-  @import './message/message';
-  @import './daySeparator';
+  @import 'message/message';
+  @import 'daySeparator';
 }

@@ -8,7 +8,7 @@
       padding-left: 13px;
       max-width: 1000px;
       margin-top: 5px;
-      .attachmentBody {
+      .attachment-body {
         padding: 3px 0;
       }
       &.withThumb {
@@ -19,10 +19,14 @@
       }
     }
 
-    @import './attachments/text';
-    @import './attachments/image';
-    @import './attachments/thumb';
-    @import './attachments/sidebar';
-    @import './attachments/author';
+    @import 'inline/code';
+    @import 'inline/codeblock';
+    @import 'inline/link';
+    
+    @import 'attachments/text';
+    @import 'attachments/image';
+    @import 'attachments/thumb';
+    @import 'attachments/sidebar';
+    @import 'attachments/author';
   }
 }

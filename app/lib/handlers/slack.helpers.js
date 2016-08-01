@@ -47,14 +47,14 @@ function santitizeAttachments(attachments) {
       } : undefined,
       links: {
         author: attachment.author_link,
-        title: attachment.title_link
+        title: formatText(attachment.title_link)
       },
       author: attachment.author_name,
       service: attachment.service_name,
       borderColor: color ? `#${color}` : undefined,
-      title,
-      pretext,
-      text,
+      title: formatText(title),
+      pretext: formatText(pretext),
+      text: formatText(text),
       fields
     }
   })
@@ -129,6 +129,8 @@ const _getEscapedKeys = hash => Object.keys(hash).map(x => escapeStringRegexp(x)
 const emojiWithEmoticons = { delimiter: new RegExp(`(:(?:${_getEscapedKeys(annotations)}):)`, 'g'), dict: annotations }
 
 function formatText(text) {
+  if (!text) return text
+
   const messageReplacementDict = {}
   const replacements = [{
       pattern: urlRegex,
