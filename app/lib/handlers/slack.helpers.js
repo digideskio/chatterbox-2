@@ -7,8 +7,8 @@ import escapeStringRegexp from 'escape-string-regexp'
 import annotations from 'emoji-annotation-to-unicode'
 import ChatInlineUser from 'components/Chat/Message/InlineUser.react'
 import ChatInlineChannel from 'components/Chat/Message/InlineChannel.react'
+import ChatInlineLink from 'components/Chat/Message/InlineLink.react'
 import styles from 'styles/chat.css'
-
 
 export function santitizeUser({ tz: timezone, id, deleted, profile, name: handle, presence }) {
   return {
@@ -117,6 +117,7 @@ const codeBlockRegex = /(^|\s|[_*\?\.,\-!\^;:{(\[%$#+=\u2000-\u206F\u2E00-\u2E7F
 const codeRegex = /(^|\s|[\?\.,\-!\^;:{(\[%$#+=\u2000-\u206F\u2E00-\u2E7F"])`(.*?\S *)?`/g
 
 const userOrChannelRegex = /<[#@]+(.*?)>/g
+const urlRegex = /<(.*?)>/g
 const boldRegex = /(^|\s|[\?\.,\-!\^;:{(\[%$#+=\u2000-\u206F\u2E00-\u2E7F"])\*(.*?\S *)?\*(?=$|\s|[\?\.,'\-!\^;:})\]%$~{\[<#+=\u2000-\u206F\u2E00-\u2E7F…"\uE022])/g
 const italicRegex = /(?!:.+:)(^|\s|[\?\.,\-!\^;:{(\[%$#+=\u2000-\u206F\u2E00-\u2E7F"])_(.*?\S *)?_(?=$|\s|[\?\.,'\-!\^;:})\]%$~{\[<#+=\u2000-\u206F\u2E00-\u2E7F…"\uE022])/g
 const strikeRegex = /(^|\s|[\?\.,\-!\^;:{(\[%$#+=\u2000-\u206F\u2E00-\u2E7F"])~(.*? *\S)?~(?=$|\s|[\?\.,'\-!\^;:})\]%$~{\[<#+=\u2000-\u206F\u2E00-\u2E7F…"\uE022])/g
@@ -128,19 +129,34 @@ const _getKey = key => key.match(/^:.*:$/) ? key.replace(/^:/, '').replace(/:$/,
 const _getEscapedKeys = hash => Object.keys(hash).map(x => escapeStringRegexp(x)).join('|')
 const emojiWithEmoticons = { delimiter: new RegExp(`(:(?:${_getEscapedKeys(annotations)}):)`, 'g'), dict: annotations }
 
-
 function formatText(text) {
-
   const messageReplacementDict = {}
-
   const replacements = [{
+      pattern: urlRegex,
+      replacement: (match) => {
+        match = match.trim().slice(1, -1)
+        if (match.length > 0) {
+          const replacement = uuid.v1()
+          if (match.charAt(0) == '@' || match.charAt(0) == '#') return `<${match}>`
+          let split = match.split('|')
+          let label = split.length === 2 ? split[1] : split[0]
+          let url = split[0]
+          if (!url.match(/^https?:\/\//)) return match
+
+          messageReplacementDict[replacement] = <ChatInlineLink url={url} label={label} />
+          return ` ${replacement}`
+        }
+        return match
+      }
+    },
+    {
       pattern: codeBlockRegex,
       replacement: (match) => {
-        match = match.slice(3, -3)
-        if (match.trim().length > 0) {
+        match = match.trim().slice(3, -3)
+        if (match.length > 0) {
           const replacement = uuid.v1()
           messageReplacementDict[replacement] = <div className={styles['code-block']}>{match}</div>
-          return replacement
+          return ` ${replacement}`
         }
         return match
       }
@@ -148,11 +164,11 @@ function formatText(text) {
     {
       pattern: codeRegex,
       replacement: (match) => {
-        match = match.slice(1, -1)
-        if (match.trim().length > 0) {
+        match = match.trim().slice(1, -1)
+        if (match.length > 0) {
           const replacement = uuid.v1()
-          messageReplacementDict[replacement] = <div className={styles['code-inline']}>{match}</div>
-          return replacement
+          messageReplacementDict[replacement] = <span className={styles['code-inline']}>{match}</span>
+          return ` ${replacement}`
         }
         return match
       }
@@ -160,11 +176,11 @@ function formatText(text) {
     {
       pattern: boldRegex,
       replacement: (match) => {
-        match = match.slice(1, -1)
-        if (match.trim().length > 0) {
+        match = match.trim().slice(1, -1)
+        if (match.length > 0) {
           const replacement = uuid.v1()
           messageReplacementDict[replacement] = <b>{match}</b>
-          return replacement
+          return ` ${replacement}`
         }
         return match
       }
@@ -172,11 +188,11 @@ function formatText(text) {
     {
       pattern: italicRegex,
       replacement: (match) => {
-        match = match.slice(1, -1)
-        if (match.trim().length > 0) {
+        match = match.trim().slice(1, -1)
+        if (match.length > 0) {
           const replacement = uuid.v1()
           messageReplacementDict[replacement] = <i>{match}</i>
-          return replacement
+          return ` ${replacement}`
         }
         return match
       }
@@ -184,11 +200,11 @@ function formatText(text) {
     {
       pattern: strikeRegex,
       replacement: (match) => {
-        match = match.slice(1, -1)
-        if (match.trim().length > 0) {
+        match = match.trim().slice(1, -1)
+        if (match.length > 0) {
           const replacement = uuid.v1()
           messageReplacementDict[replacement] = <em>{match}</em>
-          return replacement
+          return ` ${replacement}`
         }
         return match
       }
@@ -196,7 +212,8 @@ function formatText(text) {
     {
       pattern: userOrChannelRegex,
       replacement: (match) => {
-        if (match.trim().length > 0) {
+        match = match.trim()
+        if (match.length > 0) {
           const replacement = uuid.v1()
           if (match.includes('<@')) {
             const user = match.replace(/<|>/g, '')
@@ -208,7 +225,7 @@ function formatText(text) {
                   {...isValidUser}
                 />
               )
-              return replacement
+              return ` ${replacement}`
             }
             return match
           } else {
@@ -216,7 +233,7 @@ function formatText(text) {
             const isValidChannel = this.channels[channel]
             if (isValidChannel) {
               messageReplacementDict[replacement] = <ChatInlineChannel {...isValidChannel} />
-              return replacement
+              return ` ${replacement}`
             }
             return match
           }
@@ -230,7 +247,7 @@ function formatText(text) {
         if (hex) {
           const replacement = uuid.v1()
           messageReplacementDict[replacement] = <img className={styles.emoji} src={_buildImageUrl(hex)} />
-          return replacement
+          return ` ${replacement}`
         }
         return match
       }
