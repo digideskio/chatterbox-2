@@ -8,7 +8,6 @@ import annotations from 'emoji-annotation-to-unicode'
 import ChatInlineUser from 'components/Chat/Message/InlineUser.react'
 import ChatInlineChannel from 'components/Chat/Message/InlineChannel.react'
 import ChatInlineLink from 'components/Chat/Message/InlineLink.react'
-import styles from 'styles/chat.css'
 
 export function santitizeUser({ tz: timezone, id, deleted, profile, name: handle, presence }) {
   return {
@@ -128,7 +127,7 @@ function formatText(text) {
         match = match.trim().slice(3, -3)
         if (match.length > 0) {
           const replacement = uuid.v1()
-          messageReplacementDict[replacement] = <div className={styles['code-block']}>{match}</div>
+          messageReplacementDict[replacement] = <div className='codeblock'>{match}</div>
           return ` ${replacement}`
         }
         return match
@@ -140,7 +139,7 @@ function formatText(text) {
         match = match.trim().slice(1, -1)
         if (match.length > 0) {
           const replacement = uuid.v1()
-          messageReplacementDict[replacement] = <span className={styles['code-inline']}>{match}</span>
+          messageReplacementDict[replacement] = <span className='code'>{match}</span>
           return ` ${replacement}`
         }
         return match
@@ -219,7 +218,7 @@ function formatText(text) {
         const hex = emojiWithEmoticons.dict[_getKey(match)]
         if (hex) {
           const replacement = uuid.v1()
-          messageReplacementDict[replacement] = <img className={styles.emoji} src={_buildImageUrl(hex)} />
+          messageReplacementDict[replacement] = <img className='emoji' src={_buildImageUrl(hex)} />
           return ` ${replacement}`
         }
         return match

@@ -2,7 +2,6 @@ import React, { Component, PropTypes } from 'react'
 import _ from 'lodash'
 import { Link } from 'react-router'
 import classnames from 'classnames'
-import styles from 'styles/sidebar.css'
 
 export default class Providers extends Component {
 
@@ -25,15 +24,15 @@ export default class Providers extends Component {
 
   render() {
     return (
-      <div className={styles.providers}>
-        <div className={styles.selected} style={{backgroundImage: `url(${this.props.currentTeam.image})`}} />
-        <div className={styles.bottom}>
+      <div className='teams'>
+        <div className='selected' style={{backgroundImage: `url(${this.props.currentTeam.image})`}} />
+        <div className='bottom'>
           {
             Object.keys(this.props.teams).map(team => (
               <Provider key={team} onClick={::this.handleProviderClick} {..._.get(this.props.teams, `${team}.team`, {})} />
             ))
           }
-          <Link to='/login/slack' className={classnames('ion-ios-plus-empty', styles.add)} />
+          <Link to='/login/slack' className={classnames('ion-ios-plus-empty', 'add')} />
         </div>
       </div>
     )
@@ -58,12 +57,12 @@ class Provider extends Component {
 
   render() {
     return (
-      <div onClick={this.handleClick} className={styles.provider} style={{backgroundImage: `url(${this.props.image})`}}>
+      <div onClick={this.handleClick} className='team' style={{backgroundImage: `url(${this.props.image})`}}>
         {
-          this.props.unreads ? <div className={styles.new_message} /> : null
+          this.props.unreads ? <div className='new_message' /> : null
         }
         {
-          this.props.pings ? <div className={styles.unread_counter}>{this.props.pings}</div> : null
+          this.props.pings ? <div className='unread_counter'>{this.props.pings}</div> : null
         }
       </div>
     )

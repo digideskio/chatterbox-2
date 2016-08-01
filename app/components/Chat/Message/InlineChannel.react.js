@@ -3,7 +3,6 @@ import { bindActionCreators } from 'redux'
 import { connect } from 'react-redux'
 import classnames from 'classnames'
 import * as TeamsActions from 'actions/teams'
-import styles from 'styles/chat.css'
 
 
 class InlineChannel extends Component {
@@ -14,7 +13,7 @@ class InlineChannel extends Component {
 
   render() {
     return (
-      <div className={classnames(styles.channel)}>{this.props.name}</div>
+      <div className='channel'>{this.props.name}</div>
     )
   }
 }

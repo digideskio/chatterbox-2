@@ -1,0 +1,21 @@
+.link {
+  .popover {
+    width: 250px;
+    height: 150px;
+    background-position: center;
+    background-size: cover;
+    position: absolute;
+    bottom: calc(100% + 10px);
+  }
+  cursor: pointer;
+  color: #08c;
+  display: inline-block;
+  position: relative;
+  &:hover {
+    color: rgba(0, 136, 204, 0.81);
+    text-decoration: underline;
+  }
+  &:visited {
+    color: #2a80b9;
+  }
+}

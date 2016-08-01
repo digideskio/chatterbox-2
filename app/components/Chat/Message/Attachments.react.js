@@ -1,7 +1,6 @@
 import React, { Component, PropTypes } from 'react'
 import classnames from 'classnames'
 import _ from 'lodash'
-import styles from 'styles/chat.css'
 
 /* var attachments = [{
   author: '',
@@ -27,17 +26,17 @@ export default class Attachments extends Component {
 
   _renderAuthor(name, authorLink, authorImage) {
     return (
-      <div className={styles.authorBody}>
-        {authorImage ? <div className={styles.authImg} style={{backgroundImage: `url(${authorImage})`}}></div> : null}
-        <div className={styles.authName}>{name}</div>
+      <div className='authorBody'>
+        {authorImage ? <div className='authImg' style={{backgroundImage: `url(${authorImage})`}}></div> : null}
+        <div className='authName'>{name}</div>
       </div>
     )
   }
 
   _renderThumb(thumbURL) {
     return (
-      <div className={styles.thumbCont}>
-        <div className={styles.thumb} style={{backgroundImage: `url(${thumbURL})`}}></div>
+      <div className='thumbCont'>
+        <div className='thumb' style={{backgroundImage: `url(${thumbURL})`}}></div>
       </div>
     )
   }
@@ -49,19 +48,19 @@ export default class Attachments extends Component {
 
   render() {
     return (
-      <div className={styles.attachments}>
+      <div className='attachments'>
         {
           this.props.attachments.map(({text, color: borderColor = 'gray', pretext, title, links = {}, images = {}, author}, idx) => (
-            <div key={idx + 1} className={styles.attachment}>
-              {pretext ? <div className={styles.attachmentPretext}>{_.unescape(this._sanitizeText(pretext))}</div> : null}
+            <div key={idx + 1} className='attachment'>
+              {pretext ? <div className='attachmentPretext'>{_.unescape(this._sanitizeText(pretext))}</div> : null}
 
-              <div className={classnames(styles.attachmentContainer, {[styles.withThumb]: images.thumb})}>
-                <div className={styles.sidebar} style={{borderColor}} />
-                <div className={styles.attachmentBody}>
+              <div className={classnames('attachmentContainer', {withThumb: images.thumb})}>
+                <div className='sidebar' style={{borderColor}} />
+                <div className='attachmentBody'>
 
                   {author ? this._renderAuthor(author, links.author, images.author) : null}
 
-                  {text ? <div className={styles.text}>{_.unescape(this._sanitizeText(text))}</div> : null}
+                  {text ? <div className='text'>{_.unescape(this._sanitizeText(text))}</div> : null}
                 </div>
                 {images.thumb ? this._renderThumb(images.thumb) : null}
               </div>

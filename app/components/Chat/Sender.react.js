@@ -1,5 +1,4 @@
 import React, { Component, PropTypes } from 'react'
-import styles from 'styles/chat.css'
 
 export default class Sender extends Component {
 
@@ -23,8 +22,8 @@ export default class Sender extends Component {
 
   render() {
     return (
-      <div className={styles.sender}>
-        <textarea onKeyDown={::this.handleKeyPress} ref='chat-input' placeholder='Type something...' className={styles['text-input']} />
+      <div className='sender'>
+        <textarea onKeyDown={::this.handleKeyPress} ref='chat-input' placeholder='Type something...' className='text-input' />
       </div>
     )
   }

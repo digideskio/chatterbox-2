@@ -1,7 +1,6 @@
 import React, { Component, PropTypes } from 'react'
 import classnames from 'classnames'
 import Attachments from './Attachments.react'
-import styles from 'styles/chat.css'
 
 export default class Message extends Component {
   static propTypes = {
@@ -19,28 +18,28 @@ export default class Message extends Component {
   render() {
     const { timestamp, user, text, attachments, firstInChain } = this.props
     return (
-      <div onClick={::this._handleClick} className={classnames(styles.message, {[styles.firstInChain]: firstInChain})}>
-        <div className={styles.aside}>
+      <div onClick={::this._handleClick} className={classnames('message', {firstInChain})}>
+        <div className='aside'>
           {
             firstInChain ? (
-              <div style={{backgroundImage: `url(${user.image})`}} className={styles.profile_pic} />
+              <div style={{backgroundImage: `url(${user.image})`}} className='profile_pic' />
             ) : (
-              <span className={styles.time}>{timestamp}</span>
+              <span className='time'>{timestamp}</span>
             )
           }
         </div>
-        <div className={styles.body}>
+        <div className='body'>
           {
             firstInChain ? (
-              <div className={styles.info}>
-                <span className={styles.user}>{user.handle}</span>
-                <span className={styles.time}>{timestamp}</span>
+              <div className='info'>
+                <span className='user'>{user.handle}</span>
+                <span className='time'>{timestamp}</span>
               </div>
             ) : null
           }
           {
             text ? (
-              <div className={styles.message_text}>{text}</div>
+              <div className='message_text'>{text}</div>
             ) : null
           }
           {
@@ -61,7 +60,7 @@ export class DaySeparator extends Component {
 
   render() {
     return (
-      <div className={styles.day_separator}>
+      <div className='day_separator'>
         <div />
         <span>{this.props.timestamp}</span>
         <div />

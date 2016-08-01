@@ -1,0 +1,72 @@
+.attachments {
+  margin-top: 10px;
+  display: block;
+  img {
+    border-radius: 3px;
+    box-shadow: inset 0 0 0 1px rgba(0, 0, 0, 0.1);
+    max-width: 400px;
+  }
+}
+.attachments .attachment {
+  .attachmentPretext {
+    margin-bottom: 2px;
+  }
+  .attachmentContainer {
+    position: relative;
+    padding-left: 13px;
+    max-width: 1000px;
+    margin-top: 5px;
+    &.withThumb {
+      display: flex;
+    }
+    .thumbCont {
+      width: 100px;
+      display: flex;
+      justify-content: center;
+      align-items: center;
+      .thumb {
+        width: 60px;
+        height: 60px;
+        background-size: contain;
+        background-repeat: no-repeat;
+      }
+    }
+  }
+  .sidebar {
+    border-right: 4px solid;
+    border-radius: 3px;
+    position: absolute;
+    height: 100%;
+    left: 2px;
+  }
+  .attachmentContainer {
+    .attachmentBody {
+      padding: 3px 0;
+    }
+    &.withThumb .attachmentBody {
+      width: calc(100% - 100px);
+    }
+  }
+  .attachmentBody .authorBody {
+    margin-bottom: 3px;
+    display: flex;
+    height: 18px;
+    .authImg {
+      background-size: contain;
+      width: 18px;
+      height: 18px;
+      background-repeat: no-repeat;
+      margin-right: 5px;
+      margin-left: 1px;
+      margin-top: 1px;
+    }
+  }
+  .authorBody .authName {
+    color: grey;
+    font-size: 15px;
+    &.link:hover {
+      text-decoration: underline;
+    }
+  }
+  .text {}
+}

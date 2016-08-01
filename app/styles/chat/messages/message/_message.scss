@@ -1,0 +1,62 @@
+.message {
+  display: flex;
+  transition: background-color 50ms ease-in-out, opacity 40ms ease-in-out;
+  margin-top: 3px;
+  padding-right: 5px;
+  word-break: break-word;
+  &.firstInChain {
+    margin-top: 6px;
+  }
+  &:hover {
+    background-color: rgba(0, 0, 0, 0.06);
+    .aside .time {
+      opacity: 1;
+    }
+  }
+  @import 'aside';
+  @import 'attachments';
+  .body {
+    display: inline-block;
+    flex: 1;
+    .info {
+      display: block;
+      margin-bottom: 5px;
+      span {
+        display: inline-block;
+        &.time {
+          font-size: 12px;
+          top: -1px;
+          position: relative;
+          margin-left: 5px;
+          line-height: 15px;
+          font-weight: 400;
+          color: #afbcc5;
+        }
+        &.user {
+          font-size: 15px;
+          font-weight: 900;
+          color: #2a2f33;
+        }
+      }
+    }
+    .text {
+      margin: 0;
+      display: block;
+      color: #1e1e1e;
+      font-size: 15px;
+      line-height: 20px;
+      font-weight: 0;
+      em {
+        text-decoration: line-through;
+        font-style: normal;
+      }
+      .emoji {
+        height: 20px;
+      }
+
+      @import 'inline/code';
+      @import 'inline/codeblock';
+      @import 'inline/link';
+    }
+  }
+}

@@ -1,6 +1,5 @@
 import React, { Component, PropTypes } from 'react'
 import classnames from 'classnames'
-import styles from 'styles/sidebar.css'
 
 export default class DM extends Component {
   static propTypes = {
@@ -19,10 +18,10 @@ export default class DM extends Component {
   render() {
     const { image, active, handle, presence } = this.props
     return (
-      <div onClick={this.handleOnClick} className={classnames(styles.dm, styles.channel, {[styles.active]: active})}>
-        <div className={classnames(styles.status, {[styles.online]: presence === 'online'})} />
-        <div className={styles.image} style={{backgroundImage: `url(${image})`}} />
-        <div className={styles.name}>{handle}</div>
+      <div onClick={this.handleOnClick} className={classnames('dm channel', { active })}>
+        <div className={classnames('status', {online: presence === 'online'})} />
+        <div className='image' style={{backgroundImage: `url(${image})`}} />
+        <div className='name'>{handle}</div>
       </div>
     )
   }
