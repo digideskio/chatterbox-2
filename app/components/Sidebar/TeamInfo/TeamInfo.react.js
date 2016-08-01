@@ -1,4 +1,5 @@
 import React, { Component, PropTypes } from 'react'
+import Dragula from 'react-dragula'
 import classnames from 'classnames'
 import DM from './DM.react'
 import Channel from './Channel.react'
@@ -22,6 +23,13 @@ export default class TeamInfo extends Component {
 
   handleChannelorDMClick = (channel_or_dm_id) => this.props.changeActiveTeamChannelOrDM(channel_or_dm_id, this.props.team.id)
 
+  dragulaDecorator = componentBackingInstance => {
+    if (componentBackingInstance) {
+      const options = {}
+      Dragula([componentBackingInstance], options)
+    }
+  }
+
   render() {
     return (
       <div className='teamInfo'>
@@ -36,22 +44,26 @@ export default class TeamInfo extends Component {
               CHANNELS
               <span>({Object.keys(this.props.channels).length})</span>
             </div>
-            {
-              Object.keys(this.props.channels).map(channelID => (
-                <Channel active={this.props.activeChannelorDMID === channelID} onClick={this.handleChannelorDMClick} select={::this.props.changeActiveTeamChannelOrDM} key={channelID} {...this.props.channels[channelID]} />
-              ))
-            }
+            <div ref={this.dragulaDecorator}>
+              {
+                Object.keys(this.props.channels).map(channelID => (
+                  <Channel active={this.props.activeChannelorDMID === channelID} onClick={this.handleChannelorDMClick} select={::this.props.changeActiveTeamChannelOrDM} key={channelID} {...this.props.channels[channelID]} />
+                ))
+              }
+            </div>
           </div>
           <div className='dms'>
             <div className='title'>
               DIRECT MESSAGES
               <span>({Object.keys(this.props.dms).length})</span>
             </div>
-            {
-              Object.keys(this.props.dms).map(DMID => (
-                <DM active={this.props.activeChannelorDMID === DMID} onClick={this.handleChannelorDMClick} select={::this.props.changeActiveTeamChannelOrDM} key={DMID} {...this.props.dms[DMID]} />
-              ))
-            }
+            <div ref={this.dragulaDecorator}>
+              {
+                Object.keys(this.props.dms).map(DMID => (
+                  <DM active={this.props.activeChannelorDMID === DMID} onClick={this.handleChannelorDMClick} select={::this.props.changeActiveTeamChannelOrDM} key={DMID} {...this.props.dms[DMID]} />
+                ))
+              }
+            </div>
           </div>
         </div>
       </div>
