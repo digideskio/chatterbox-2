@@ -1,72 +1,28 @@
 .attachments {
   margin-top: 10px;
   display: block;
-  img {
-    border-radius: 3px;
-    box-shadow: inset 0 0 0 1px rgba(0, 0, 0, 0.1);
-    max-width: 400px;
-  }
-}
-.attachments .attachment {
-  .attachmentPretext {
-    margin-bottom: 2px;
-  }
-  .attachment-container {
-    position: relative;
-    padding-left: 13px;
-    max-width: 1000px;
-    margin-top: 5px;
-    &.withThumb {
-      display: flex;
-    }
-    .thumb-cont {
-      width: 100px;
-      display: flex;
-      justify-content: center;
-      align-items: center;
-      .thumb {
-        width: 60px;
-        height: 60px;
-        background-size: contain;
-        background-repeat: no-repeat;
+
+  .attachment {
+    .attachment-container {
+      position: relative;
+      padding-left: 13px;
+      max-width: 1000px;
+      margin-top: 5px;
+      .attachmentBody {
+        padding: 3px 0;
+      }
+      &.withThumb {
+        display: flex;
+        .attachment-body {
+          width: calc(100% - 100px);
+        }
       }
     }
-  }
-  .attachment-sidebar {
-    border-right: 4px solid;
-    border-radius: 3px;
-    position: absolute;
-    height: 100%;
-    left: 2px;
-  }
-  .attachment-container {
-    .attachmentBody {
-      padding: 3px 0;
-    }
-    &.withThumb .attachment-body {
-      width: calc(100% - 100px);
-    }
-  }
-  .attachment-body .author-body {
-    color: grey;
-    font-size: 15px;
-    margin-bottom: 3px;
-    display: flex;
-    height: 18px;
-    .auth-name {
-      &.link:hover {
-        text-decoration: underline;
-      }
-    }
-    .text {}
-    .auth-img {
-      background-size: contain;
-      width: 18px;
-      height: 18px;
-      background-repeat: no-repeat;
-      margin-right: 5px;
-      margin-left: 1px;
-      margin-top: 1px;
-    }
+
+    @import './attachments/text';
+    @import './attachments/image';
+    @import './attachments/thumb';
+    @import './attachments/sidebar';
+    @import './attachments/author';
   }
 }
