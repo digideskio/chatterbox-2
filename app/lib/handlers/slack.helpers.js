@@ -117,7 +117,7 @@ function formatText(text) {
           if (!url.match(/^https?:\/\//)) return match
 
           messageReplacementDict[replacement] = <ChatInlineLink url={url} label={label} />
-          return replacement
+          return ` ${replacement}`
         }
         return match
       }
@@ -129,7 +129,7 @@ function formatText(text) {
         if (match.length > 0) {
           const replacement = uuid.v1()
           messageReplacementDict[replacement] = <div className={styles['code-block']}>{match}</div>
-          return replacement
+          return ` ${replacement}`
         }
         return match
       }
@@ -141,7 +141,7 @@ function formatText(text) {
         if (match.length > 0) {
           const replacement = uuid.v1()
           messageReplacementDict[replacement] = <span className={styles['code-inline']}>{match}</span>
-          return replacement
+          return ` ${replacement}`
         }
         return match
       }
@@ -153,7 +153,7 @@ function formatText(text) {
         if (match.length > 0) {
           const replacement = uuid.v1()
           messageReplacementDict[replacement] = <b>{match}</b>
-          return replacement
+          return ` ${replacement}`
         }
         return match
       }
@@ -165,7 +165,7 @@ function formatText(text) {
         if (match.length > 0) {
           const replacement = uuid.v1()
           messageReplacementDict[replacement] = <i>{match}</i>
-          return replacement
+          return ` ${replacement}`
         }
         return match
       }
@@ -177,7 +177,7 @@ function formatText(text) {
         if (match.length > 0) {
           const replacement = uuid.v1()
           messageReplacementDict[replacement] = <em>{match}</em>
-          return replacement
+          return ` ${replacement}`
         }
         return match
       }
@@ -198,7 +198,7 @@ function formatText(text) {
                   {...isValidUser}
                 />
               )
-              return replacement
+              return ` ${replacement}`
             }
             return match
           } else {
@@ -206,7 +206,7 @@ function formatText(text) {
             const isValidChannel = this.channels[channel]
             if (isValidChannel) {
               messageReplacementDict[replacement] = <ChatInlineChannel {...isValidChannel} />
-              return replacement
+              return ` ${replacement}`
             }
             return match
           }
@@ -220,7 +220,7 @@ function formatText(text) {
         if (hex) {
           const replacement = uuid.v1()
           messageReplacementDict[replacement] = <img className={styles.emoji} src={_buildImageUrl(hex)} />
-          return replacement
+          return ` ${replacement}`
         }
         return match
       }
