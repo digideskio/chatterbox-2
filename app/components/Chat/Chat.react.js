@@ -46,6 +46,7 @@ export default class Chat extends Component {
   }
 
   render() {
+    console.info(this.props)
     return (
       <div className='chat'>
         <header>

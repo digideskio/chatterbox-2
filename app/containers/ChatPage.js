@@ -1,16 +1,12 @@
-import { bindActionCreators } from 'redux'
-import { connect } from 'react-redux'
-import Team from 'components/Team.react'
-import * as SettingsActions from 'actions/settings'
-import * as MessageActions from 'actions/messages'
-import * as TeamsActions from 'actions/teams'
+import React from 'react'
+import ChatContainer from './Chat'
+import SidebarContainer from './Sidebar'
 
-function mapStateToProps({ settings, teams, messages }) {
-  return { settings, ...teams, messages }
+export default () => {
+  return (
+    <div>
+      <SidebarContainer />
+      <ChatContainer />
+    </div>
+  )
 }
-
-function mapDispatchToProps(dispatch) {
-  return bindActionCreators({ ...TeamsActions, ...SettingsActions, ...MessageActions }, dispatch)
-}
-
-export default connect(mapStateToProps, mapDispatchToProps)(Team)

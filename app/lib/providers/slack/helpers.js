@@ -107,7 +107,7 @@ export function parseMessage({ type, subtype, bot_id, channel = null, ...message
         else this.emit('message:changed', msg)
       })()
     default:
-      console.info('Unable to parse message:', { type, subtype, ...messageData })
+      //console.info('Unable to parse message:', { type, subtype, ...messageData })
       return false
   }
 }

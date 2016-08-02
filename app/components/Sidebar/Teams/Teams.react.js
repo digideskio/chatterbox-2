@@ -1,13 +1,13 @@
 import React, { Component, PropTypes } from 'react'
 import _ from 'lodash'
 import { Link } from 'react-router'
-import Provider from './Provider.react'
+import Team from './Team.react'
 
 export default class Providers extends Component {
   static propTypes = {
     changeActiveTeam: PropTypes.func.isRequired,
     teams: PropTypes.object,
-    currentTeam: PropTypes.object
+    team: PropTypes.object
   }
 
   static defaultProps = {
@@ -16,7 +16,7 @@ export default class Providers extends Component {
   }
 
   handleProviderClick(id) {
-    if (this.props.currentTeam.id !== id) {
+    if (this.props.team.id !== id) {
       this.props.changeActiveTeam(id)
     }
   }
@@ -24,11 +24,11 @@ export default class Providers extends Component {
   render() {
     return (
       <div className='teams'>
-        <div className='selected' style={{backgroundImage: `url(${this.props.currentTeam.image})`}} />
+        <div className='selected' style={{backgroundImage: `url(${this.props.team.image})`}} />
         <div className='bottom'>
           {
             Object.keys(this.props.teams).map(team => (
-              <Provider
+              <Team
                 key={team}
                 onClick={::this.handleProviderClick}
                 {..._.get(this.props.teams, `${team}.team`, {})}
