@@ -9,16 +9,7 @@ export default class Chat extends Component {
     messages: PropTypes.array,
     users: PropTypes.object,
     channel: PropTypes.object,
-    channelUsers: PropTypes.array,
-    sendMessage: PropTypes.func.isRequired,
-    activeChannelorDMID: PropTypes.string
-  }
-
-  static defaultProps = {
-    messages: [],
-    users: {},
-    channelUsers: [],
-    channel: {}
+    team: PropTypes.object
   }
 
   componentDidUpdate({ messages: prevMessages }) {
@@ -46,7 +37,6 @@ export default class Chat extends Component {
   }
 
   render() {
-    console.info(this.props)
     return (
       <div className='chat'>
         <header>
@@ -94,11 +84,7 @@ export default class Chat extends Component {
             }
           </section>
         </ReactCSSTransitionGroup>
-        <Sender
-          sendMessage={::this.props.sendMessage}
-          teamID={_.get(this.props, 'team.id')}
-          channelID={this.props.activeChannelorDMID}
-        />
+        <Sender />
       </div>
     )
   }
