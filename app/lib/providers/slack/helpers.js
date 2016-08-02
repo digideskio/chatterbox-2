@@ -132,6 +132,21 @@ const _getKey = key => key.match(/^:.*:$/) ? key.replace(/^:/, '').replace(/:$/,
 const _getEscapedKeys = hash => Object.keys(hash).map(x => escapeStringRegexp(x)).join('|')
 const emojiWithEmoticons = { delimiter: new RegExp(`(:(?:${_getEscapedKeys(annotations)}):)`, 'g'), dict: annotations }
 
+
+function reparseMatch(match, messageReplacementDict) {
+  const delimiter = new RegExp(`(${_getEscapedKeys(messageReplacementDict)})`, 'g')
+  return _.compact(
+    match.split(delimiter).map((word, index) => {
+      const [match] = word.match(delimiter) || []
+      if (match && messageReplacementDict[match]) {
+        word = messageReplacementDict[match]
+        delete messageReplacementDict[match]
+      }
+      return word
+    })
+  )
+}
+
 function formatText(text) {
   if (!text) return text
 
@@ -149,7 +164,7 @@ function formatText(text) {
           if (!url.match(/^https?:\/\//)) return match
 
           messageReplacementDict[replacement] = <ChatInlineLink url={url} label={label} />
-          return ` ${replacement}`
+          return replacement
         }
         return match
       }
@@ -160,8 +175,13 @@ function formatText(text) {
         match = match.trim().slice(3, -3)
         if (match.length > 0) {
           const replacement = uuid.v1()
+
+          if (Object.keys(messageReplacementDict).length > 0) {
+            match = reparseMatch(match, messageReplacementDict)
+          }
+
           messageReplacementDict[replacement] = <div className='codeblock'>{match}</div>
-          return ` ${replacement}`
+          return replacement
         }
         return match
       }
@@ -172,8 +192,13 @@ function formatText(text) {
         match = match.trim().slice(1, -1)
         if (match.length > 0) {
           const replacement = uuid.v1()
+
+          if (Object.keys(messageReplacementDict).length > 0) {
+            match = reparseMatch(match, messageReplacementDict)
+          }
+
           messageReplacementDict[replacement] = <span className='code'>{match}</span>
-          return ` ${replacement}`
+          return replacement
         }
         return match
       }
@@ -185,7 +210,7 @@ function formatText(text) {
         if (match.length > 0) {
           const replacement = uuid.v1()
           messageReplacementDict[replacement] = <b>{match}</b>
-          return ` ${replacement}`
+          return replacement
         }
         return match
       }
@@ -209,7 +234,7 @@ function formatText(text) {
         if (match.length > 0) {
           const replacement = uuid.v1()
           messageReplacementDict[replacement] = <em>{match}</em>
-          return ` ${replacement}`
+          return replacement
         }
         return match
       }
@@ -230,7 +255,7 @@ function formatText(text) {
                   {...isValidUser}
                 />
               )
-              return ` ${replacement}`
+              return replacement
             }
             return match
           } else {
@@ -252,7 +277,7 @@ function formatText(text) {
         if (hex) {
           const replacement = uuid.v1()
           messageReplacementDict[replacement] = <img className='emoji' src={_buildImageUrl(hex)} />
-          return ` ${replacement}`
+          return replacement
         }
         return match
       }
