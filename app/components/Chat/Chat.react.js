@@ -44,7 +44,7 @@ export default class Chat extends Component {
         <header>
           <div className='info'>
             <span className='channel'>{this.props.channel.name}</span>
-            <span className='meta'>{_.get(this.props, 'channel.meta.members') || `${_.get(this.props, 'channelUsers.length') } Members`}</span>
+            <span className='meta'>{_.get(this.props, 'channel.meta.members') || `${_.get(this.props, 'channelUsers.length')} Members`}</span>
             {
               _.get(this.props, 'channel.meta.topic') ? (
                 <div>
@@ -68,7 +68,7 @@ export default class Chat extends Component {
           <section ref='messagesContainer' className='animation-wrapper'>
             {
               this.props.messages.map(({key, text, user, timestamp, friendlyTimestamp, ...message}, idx) => {
-                const {user:prevUser, timestamp:prevTimestamp} = this.props.messages[idx - 1] || {}
+                const {user: prevUser, timestamp: prevTimestamp} = this.props.messages[idx - 1] || {}
                 const messageEl = (
                   <Message
                     key={key}
