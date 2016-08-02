@@ -37,11 +37,7 @@ export default class Message extends Component {
               </div>
             ) : null
           }
-          {
-            text ? (
-              <div className='text'>{text}</div>
-            ) : null
-          }
+          {text ? (<div className='text'>{text}</div>) : null}
           {
             attachments && attachments.length > 0 ? (
               <Attachments attachments={attachments} />

@@ -76,7 +76,7 @@ export default class Attachments extends Component {
                   height={video.height}
                   width={video.width}
                   type={video.type}
-                  />
+                />
               ) : null}
             </div>
           ) : null}
@@ -98,8 +98,8 @@ export default class Attachments extends Component {
     return (
       <div className='attachments'>
         {
-          this.props.attachments.map((attachment, idx) => (
-            <div key={idx + 1} className='attachment'>
+          this.props.attachments.map(({key, ...attachment}, idx) => (
+            <div key={key} className='attachment'>
               {this._renderAttachments(attachment)}
             </div>
           ))

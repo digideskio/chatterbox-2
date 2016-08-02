@@ -75,9 +75,9 @@ export default class Chat extends Component {
         >
           <section ref='messagesContainer' className='animation-wrapper'>
             {
-              this.props.messages.map(({text, user, timestamp, friendlyTimestamp, ...message}, idx) => (
+              this.props.messages.map(({key, text, user, timestamp, friendlyTimestamp, ...message}, idx) => (
                 <Message
-                  key={`${user}-${timestamp}`}
+                  key={key}
                   firstInChain={!this.props.messages[idx - 1] || this.props.messages[idx - 1].user !== user}
                   user={::this._mapUserIDtoData(user, idx)}
                   text={text}

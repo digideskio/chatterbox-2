@@ -1,4 +1,5 @@
 import React from 'react'
+import crypto from 'crypto'
 import uuid from 'node-uuid'
 import moment from 'moment'
 import _ from 'lodash'
@@ -21,7 +22,8 @@ export function santitizeUser({ tz: timezone, id, deleted, profile, name: handle
 }
 
 function santitizeAttachments(attachments) {
-  return attachments.map(({ title, text, pretext, color, fields, ...attachment }) => {
+  return attachments.map((rawAttachment) => {
+    const { title, text, pretext, color, fields, ...attachment } = rawAttachment
     return {
       original: { title, text, pretext, color, fields, ...attachment },
       images: {
@@ -55,7 +57,8 @@ function santitizeAttachments(attachments) {
       title: formatText.bind(this)(title),
       pretext: formatText.bind(this)(pretext),
       text: formatText.bind(this)(text),
-      fields
+      fields,
+      key: crypto.createHash('md5').update(JSON.stringify(rawAttachment)).digest('hex')
     }
   })
 }
@@ -67,7 +70,8 @@ function santitizeMessage({ user, text, ts: timestamp, user_profile: userProfile
     text: formatText.bind(this)(text),
     userProfile,
     timestamp,
-    friendlyTimestamp: moment.unix(timestamp).format('h:mm a')
+    friendlyTimestamp: moment.unix(timestamp).format('h:mm a'),
+    key: crypto.createHash('md5').update(`${user}-${timestamp}-${text}`).digest('hex')
   }
 }
 
