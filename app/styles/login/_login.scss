@@ -5,5 +5,16 @@
   width: 100vw;
   background-color: #fafafa;
 
+  .back {
+    position: absolute;
+    color: #1e1e1e;
+    font-size: 68px;
+    cursor: pointer;
+    z-index: 2;
+    display: inline-block;
+    margin-left: 40px;
+    margin-top: 20px;
+  }
+
   @import 'slack';
 }

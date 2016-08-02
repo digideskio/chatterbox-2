@@ -1,7 +1,6 @@
 import React, { Component, PropTypes } from 'react'
 import _ from 'lodash'
 import { Link } from 'react-router'
-import classnames from 'classnames'
 
 export default class Providers extends Component {
 
@@ -32,7 +31,7 @@ export default class Providers extends Component {
               <Provider key={team} onClick={::this.handleProviderClick} {..._.get(this.props.teams, `${team}.team`, {})} />
             ))
           }
-          <Link to='/login/slack' className={classnames('ion-ios-plus-empty', 'add')} />
+          <Link to='/login/slack' className='ion-ios-plus-empty add' />
         </div>
       </div>
     )

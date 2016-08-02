@@ -4,8 +4,8 @@ import Login from 'components/login'
 import * as LoginActions from 'actions/login'
 
 
-function mapStateToProps({ login }) {
-  return { login }
+function mapStateToProps({ login, teams }) {
+  return { login, teams }
 }
 
 function mapDispatchToProps(dispatch) {

@@ -94,7 +94,6 @@ export default class SlackLogin extends Component {
 
   render() {
     const { webviewShown } = this.state
-
     return (
       <div className='slack'>
         <div className='header'>
@@ -102,9 +101,8 @@ export default class SlackLogin extends Component {
         </div>
         <div className='contents'>
           <div className='info'>
-            <span>            Slack is a cloud-based team collaboration tool co-founded by Stewart Butterfield, Eric Costello, Cal Henderson, and Serguei Mourachov.
-            Slack began as an internal tool used by their company, Tiny Speck, in the development of Glitch, a now defunct online game.</span>
-
+            Slack is a cloud-based team collaboration tool co-founded by Stewart Butterfield, Eric Costello, Cal Henderson, and Serguei Mourachov.
+            Slack began as an internal tool used by their company, Tiny Speck, in the development of Glitch, a now defunct online game.
           </div>
           <div className='webview-container'>
             <webview

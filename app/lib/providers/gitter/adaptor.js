@@ -1,6 +1,5 @@
 import { EventEmitter } from 'events'
 import GitterClient from 'node-gitter'
-import _ from 'lodash'
 
 
 export default class GitterHandler extends EventEmitter {
