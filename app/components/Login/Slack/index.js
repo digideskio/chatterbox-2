@@ -1,2 +1,2 @@
-import Slack from './Login.react'
+import Slack from './SlackLogin.react'
 export default Slack

@@ -5,7 +5,6 @@ import LoadingPage from 'containers/LoadingPage'
 import ChatPage from 'containers/ChatPage'
 import LoginPage from 'containers/LoginPage'
 
-
 export default (
   <Route path='/' component={App}>
     <IndexRoute component={LoadingPage} />

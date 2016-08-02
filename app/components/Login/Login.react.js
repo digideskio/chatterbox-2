@@ -12,6 +12,7 @@ export default class Login extends Component {
     provider: PropTypes.shape({ loaded: PropTypes.bool, name: PropTypes.string }),
     providers: PropTypes.array,
     addTeam: PropTypes.func.isRequired,
+    isCloseable: PropTypes.bool.isRequired,
     teams: PropTypes.shape({ teams: PropTypes.object.isRequired })
   }
 
@@ -33,10 +34,10 @@ export default class Login extends Component {
   }
 
   render() {
-    const { teams: { teams } } = this.props
+    const { isCloseable } = this.props
     return (
       <div className='login'>
-        {Object.keys(teams.teams).length > 0 ? <Link to='/chat' className='ion-android-arrow-back back' /> : null}
+        {isCloseable ? <Link to='/chat' className='ion-android-arrow-back back' /> : null}
         {::this._renderTeamLogin()}
       </div>
     )
