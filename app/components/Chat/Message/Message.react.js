@@ -1,4 +1,5 @@
 import React, { Component, PropTypes } from 'react'
+import moment from 'moment'
 import classnames from 'classnames'
 import Attachments from './Attachments.react'
 
@@ -51,14 +52,25 @@ export default class Message extends Component {
 
 export class DaySeparator extends Component {
   static propTypes = {
-    timestamp: PropTypes.string.isRequired
+    timestamp: PropTypes.number.isRequired
+  }
+
+  get parsedTime() {
+    return moment().calendar(this.props.timestamp, {
+      sameDay: '[Today]',
+      nextDay: '[Tomorrow]',
+      nextWeek: 'dddd',
+      lastDay: '[Yesterday]',
+      lastWeek: '[Last] dddd',
+      sameElse: '[Today]'
+    })
   }
 
   render() {
     return (
-      <div className='day_separator'>
+      <div className='daySeparator'>
         <div />
-        <span>{this.props.timestamp}</span>
+        <span>{this.parsedTime}</span>
         <div />
       </div>
     )

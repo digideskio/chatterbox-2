@@ -1,7 +1,7 @@
 import React, { Component, PropTypes } from 'react'
 import ReactCSSTransitionGroup from 'react-addons-css-transition-group'
 import _ from 'lodash'
-import Message from './Message'
+import Message, { DaySeparator } from './Message/Message.react'
 import Sender from './Sender.react'
 
 export default class Chat extends Component {
@@ -10,7 +10,7 @@ export default class Chat extends Component {
     users: PropTypes.object,
     channel: PropTypes.object,
     channelUsers: PropTypes.array,
-    sendMessage: PropTypes.func,
+    sendMessage: PropTypes.func.isRequired,
     activeChannelorDMID: PropTypes.string
   }
 
@@ -75,16 +75,22 @@ export default class Chat extends Component {
         >
           <section ref='messagesContainer' className='animation-wrapper'>
             {
-              this.props.messages.map(({key, text, user, timestamp, friendlyTimestamp, ...message}, idx) => (
-                <Message
-                  key={key}
-                  firstInChain={!this.props.messages[idx - 1] || this.props.messages[idx - 1].user !== user}
-                  user={::this._mapUserIDtoData(user, idx)}
-                  text={text}
-                  timestamp={friendlyTimestamp || timestamp}
-                  {...message}
-                />
-              ))
+              this.props.messages.map(({key, text, user, timestamp, friendlyTimestamp, ...message}, idx) => {
+                const {user:prevUser, timestamp:prevTimestamp} = this.props.messages[idx - 1] || {}
+                const messageEl = (
+                  <Message
+                    key={key}
+                    firstInChain={!prevUser !== user}
+                    user={::this._mapUserIDtoData(user, idx)}
+                    text={text}
+                    timestamp={friendlyTimestamp || timestamp}
+                    {...message}
+                  />
+                )
+                return (!prevTimestamp || new Date(Number(prevTimestamp)).getDay() !== new Date(Number(timestamp)).getDay()) ? (
+                  [<DaySeparator key={timestamp} timestamp={Number(timestamp)} />, messageEl]
+                ) : messageEl
+              })
             }
           </section>
         </ReactCSSTransitionGroup>
