@@ -94,15 +94,36 @@ export default class SlackLogin extends Component {
 
   render() {
     const { webviewShown } = this.state
+
     return (
       <div className='slack'>
-        <div className='sidebar full'>
-          <object className='slack' data='images/logins/slack.svg' type='image/svg+xml' />
+        <div className='header'>
+          <img className='slack-icon' src='images/logins/slack.svg' />
         </div>
-        <div className={classnames('webview', {show: webviewShown})}>
-          <webview preload='components/Logins/slack.injected.js' ref='webview' src={`https://slack.com/oauth/pick_reflow?${::this.getOAuthQuery()}`} />
+        <div className='contents'>
+          <div className='info'>
+            <span>            Slack is a cloud-based team collaboration tool co-founded by Stewart Butterfield, Eric Costello, Cal Henderson, and Serguei Mourachov.
+            Slack began as an internal tool used by their company, Tiny Speck, in the development of Glitch, a now defunct online game.</span>
+
+          </div>
+          <div className='webview-container'>
+            <webview
+              className={classnames('webview', {show: webviewShown})}
+              preload='components/Logins/Slack/webview.injected.js'
+              ref='webview'
+              src={`https://slack.com/oauth/pick_reflow?${::this.getOAuthQuery()}`}
+            />
+          </div>
         </div>
       </div>
     )
   }
 }
+
+/*
+<webview
+  className={classnames('webview', {show: webviewShown})}
+  preload='components/Logins/Slack/webview.injected.js'
+  ref='webview'
+  src={`https://slack.com/oauth/pick_reflow?${::this.getOAuthQuery()}`}
+/> */

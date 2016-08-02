@@ -11,7 +11,7 @@ app.on('window-all-closed', () => process.platform !== 'darwin' && app.quit())
 const installExtensions = async() => {
   if (process.env.NODE_ENV === 'development') {
     const installer = require('electron-devtools-installer') // eslint-disable-line global-require
-    const extensions = ['REACT_DEVELOPER_TOOLS', 'REDUX_DEVTOOLS']
+    const extensions = ['REACT_DEVELOPER_TOOLS']
     const forceDownload = !!process.env.UPGRADE_EXTENSIONS
     for (const name of extensions) {
       try {

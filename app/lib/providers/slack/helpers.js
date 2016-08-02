@@ -260,11 +260,7 @@ function formatText(text) {
   return _.compact(
     formattedText.split(delimiter).map((word, index) => {
       const [match] = word.match(delimiter) || []
-      if (match) {
-        return messageReplacementDict[match] || word
-      } else {
-        return word
-      }
+      return match ? (messageReplacementDict[match] || word) : word
     })
   )
 }
