@@ -24,7 +24,6 @@ export function load() {
         if (!teamID) {
           dispatch(locationPush('/login/slack'))
         } else {
-          console.log(TeamsActions.changeActiveTeam(teamID))
           dispatch(TeamsActions.changeActiveTeam(teamID))
           dispatch(locationPush('/chat'))
         }
