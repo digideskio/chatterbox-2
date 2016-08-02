@@ -37,7 +37,7 @@ class InlineLink extends Component {
   render() {
     const { url, label, linkPreviews: { loaded } } = this.props
     return (
-      <div
+      <span
         onClick={::this.handleClick}
         onMouseEnter={::this.handleHover}
         onMouseLeave={this.handleHoverOut}
@@ -49,7 +49,7 @@ class InlineLink extends Component {
           ) : null
         }
         {label || url}
-      </div>
+      </span>
     )
   }
 }

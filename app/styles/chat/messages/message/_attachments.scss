@@ -19,10 +19,8 @@
       }
     }
 
-    @import 'inline/code';
-    @import 'inline/codeblock';
-    @import 'inline/link';
-    
+    @import 'inline/all';
+
     @import 'attachments/text';
     @import 'attachments/image';
     @import 'attachments/thumb';

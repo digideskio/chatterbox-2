@@ -12,9 +12,9 @@ class InlineChannel extends Component {
 
   render() {
     return (
-      <div className='channel'>
+      <span className='channel'>
         {this.props.name}
-      </div>
+      </span>
     )
   }
 }

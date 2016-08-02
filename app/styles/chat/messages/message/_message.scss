@@ -54,9 +54,7 @@
         height: 20px;
       }
 
-      @import 'inline/code';
-      @import 'inline/codeblock';
-      @import 'inline/link';
+      @import 'inline/all';
     }
   }
 }

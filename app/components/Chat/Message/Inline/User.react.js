@@ -19,9 +19,9 @@ class InlineUser extends Component {
   render() {
     const { isPing } = this.props
     return (
-      <div className={classnames('user', {isPing})}>
+      <span className={classnames('user', {isPing})}>
         @{this.props.handle}
-      </div>
+      </span>
     )
   }
 }
