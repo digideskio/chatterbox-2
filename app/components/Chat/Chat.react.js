@@ -1,4 +1,5 @@
 import React, { Component, PropTypes } from 'react'
+import ReactCSSTransitionGroup from 'react-addons-css-transition-group'
 import _ from 'lodash'
 import Message from './Message'
 import Sender from './Sender.react'
@@ -61,20 +62,29 @@ export default class Chat extends Component {
             }
           </div>
         </header>
-        <section ref='messagesContainer' className='messages'>
-          {
-            this.props.messages.map(({text, user, timestamp, friendlyTimestamp, ...message}, idx) => (
-              <Message
-                key={`${user}-${timestamp}`}
-                firstInChain={!this.props.messages[idx - 1] || this.props.messages[idx - 1].user !== user}
-                user={::this._mapUserIDtoData(user, idx)}
-                text={text}
-                timestamp={friendlyTimestamp || timestamp}
-                {...message}
-              />
-            ))
-          }
-        </section>
+        <ReactCSSTransitionGroup
+          component='div'
+          className='messages'
+          key={this.props.channel.id}
+          transitionName='fade'
+          transitionAppear={true}
+          transitionEnterTimeout={50}
+        >
+          <section ref='messagesContainer' className='animation-wrapper'>
+            {
+              this.props.messages.map(({text, user, timestamp, friendlyTimestamp, ...message}, idx) => (
+                <Message
+                  key={`${user}-${timestamp}`}
+                  firstInChain={!this.props.messages[idx - 1] || this.props.messages[idx - 1].user !== user}
+                  user={::this._mapUserIDtoData(user, idx)}
+                  text={text}
+                  timestamp={friendlyTimestamp || timestamp}
+                  {...message}
+                />
+              ))
+            }
+          </section>
+        </ReactCSSTransitionGroup>
         <Sender
           sendMessage={::this.props.sendMessage}
           teamID={_.get(this.props, 'team.id')}

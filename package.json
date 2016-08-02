@@ -32,6 +32,7 @@
     "pretty-bytes": "^3.0.1",
     "qs": "^6.2.1",
     "react": "^15.1.0",
+    "react-addons-css-transition-group": "^15.3.0",
     "react-dom": "^15.1.0",
     "react-imageloader": "^2.1.0",
     "react-player": "^0.8.0",
