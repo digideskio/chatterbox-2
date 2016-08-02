@@ -68,7 +68,7 @@ export default class Chat extends Component {
           className='messages'
           key={this.props.channel.id}
           transitionName='fade'
-          transitionAppear={true}
+          transitionAppear
           transitionEnterTimeout={50}
           transitionAppearTimeout={50}
           transitionLeaveTimeout={50}
