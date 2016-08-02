@@ -176,6 +176,8 @@ function formatText(text) {
         if (match.length > 0) {
           const replacement = uuid.v1()
 
+          match = match.charAt(0) == '\n' ? match.substring(1) : match
+
           if (Object.keys(messageReplacementDict).length > 0) {
             match = reparseMatch(match, messageReplacementDict)
           }
