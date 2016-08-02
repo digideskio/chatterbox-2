@@ -1,6 +1,6 @@
 import React, { Component, PropTypes } from 'react'
 import {pick} from 'lodash'
-import Providers from './Providers.react'
+import Providers from './Providers'
 import TeamInfo from './TeamInfo'
 
 export default class Sidebar extends Component {

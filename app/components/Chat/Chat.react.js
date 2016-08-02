@@ -25,12 +25,12 @@ export default class Chat extends Component {
     if (prevMessages.length > 0 && this.props.messages.length > 0) {
       const [{ timestamp: prevTimestamp }, { timestamp: currentTimestamp }] = [_.last(prevMessages), _.last(this.props.messages)]
       if (prevTimestamp !== currentTimestamp) {
-        this._checkMessagesScroll()
+        this._scrollBottom()
       }
     }
   }
 
-  _checkMessagesScroll() {
+  _scrollBottom() {
     const { messagesContainer } = this.refs
     messagesContainer.scrollTop = messagesContainer.scrollHeight
   }
@@ -69,6 +69,8 @@ export default class Chat extends Component {
           transitionName='fade'
           transitionAppear={true}
           transitionEnterTimeout={50}
+          transitionAppearTimeout={50}
+          transitionLeaveTimeout={50}
         >
           <section ref='messagesContainer' className='animation-wrapper'>
             {

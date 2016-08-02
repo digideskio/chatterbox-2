@@ -1,9 +1,9 @@
 import React, { Component, PropTypes } from 'react'
 import _ from 'lodash'
 import { Link } from 'react-router'
+import Provider from './Provider.react'
 
 export default class Providers extends Component {
-
   static propTypes = {
     changeActiveTeam: PropTypes.func.isRequired,
     teams: PropTypes.object,
@@ -28,41 +28,15 @@ export default class Providers extends Component {
         <div className='bottom'>
           {
             Object.keys(this.props.teams).map(team => (
-              <Provider key={team} onClick={::this.handleProviderClick} {..._.get(this.props.teams, `${team}.team`, {})} />
+              <Provider
+                key={team}
+                onClick={::this.handleProviderClick}
+                {..._.get(this.props.teams, `${team}.team`, {})}
+              />
             ))
           }
           <Link to='/login/slack' className='ion-ios-plus-empty add' />
         </div>
-      </div>
-    )
-  }
-}
-
-class Provider extends Component {
-
-  static propTypes = {
-    image: PropTypes.string,
-    unreads: PropTypes.bool,
-    pings: PropTypes.number,
-    id: PropTypes.string,
-    onClick: PropTypes.func.isRequired
-  }
-
-  static defaultProps = {
-    currentTeam: {}
-  }
-
-  handleClick = () => this.props.onClick(this.props.id)
-
-  render() {
-    return (
-      <div onClick={this.handleClick} className='team' style={{backgroundImage: `url(${this.props.image})`}}>
-        {
-          this.props.unreads ? <div className='new_message' /> : null
-        }
-        {
-          this.props.pings ? <div className='unread_counter'>{this.props.pings}</div> : null
-        }
       </div>
     )
   }
