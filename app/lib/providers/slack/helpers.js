@@ -286,7 +286,8 @@ function formatText(text) {
     }
   ]
 
-  const formattedText = replace.strWithArr(text, replacements)
+  const formattedText = _.unescape(replace.strWithArr(text, replacements))
+  if (_.isEmpty(messageReplacementDict)) return formattedText
   const delimiter = new RegExp(`(${_getEscapedKeys(messageReplacementDict)})`, 'g')
   return _.compact(
     formattedText.split(delimiter).map((word, index) => {
