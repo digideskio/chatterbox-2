@@ -24,7 +24,11 @@ export default class Togglable extends Component {
         {title ? <span>{title}</span> : null}
         <span onClick={::this.handleToggle} className={classnames(isOpen ? 'ion-arrow-down-b' : 'ion-arrow-right-b', 'toggler')} />
         {
-          isOpen ? this.props.children : null
+          isOpen ? (
+            <div className='contents'>
+              {this.props.children}
+            </div>
+          ) : null
         }
       </span>
     )
