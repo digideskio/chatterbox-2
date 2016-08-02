@@ -6,9 +6,9 @@
     display: block;
     width: 100%;
     position: relative;
-    height: 50px;
-    object {
-      margin-left: 150px;
+    .slack-icon {
+      display: block;
+      margin: auto;
       width: 250px;
     }
   }
@@ -16,8 +16,16 @@
     display: flex;
     height: calc(100% - 200px);
     .info {
-      display: inline-block;
       width: 50%;
+      text-align: center;
+      vertical-align: middle;
+      span {
+        text-align: center;
+        vertical-align: middle;
+        display: inline-block;
+
+      }
+
     }
     .webview-container {
       display: inline-flex;
