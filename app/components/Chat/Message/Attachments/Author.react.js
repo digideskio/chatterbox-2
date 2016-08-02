@@ -4,7 +4,7 @@ export default ({ name, link, image, service: { image: serviceImage, name: servi
   return (
     <div className='author-body'>
       {serviceImage ? <div className='service-image' style={{backgroundImage: `url(${serviceImage})`}} /> : null}
-      {serviceName ? <div className='service-name'>{serviceName} |</div> : null}
+      {serviceName ? <div className='service-name'>{serviceName}{name ? ' |' : ''}</div> : null}
       {image ? <div className='author-image' style={{backgroundImage: `url(${image})`}} /> : null}
       {name ? <div className='author-name'>{name}</div> : null}
     </div>
