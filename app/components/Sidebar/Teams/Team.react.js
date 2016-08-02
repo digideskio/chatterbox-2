@@ -1,30 +1,15 @@
-import React, { Component, PropTypes } from 'react'
+import React from 'react'
 
-export default class Provider extends Component {
-  static propTypes = {
-    image: PropTypes.string,
-    unreads: PropTypes.bool,
-    pings: PropTypes.number,
-    id: PropTypes.string,
-    onClick: PropTypes.func.isRequired
-  }
-
-  static defaultProps = {
-    currentTeam: {}
-  }
-
-  handleClick = () => this.props.onClick(this.props.id)
-
-  render() {
-    return (
-      <div onClick={this.handleClick} className='team' style={{backgroundImage: `url(${this.props.image})`}}>
-        {
-          this.props.unreads ? <div className='new_message' /> : null
-        }
-        {
-          this.props.pings ? <div className='unread_counter'>{this.props.pings}</div> : null
-        }
-      </div>
-    )
-  }
+export default ({ image, unreads, pings, id, onClick }) => { // eslint-disable-line react/prop-types
+  const onClickHandler = () => onClick(id)
+  return (
+    <div onClick={onClickHandler} className='team' style={{backgroundImage: `url(${image})`}}>
+      {
+        unreads ? <div className='new_message' /> : null
+      }
+      {
+        pings ? <div className='unread_counter'>{pings}</div> : null
+      }
+    </div>
+  )
 }

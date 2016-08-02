@@ -1,6 +1,5 @@
 import { bindActionCreators } from 'redux'
 import { connect } from 'react-redux'
-import _ from 'lodash'
 
 import Teams from 'components/Sidebar/Teams'
 import * as SettingsActions from 'actions/settings'
@@ -15,8 +14,7 @@ function mapDispatchToProps(dispatch) {
 }
 
 function mapStateToTeamInfoProps({ settings, teams: { teams, activeTeamID } }) {
-  const { team } = teams[activeTeamID] || {}
-  return { team, settings, teams }
+  return { team: teams[activeTeamID] || {}, settings, teams }
 }
 
 export default connect(mapStateToTeamInfoProps, mapDispatchToProps)(Teams)
