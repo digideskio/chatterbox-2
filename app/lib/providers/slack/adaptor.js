@@ -88,7 +88,7 @@ export default class SlackHandler extends EventEmitter {
         name: `# ${name}`,
         id,
         main,
-        members: members != undefined ? members.map(id => !users[id] ? id : false).filter(Boolean) || [] : [],
+        members: members != undefined ? members.map(id => users[id] ? id : false).filter(Boolean) || [] : [],
         meta: { topic: _.get(topic, 'value', null), purpose: _.get(purpose, 'value', null) }
       })
     })

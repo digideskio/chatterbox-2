@@ -47,14 +47,14 @@ function santitizeAttachments(attachments) {
       } : undefined,
       links: {
         author: attachment.author_link,
-        title: formatText(attachment.title_link)
+        title: formatText.bind(this)(attachment.title_link)
       },
       author: attachment.author_name,
       service: attachment.service_name,
       borderColor: color ? `#${color}` : undefined,
-      title: formatText(title),
-      pretext: formatText(pretext),
-      text: formatText(text),
+      title: formatText.bind(this)(title),
+      pretext: formatText.bind(this)(pretext),
+      text: formatText.bind(this)(text),
       fields
     }
   })
@@ -62,7 +62,7 @@ function santitizeAttachments(attachments) {
 
 function santitizeMessage({ user, text, ts: timestamp, user_profile: userProfile = null, attachments = [] }) {
   return {
-    attachments: santitizeAttachments(attachments),
+    attachments: santitizeAttachments.bind(this)(attachments),
     user,
     text: formatText.bind(this)(text),
     userProfile,
