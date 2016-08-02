@@ -1,4 +1,4 @@
-export function extractImageDimentions({ width, height }) {
+export function extractImageDimentions(width, height) {
   if (width && height) {
     if (width > 400) {
       width = 400
