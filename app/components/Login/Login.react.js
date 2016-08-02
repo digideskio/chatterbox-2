@@ -1,5 +1,5 @@
 import React, { Component, PropTypes } from 'react'
-import SlackLogin from './Slack/Login.react'
+import SlackLogin from './Slack'
 
 export default class Login extends Component {
   static contextTypes = {
