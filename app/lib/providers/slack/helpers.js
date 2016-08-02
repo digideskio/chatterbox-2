@@ -41,7 +41,7 @@ function santitizeAttachments(attachments) {
       },
       video: attachment.video_html ? {
         type: attachment.service_name,
-        url: attachment.from_url,
+        url: attachment.video_url ? attachment.video_url : attachment.from_url,
         height: attachment.video_html_height,
         width: attachment.video_html_width
       } : undefined,

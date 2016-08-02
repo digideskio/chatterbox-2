@@ -4,6 +4,7 @@ import _ from 'lodash'
 
 import ThumbImage from './Attachments/ThumbImage.react'
 import Image from './Attachments/Image.react'
+import Video from './Attachments/Video.react'
 import Text from './Attachments/Text.react'
 import Author from './Attachments/Author.react'
 
@@ -69,10 +70,18 @@ export default class Attachments extends Component {
                 />
               ) : null}
               {text ? <Text isPretext={false} text={text} /> : null}
+              {video ? (
+                <Video
+                  url={video.url}
+                  height={video.height}
+                  width={video.width}
+                  type={video.type}
+                  />
+              ) : null}
             </div>
           ) : null}
 
-          {images.thumb ? <ThumbImage url={images.thumb} /> : null}
+          {images.thumb && !video ? <ThumbImage url={images.thumb.url} /> : null}
           {images.image ? (
             <Image
               url={_.get(images.image, 'url')}

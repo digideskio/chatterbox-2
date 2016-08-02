@@ -34,6 +34,7 @@
     "react": "^15.1.0",
     "react-dom": "^15.1.0",
     "react-imageloader": "^2.1.0",
+    "react-player": "^0.8.0",
     "react-redux": "^4.4.5",
     "react-router": "^2.4.1",
     "react-router-redux": "^4.0.4",
