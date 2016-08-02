@@ -23,7 +23,9 @@ export default class Chat extends Component {
 
   _scrollBottom() {
     const { messagesContainer } = this.refs
-    messagesContainer.scrollTop = messagesContainer.scrollHeight
+    if (messagesContainer) {
+      messagesContainer.scrollTop = messagesContainer.scrollHeight
+    }
   }
 
   _mapUserIDtoData(id, messageIdx) {
@@ -42,7 +44,7 @@ export default class Chat extends Component {
         <header>
           <div className='info'>
             <span className='channel'>{this.props.channel.name}</span>
-            <span className='meta'>{_.get(this.props, 'channel.meta.members') || `${this.props.channelUsers.length} Members`}</span>
+            <span className='meta'>{_.get(this.props, 'channel.meta.members') || `${_.get(this.props, 'channelUsers.length') } Members`}</span>
             {
               _.get(this.props, 'channel.meta.topic') ? (
                 <div>
