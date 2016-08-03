@@ -1,20 +1,46 @@
 .login {
   display: flex;
-  flex: 1;
+  align-items: center;
+  justify-content: center;
   height: 100vh;
   width: 100vw;
   background-color: #fafafa;
 
-  .back {
-    position: absolute;
-    color: #1e1e1e;
-    font-size: 68px;
-    cursor: pointer;
-    z-index: 2;
-    display: inline-block;
-    margin-left: 40px;
-    margin-top: 20px;
+  .login-providers {
+    width: 45vh;
+    border: 1px solid darken(#fafafa, 10%);
+    border-radius: 5px;
+    padding: 0;
   }
+
+  .login-providers li {
+    list-style-type: none;
+    border-bottom: 1px solid darken(#fafafa, 10%);
+
+    &:last-child {
+      border-bottom: none;
+    }
+  }
+
+  .login-providers li a {
+    display: block;
+    padding: 20px 10px;
+    text-decoration: none;
+    color: #000;
+    font-weight: bold;
+  }
+
+  .app-sidebar {
+    width: 90px;
+  }
+}
+
+.modal-login {
+  height: 75vh;
+  margin: 30px 20px;
+  padding: 15px;
+  outline: none;
+  background-color: #fafafa;
 
   @import 'slack';
 }

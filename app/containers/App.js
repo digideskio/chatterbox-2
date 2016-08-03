@@ -1,4 +1,5 @@
 import React, { Component, PropTypes } from 'react'
+import Sidebar from './Sidebar'
 
 export default class App extends Component {
   static contextTypes = {
@@ -19,6 +20,7 @@ export default class App extends Component {
   render() {
     return (
       <div className='app'>
+        <Sidebar />
         {this.props.children}
       </div>
     )

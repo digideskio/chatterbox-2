@@ -1,79 +1,69 @@
 .teams {
+  position: absolute;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: flex-end;
   height: 100%;
   width: 90px;
-  position: absolute;
-  .selected {
-    background-color: white;
-    border: white solid 2px;
-    width: 57px;
-    height: 57px;
-    margin-top: 20px;
-    margin-left: 15px;
-    position: relative;
+  background-color: #212a3b;
+  color: #fff;
+
+  .team {
+    width: 45px;
+    height: 45px;
     border-radius: 50%;
     font-size: 50px;
     cursor: pointer;
-    display: inline-block;
     background-position: center;
     background-size: contain;
-    position: absolute;
-  }
-  .bottom {
-    bottom: 0;
-    position: absolute;
-    margin-left: 15px;
-    width: 52px;
-    .team {
+    margin-top: 15px;
+
+    &.selected {
+      position: absolute;
+      top: 0;
+      border: 2px solid white;
       width: 55px;
       height: 55px;
-      position: relative;
-      border-radius: 50%;
-      font-size: 50px;
-      cursor: pointer;
-      display: inline-block;
-      background-position: center;
-      background-size: contain;
-      margin-top: 10px;
-      .new_message {
-        width: 9px;
-        height: 9px;
-        background-color: rgba(255, 255, 255, 0.5);
-        border-radius: 50%;
-        left: -11px;
-        position: absolute;
-        margin-top: calc(50% - 6px);
-      }
-      .unread_counter {
-        width: 24px;
-        height: 22px;
-        background-color: #fb3c4c;
-        border-radius: 40%;
-        font-size: 14px;
-        font-weight: 600;
-        line-height: 22px;
-        text-align: center;
-        color: #feecec;
-        top: -25px;
-        right: -5px;
-        position: absolute;
-        margin-top: calc(50% - 6px);
-      }
+      cursor: default;
     }
-    .add {
-      width: 42px;
-      height: 42px;
+
+    .new_message {
+      position: relative;
+      left: -15px;
+      width: 9px;
+      height: 9px;
+      background-color: rgba(255, 255, 255, 0.5);
       border-radius: 50%;
-      display: inline-block;
-      margin-top: 10px;
-      color: #8e898b;
-      border: #8e898b solid 2px;
-      font-size: 45px;
-      margin-left: 3px;
-      line-height: 0;
+      margin-top: calc(50% - 6px);
+    }
+    .unread_counter {
+      position: relative;
+      top: -5px;
+      right: -30px;
+      width: 24px;
+      height: 22px;
+      background-color: #fb3c4c;
+      border-radius: 40%;
+      font-size: 14px;
+      font-weight: 600;
+      line-height: 22px;
       text-align: center;
-      margin-bottom: 30px;
-      cursor: pointer;
-      position: relative;
+      color: #feecec;
     }
+  }
+
+  .add {
+    width: 45px;
+    height: 45px;
+    border-radius: 50%;
+    margin-top: 15px;
+    color: #8e898b;
+    border: #8e898b solid 2px;
+    font-size: 35px;
+    line-height: 45px;
+    text-align: center;
+    margin-bottom: 25px;
+    cursor: pointer;
   }
 }

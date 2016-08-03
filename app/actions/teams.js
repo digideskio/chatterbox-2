@@ -38,7 +38,12 @@ export function changeTeam(team) {
 }
 
 export function changeActiveTeam(team) {
-  return { type: TEAMS_ACTIVE_TEAM_CHANGE, team }
+  return (dispatch, getState) => {
+    const { teams: { activeTeamID } } = getState()
+    if (team === activeTeamID) return
+    if (team) dispatch(locationPush('/chat'))
+    dispatch({ type: TEAMS_ACTIVE_TEAM_CHANGE, team })
+  }
 }
 
 export function changeActiveTeamChannelOrDM(channel_or_dm_id, teamID) {

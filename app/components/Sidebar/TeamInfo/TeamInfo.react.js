@@ -31,6 +31,8 @@ export default class TeamInfo extends Component {
   }
 
   render() {
+    if (!this.props.team.id) return null
+
     return (
       <div className='teamInfo'>
         <div className='team'>
