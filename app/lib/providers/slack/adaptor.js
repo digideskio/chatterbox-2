@@ -66,7 +66,7 @@ export default class SlackHandler extends EventEmitter {
   _canSend = false
   _connected = false
 
-  _getHistoryByID({ channel_or_dm_id, count = 50, latest = null, oldest = null, inclusive = 0 }) {
+  _getHistoryByID({ channel_or_dm_id, count = 100, latest = null, oldest = null, inclusive = 0 }) {
     return new Promise((resolve, reject) => {
       let method = 'channels'
       if (channel_or_dm_id.startsWith('D')) method = 'im'
@@ -85,7 +85,7 @@ export default class SlackHandler extends EventEmitter {
       if (is_archived) return
       channels[id] = ({
         isMember,
-        name: `# ${name}`,
+        name: `#${name}`,
         id,
         main,
         members: members != undefined ? members.map(id => users[id] ? id : false).filter(Boolean) || [] : [],

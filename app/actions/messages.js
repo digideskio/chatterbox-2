@@ -11,7 +11,7 @@ export function historyIsLoading(teamID, channelID) {
   return {type: MESSAGES_HISTORY_LOADING, payload: {channelID, teamID}}
 }
 
-export function requestHistory(startTimestamp, endTimestamp, channelID, teamID, amount = 50) {
+export function requestHistory(startTimestamp, endTimestamp, channelID, teamID, amount = 100) {
   return (dispatch, getState) => {
     if (!_.get(getState().messages, `${teamID}.${channelID}.isLoading`, false)) {
       const { teams: { [teamID]: { history: { request: requestHistory } } } } = getState().teams
