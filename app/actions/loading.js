@@ -7,6 +7,7 @@ import { setSetting } from './settings'
 
 export const LOADING_LOADED_CHANGE = 'LOADING_LOADED_CHANGE'
 export const LOADING_TASK_CHANGE = 'LOADING_TASK_CHANGE'
+export const LOADING_FINISH = 'LOADING_FINISH'
 
 export function changeTask(task) {
   return { type: LOADING_TASK_CHANGE, task }
@@ -16,17 +17,22 @@ export function setLoadedPercent(percent) {
   return { type: LOADING_LOADED_CHANGE, loaded: percent }
 }
 
+export function finishLoading(finished) {
+  return { type: LOADING_FINISH, finished }
+}
+
 export function load() {
   return (dispatch) => {
     loadSettings(dispatch)
-      .then(loadTeams.bind(this, dispatch))
+      .then(() => loadTeams(dispatch))
       .then(teamID => {
+        dispatch(finishLoading(true))
         if (!teamID) {
-          dispatch(locationPush('/login/slack'))
-        } else {
-          dispatch(TeamsActions.changeActiveTeam(teamID))
-          dispatch(locationPush('/chat'))
+          dispatch(locationPush('/login'))
+          return
         }
+        dispatch(TeamsActions.changeActiveTeam(teamID))
+        dispatch(locationPush('/chat'))
       })
   }
 }

@@ -1,10 +1,11 @@
 import { combineReducers } from 'redux'
 
-import { LOADING_TASK_CHANGE, LOADING_LOADED_CHANGE } from 'actions/loading'
+import { LOADING_TASK_CHANGE, LOADING_LOADED_CHANGE, LOADING_FINISH } from 'actions/loading'
 
 const DEFAULT_STATE = {
   loaded: 0,
-  task: ''
+  task: '',
+  finished: false
 }
 
 function loaded(state = DEFAULT_STATE.loaded, action) {
@@ -21,7 +22,15 @@ function task(state = DEFAULT_STATE.task, action) {
   return state
 }
 
+function finished(state = DEFAULT_STATE.finished, action) {
+  if (action.type === LOADING_FINISH) {
+    return action.finished
+  }
+  return state
+}
+
 export default combineReducers({
   loaded,
-  task
+  task,
+  finished
 })

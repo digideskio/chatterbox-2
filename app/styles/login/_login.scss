@@ -1,20 +1,63 @@
 .login {
   display: flex;
-  flex: 1;
+  align-items: center;
+  justify-content: center;
   height: 100vh;
   width: 100vw;
   background-color: #fafafa;
 
-  .back {
-    position: absolute;
-    color: #1e1e1e;
-    font-size: 68px;
-    cursor: pointer;
-    z-index: 2;
-    display: inline-block;
-    margin-left: 40px;
-    margin-top: 20px;
+  .login-providers ul {
+    width: 45vw;
+    border: 1px solid darken(#fafafa, 10%);
+    border-radius: 5px;
+    padding: 0;
   }
+
+  .login-providers li {
+    list-style-type: none;
+    border-bottom: 1px solid darken(#fafafa, 10%);
+    background-color: #fff;
+
+    &:hover {
+      background-color: darken(#fafafa, 5%);
+    }
+    &:first-child {
+      border-top-left-radius: 5px;
+      border-top-right-radius: 5px;
+    }
+    &:last-child {
+      border-bottom: none;
+      border-bottom-left-radius: 5px;
+      border-bottom-right-radius: 5px;
+    }
+  }
+
+  .login-providers li a {
+    display: block;
+    height: 32px;
+    text-decoration: none;
+    color: #000;
+    font-weight: bold;
+    line-height: 32px;
+    height: 32px;
+    padding: 8px 12px;
+  }
+
+  .login-providers li a .provider-icon {
+    float: left;
+    width: 24px;
+    height: 24px;
+    margin-top: 4px;
+    margin-right: 12px;
+  }
+}
+
+.modal-login {
+  height: 75vh;
+  margin: 30px 20px;
+  padding: 15px;
+  outline: none;
+  background-color: #fafafa;
 
   @import 'slack';
 }

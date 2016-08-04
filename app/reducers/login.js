@@ -8,7 +8,10 @@ const DEFAULT_STATE = {
     name: null,
     error: null
   },
-  providers: ['slack', 'irc']
+  providers: {
+    'slack': {name: 'Slack', icon: 'images/logins/slack-icon.svg'},
+    'irc': {name: 'IRC'}
+  }
 }
 
 function provider(state = DEFAULT_STATE.provider, action) {

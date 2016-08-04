@@ -1,34 +1,13 @@
 .slack {
-  flex: 1;
-  .header {
-    flex: none;
-    padding-top: 50px;
-    display: block;
-    width: 100%;
-    position: relative;
-    .slack-icon {
-      display: block;
-      margin: auto;
-      width: 250px;
-    }
-  }
-  .contents {
-    display: flex;
-    height: calc(100% - 200px);
-    .info {
-      width: 50%;
-      text-align: center;
-      vertical-align: middle;
-    }
-    .webview-container {
-      display: inline-flex;
-      flex: 1;
-      transition: opacity 300ms ease-in-out;
-      .webview {
-        flex: 1;
-        &.show {
-          opacity: 1;
-        }
+  height: 100%;
+
+  .webview-container {
+    height: 100%;
+    transition: opacity 300ms ease-in-out;
+    .webview {
+      height: 100%;
+      &.show {
+        opacity: 1;
       }
     }
   }

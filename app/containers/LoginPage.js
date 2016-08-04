@@ -3,8 +3,11 @@ import { connect } from 'react-redux'
 import Login from 'components/Login'
 import * as LoginActions from 'actions/login'
 
-function mapStateToProps({ login, teams: { teams } }) {
-  return { login, isCloseable: (Object.keys(teams).length > 0) }
+function mapStateToProps({ login }) {
+  return {
+    login,
+    providers: login.providers
+  }
 }
 
 function mapDispatchToProps(dispatch) {

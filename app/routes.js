@@ -9,6 +9,7 @@ export default (
   <Route path='/' component={App}>
     <IndexRoute component={LoadingPage} />
     <Route path='/chat' component={ChatPage} />
-    <Route path='/login/:teamType' component={LoginPage} />
+    <Route path='/login' component={LoginPage} />
+    <Route path='/login/:provider' component={LoginPage} />
   </Route>
 )
