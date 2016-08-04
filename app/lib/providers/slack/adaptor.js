@@ -53,11 +53,14 @@ export default class SlackHandler extends EventEmitter {
   }
 
   message = {
-    send: (channelID, message, custom = false) => {
-      return this._slack.sendMessage(message, channelID).then(message => {
-        parseMessage.bind(this)(message)
-        return message
+    send: (channelID, text, sendingID, custom = false) => {
+      const { id: userID } = this.user
+      this.emit('message', {
+        ...parseMessage.bind(this)({ type: 'message', text, timestamp: +new Date, user:userID, channel: channelID }, true),
+        sendingID
       })
+
+      return this._slack.sendMessage(text, channelID).then(m => parseMessage.bind(this)(m, true))
     },
     edit: (channelID, messageID, editedMessage, custom = false) => {},
     remove: (channelID, messageID) => {}
