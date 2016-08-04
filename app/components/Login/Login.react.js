@@ -15,13 +15,19 @@ const Login = ({ providers, addTeam, showLogin, routeParams }) =>
   </div>
 
 const ProviderList = ({providers}) =>
-  <ul className='login-providers'>{
-    providers.map((provider, idx) =>
-      <li key={idx}>
-        <Link to={`/login/${provider}`}>{provider}</Link>
-      </li>
-    )
-  }</ul>
+  <div className='login-providers'>
+    <h3>Select a service</h3>
+    <ul>{
+      Object.keys(providers).map((provider) =>
+        <li key={provider}>
+          <Link to={`/login/${provider}`}>
+            {providers[provider].icon ? <img className='provider-icon' src={providers[provider].icon} /> : null}
+            {providers[provider].name}
+          </Link>
+        </li>
+      )
+    }</ul>
+  </div>
 
 const ProviderModal = ({provider, addTeam, showLogin}) => {
   if (!provider) return null
