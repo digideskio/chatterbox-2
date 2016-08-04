@@ -1,7 +1,8 @@
 import React, { Component, PropTypes } from 'react'
 import ReactCSSTransitionGroup from 'react-addons-css-transition-group'
 import _ from 'lodash'
-import Message, { DaySeparator } from './Message/Message.react'
+import Message from './Message/Message.react'
+import DaySeparator from './Message/DaySeparator.react'
 import Sender from './Sender.react'
 
 export default class Chat extends Component {
@@ -12,20 +13,28 @@ export default class Chat extends Component {
     team: PropTypes.object
   }
 
+  componentDidMount() {
+    this._scrollBottom()
+  }
+
   componentDidUpdate({ messages: prevMessages }) {
-    if (prevMessages.length > 0 && this.props.messages.length > 0) {
-      const [{ timestamp: prevTimestamp }, { timestamp: currentTimestamp }] = [_.last(prevMessages), _.last(this.props.messages)]
-      if (prevTimestamp !== currentTimestamp) {
+    console.info('CHAT UPDATED')
+    this._checkScroll()
+  }
+
+  _checkScroll() {
+    const { messagesContainer } = this.refs
+    if (messagesContainer) {
+      const shouldScrollBottom = messagesContainer.scrollTop + messagesContainer.offsetHeight >= messagesContainer.scrollHeight - 15
+      if (shouldScrollBottom) {
         this._scrollBottom()
       }
     }
   }
 
   _scrollBottom() {
-    const { messagesContainer } = this.refs
-    if (messagesContainer) {
-      messagesContainer.scrollTop = messagesContainer.scrollHeight
-    }
+    const lastMessage = _.last(this.refs.messagesContainer.children)
+    _.defer(::lastMessage.scrollIntoView)
   }
 
   _mapUserIDtoData(id, messageIdx) {
@@ -72,6 +81,7 @@ export default class Chat extends Component {
                 const messageEl = (
                   <Message
                     key={key}
+                    checkScroll={::this._checkScroll}
                     firstInChain={!prevUser !== user}
                     user={::this._mapUserIDtoData(user, idx)}
                     text={text}
