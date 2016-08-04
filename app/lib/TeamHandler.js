@@ -1,7 +1,7 @@
 import _ from 'lodash'
 import { queue } from 'async'
 import Database from 'lib/database'
-import { addHistory, newMessage, editMessage } from 'actions/messages'
+import { addHistory, newMessage, editMessage, historyIsLoading } from 'actions/messages'
 
 export default function createTeamHandler(provider) {
   const Provider = require(`./providers/${provider}/adaptor.js`)
@@ -15,6 +15,7 @@ export default function createTeamHandler(provider) {
     }
 
     _historyRequestQueue = queue(({ channel_or_dm_id, args }, next) => {
+      this._dispatch(historyIsLoading(this.team.id, channel_or_dm_id))
       this._getHistoryByID({ channel_or_dm_id, ...args })
         .then(messages => this._dispatch(addHistory({ messages, channel: channel_or_dm_id, team: this.team.id })))
         .then(() => process.nextTick(next))
@@ -33,7 +34,7 @@ export default function createTeamHandler(provider) {
 
     history = {
       request: (startTimestamp, endTimestamp, channel_or_dm_id, count) => {
-        this._getHistoryByID({ channel_or_dm_id, count, latest: startTimestamp }).then(messages => {
+        this._getHistoryByID({ channel_or_dm_id, count, latest: startTimestamp, oldest: endTimestamp }).then(messages => {
           this._dispatch(addHistory({ messages, channel: channel_or_dm_id, team: this.team.id }))
         })
       }
