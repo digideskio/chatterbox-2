@@ -22,13 +22,16 @@ export default class Chat extends Component {
     this._checkScroll()
   }
 
+  handleScroll({ target }) {
+    if (target.scrollTop <= 20) {
+      console.log('GET MORE!')
+    }
+  }
+
   _checkScroll() {
     const { messagesContainer } = this.refs
-    if (messagesContainer) {
-      const shouldScrollBottom = messagesContainer.scrollTop + messagesContainer.offsetHeight >= messagesContainer.scrollHeight - 15
-      if (shouldScrollBottom) {
-        this._scrollBottom()
-      }
+    if (messagesContainer && messagesContainer.scrollTop + messagesContainer.offsetHeight >= messagesContainer.scrollHeight - 15) {
+      this._scrollBottom()
     }
   }
 
@@ -70,6 +73,7 @@ export default class Chat extends Component {
           component='div'
           className='messages'
           key={this.props.channel.id}
+          onScroll={::this.handleScroll}
           transitionName='fade'
           transitionAppear
           transitionEnterTimeout={50}
