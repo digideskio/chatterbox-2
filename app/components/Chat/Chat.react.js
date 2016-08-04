@@ -84,7 +84,7 @@ export default class Chat extends Component {
                   <Message
                     key={key}
                     checkScroll={::this._checkScroll}
-                    firstInChain={!prevUser !== user}
+                    firstInChain={prevUser !== user}
                     user={::this._mapUserIDtoData(user, idx)}
                     text={text}
                     timestamp={friendlyTimestamp || timestamp}
