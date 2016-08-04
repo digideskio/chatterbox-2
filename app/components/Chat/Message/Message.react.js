@@ -17,7 +17,7 @@ export default class Message extends Component {
   }
 
   render() {
-    const { timestamp, user, text, attachments, firstInChain } = this.props
+    const { timestamp, user, text, attachments, firstInChain, checkScroll } = this.props
     return (
       <div onClick={::this._handleClick} className={classnames('message', {firstInChain})}>
         <div className='aside'>
@@ -41,7 +41,7 @@ export default class Message extends Component {
           {text ? (<div className='text'>{text}</div>) : null}
           {
             attachments && attachments.length > 0 ? (
-              <Attachments attachments={attachments} />
+              <Attachments checkScroll={checkScroll} attachments={attachments} />
             ) : null
           }
         </div>

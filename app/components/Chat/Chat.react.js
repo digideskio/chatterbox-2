@@ -34,7 +34,9 @@ export default class Chat extends Component {
 
   _scrollBottom() {
     const lastMessage = _.last(this.refs.messagesContainer.children)
-    _.defer(::lastMessage.scrollIntoView)
+    if (lastMessage) {
+      _.defer(::lastMessage.scrollIntoView)
+    }
   }
 
   _mapUserIDtoData(id, messageIdx) {
