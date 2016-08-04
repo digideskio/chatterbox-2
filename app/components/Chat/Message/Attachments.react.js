@@ -45,7 +45,8 @@ import Author from './Attachments/Author.react'
 
 export default class Attachments extends Component {
   static propTypes = {
-    attachments: PropTypes.array.isRequired
+    attachments: PropTypes.array.isRequired,
+    checkScroll: PropTypes.func.isRequired
   }
 
   _renderAttachments({ text, borderColor = 'gray', pretext, title, links = {}, images = {}, video, author, service, fields }) {

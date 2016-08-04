@@ -1,7 +1,8 @@
 import React, { Component, PropTypes } from 'react'
 import ReactCSSTransitionGroup from 'react-addons-css-transition-group'
 import _ from 'lodash'
-import Message, { DaySeparator } from './Message/Message.react'
+import Message from './Message/Message.react'
+import DaySeparator from './Message/DaySeparator.react'
 import Sender from './Sender.react'
 
 export default class Chat extends Component {
@@ -9,22 +10,38 @@ export default class Chat extends Component {
     messages: PropTypes.array,
     users: PropTypes.object,
     channel: PropTypes.object,
-    team: PropTypes.object
+    team: PropTypes.object,
+    requestHistory: PropTypes.func.isRequired
+  }
+
+  componentDidMount() {
+    this._scrollBottom()
   }
 
   componentDidUpdate({ messages: prevMessages }) {
-    if (prevMessages.length > 0 && this.props.messages.length > 0) {
-      const [{ timestamp: prevTimestamp }, { timestamp: currentTimestamp }] = [_.last(prevMessages), _.last(this.props.messages)]
-      if (prevTimestamp !== currentTimestamp) {
-        this._scrollBottom()
-      }
+    console.info('CHAT UPDATED')
+    this._checkScroll()
+  }
+
+  handleScroll({ target }) {
+    if (target.scrollTop <= 20) {
+      const { channel: { id: channelID }, team: { id: teamID }, requestHistory, messages } = this.props
+      const { timestamp: lastMessageTimestamp } = _.first(messages)
+      requestHistory(lastMessageTimestamp, null, channelID, teamID)
+    }
+  }
+
+  _checkScroll() {
+    const { messagesContainer } = this.refs
+    if (messagesContainer && messagesContainer.scrollTop + messagesContainer.offsetHeight >= messagesContainer.scrollHeight - 15) {
+      this._scrollBottom()
     }
   }
 
   _scrollBottom() {
-    const { messagesContainer } = this.refs
-    if (messagesContainer) {
-      messagesContainer.scrollTop = messagesContainer.scrollHeight
+    const lastMessage = _.last(this.refs.messagesContainer.children)
+    if (lastMessage) {
+      _.defer(::lastMessage.scrollIntoView)
     }
   }
 
@@ -59,6 +76,7 @@ export default class Chat extends Component {
           component='div'
           className='messages'
           key={this.props.channel.id}
+          onScroll={::this.handleScroll}
           transitionName='fade'
           transitionAppear
           transitionEnterTimeout={50}
@@ -72,7 +90,8 @@ export default class Chat extends Component {
                 const messageEl = (
                   <Message
                     key={key}
-                    firstInChain={!prevUser !== user}
+                    checkScroll={::this._checkScroll}
+                    firstInChain={prevUser !== user}
                     user={::this._mapUserIDtoData(user, idx)}
                     text={text}
                     timestamp={friendlyTimestamp || timestamp}

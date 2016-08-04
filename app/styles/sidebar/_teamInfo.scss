@@ -99,6 +99,10 @@
       color: rgba(255, 255, 255, 0.58);
       font-weight: 400;
       letter-spacing: 0.5px;
+      white-space: nowrap;
+      overflow: hidden;
+      text-overflow: ellipsis;
+      width: 145px;
     }
     .missed_pings {
       width: 22px;
@@ -162,6 +166,10 @@
       letter-spacing: 0.5px;
       margin-left: 10px;
       position: absolute;
+      white-space: nowrap;
+      overflow: hidden;
+      text-overflow: ellipsis;
+      width: 145px;
     }
   }
 }

@@ -1,5 +1,4 @@
 import React, { Component, PropTypes } from 'react'
-import moment from 'moment'
 import classnames from 'classnames'
 import Attachments from './Attachments.react'
 
@@ -9,7 +8,8 @@ export default class Message extends Component {
     text: PropTypes.oneOfType([PropTypes.array, PropTypes.string]),
     timestamp: PropTypes.string,
     firstInChain: PropTypes.bool,
-    user: PropTypes.shape({ image: PropTypes.string, name: PropTypes.string, handle: PropTypes.string })
+    user: PropTypes.shape({ image: PropTypes.string, name: PropTypes.string, handle: PropTypes.string }),
+    checkScroll: PropTypes.func.isRequired
   }
 
   _handleClick() {
@@ -17,7 +17,7 @@ export default class Message extends Component {
   }
 
   render() {
-    const { timestamp, user, text, attachments, firstInChain } = this.props
+    const { timestamp, user, text, attachments, firstInChain, checkScroll } = this.props
     return (
       <div onClick={::this._handleClick} className={classnames('message', {firstInChain})}>
         <div className='aside'>
@@ -41,37 +41,10 @@ export default class Message extends Component {
           {text ? (<div className='text'>{text}</div>) : null}
           {
             attachments && attachments.length > 0 ? (
-              <Attachments attachments={attachments} />
+              <Attachments checkScroll={checkScroll} attachments={attachments} />
             ) : null
           }
         </div>
-      </div>
-    )
-  }
-}
-
-export class DaySeparator extends Component {
-  static propTypes = {
-    timestamp: PropTypes.number.isRequired
-  }
-
-  get parsedTime() {
-    return moment().calendar(this.props.timestamp, {
-      sameDay: '[Today]',
-      nextDay: '[Tomorrow]',
-      nextWeek: 'dddd',
-      lastDay: '[Yesterday]',
-      lastWeek: '[Last] dddd',
-      sameElse: '[Today]'
-    })
-  }
-
-  render() {
-    return (
-      <div className='daySeparator'>
-        <div />
-        <span>{this.parsedTime}</span>
-        <div />
       </div>
     )
   }

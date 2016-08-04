@@ -10,7 +10,7 @@ export const TEAMS_TEAM_REMOVE = 'TEAMS_TEAM_REMOVE'
 
 function parseHandler(Handler) {
   return {
-    ...pick(Handler, ['users', 'user', 'team', 'channels', 'dms', 'message']),
+    ...pick(Handler, ['users', 'user', 'team', 'channels', 'dms', 'message', 'history']),
     activeChannelorDMID: Handler.initialActiveChannelorDMID
   }
 }
@@ -18,7 +18,6 @@ function parseHandler(Handler) {
 export function addTeam(Handler) {
   return (dispatch) => {
     const team = parseHandler(Handler)
-    console.log(team)
     dispatch({ type: TEAMS_TEAM_ADD, team })
     dispatch(changeActiveTeam(team.team.id))
     dispatch(locationPush('/chat'))
