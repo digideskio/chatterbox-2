@@ -275,10 +275,11 @@ function formatText(text) {
     }, {
       pattern: emojiWithEmoticons.delimiter,
       replacement: (match) => {
-        const hex = emojiWithEmoticons.dict[_getKey(match)]
+        const key = _getKey(match)
+        const hex = emojiWithEmoticons.dict[key]
         if (hex) {
           const replacement = uuid.v1()
-          messageReplacementDict[replacement] = <img className='emoji' src={_buildImageUrl(hex)} />
+          messageReplacementDict[replacement] = <img className='emoji' title={key} src={_buildImageUrl(hex)} />
           return replacement
         }
         return match

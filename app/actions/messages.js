@@ -4,6 +4,14 @@ export const MESSAGES_NEW_MESSAGE = 'MESSAGES_NEW_MESSAGE'
 export const MESSAGES_EDIT_MESSAGE = 'MESSAGES_EDIT_MESSAGE'
 export const MESSAGES_REMOVE_MESSAGE = 'MESSAGES_REMOVE_MESSAGE'
 
+
+export function requestHistory(startTimestamp, endTimestamp, channel, teamID, amount = 50) {
+  return (dispatch, getState) => {
+    const { teams: { [teamID]: { history: { request: requestHistory } } } } = getState().teams
+    requestHistory(startTimestamp, endTimestamp, channel, amount)
+  }
+}
+
 export function addHistory(payload) {
   return { type: MESSAGES_ADD_HISTORY, payload }
 }

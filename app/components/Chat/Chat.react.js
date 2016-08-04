@@ -10,7 +10,8 @@ export default class Chat extends Component {
     messages: PropTypes.array,
     users: PropTypes.object,
     channel: PropTypes.object,
-    team: PropTypes.object
+    team: PropTypes.object,
+    requestHistory: PropTypes.func.isRequired
   }
 
   componentDidMount() {
@@ -24,7 +25,9 @@ export default class Chat extends Component {
 
   handleScroll({ target }) {
     if (target.scrollTop <= 20) {
-      console.log('GET MORE!')
+      const { channel: { id: channelID }, team: { id: teamID }, requestHistory, messages } = this.props
+      const { timestamp: lastMessageTimestamp } = _.first(messages)
+      requestHistory(lastMessageTimestamp, null, channelID, teamID)
     }
   }
 

@@ -22,14 +22,21 @@ export default function createTeamHandler(provider) {
     })
 
     initHistory() {
-      const {
-        [this.initialActiveChannelorDMID]: { id: mainChannelID }, ...channels } = this.channels
+      const { [this.initialActiveChannelorDMID]: { id: mainChannelID }, ...channels } = this.channels
 
       this._historyRequestQueue.push({ channel_or_dm_id: mainChannelID })
       _.forEach({
         ..._.pickBy(channels, ({ isMember }) => isMember),
         ..._.pickBy(this.dms, ({ isOpen }) => isOpen)
       }, ({ id }) => this._historyRequestQueue.push({ channel_or_dm_id: id }))
+    }
+
+    history = {
+      request: (startTimestamp, endTimestamp, channel_or_dm_id, count) => {
+        this._getHistoryByID({ channel_or_dm_id, count, latest: startTimestamp }).then(messages => {
+          this._dispatch(addHistory({ messages, channel: channel_or_dm_id, team: this.team.id }))
+        })
+      }
     }
 
     loadHistory(channel_or_dm_id) {
