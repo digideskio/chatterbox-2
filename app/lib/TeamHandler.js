@@ -23,7 +23,9 @@ export default function createTeamHandler(provider) {
     })
 
     initHistory() {
-      const { [this.initialActiveChannelorDMID]: { id: mainChannelID }, ...channels } = this.channels
+      const {
+        [this.initialActiveChannelorDMID]: { id: mainChannelID }, ...channels
+      } = this.channels
 
       this._historyRequestQueue.push({ channel_or_dm_id: mainChannelID })
       _.forEach({
@@ -57,8 +59,8 @@ export default function createTeamHandler(provider) {
         }
       })
 
-      this.on('connected', () => {
-        this.initHistory()
+      this.on('connected', (bypassDefualtHistoryFetch = false) => {
+        if (!bypassDefualtHistoryFetch) this.initHistory()
         console.log(`Connected to ${this.team.type} team: ${this.team.name} via ${this.user.handle}`)
       })
 
