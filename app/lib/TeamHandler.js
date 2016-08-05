@@ -4,7 +4,7 @@ import Database from 'lib/database'
 import { addHistory, newMessage, editMessage, historyIsLoading } from 'actions/messages'
 
 export default function createTeamHandler(provider) {
-  const Provider = require(`./providers/${provider}/adaptor.js`)
+  const Provider = require(`./providers/${provider}/adaptor`)
 
   return class Team extends Provider {
     constructor(providerOpts, dispatch, firstLoad = false) {

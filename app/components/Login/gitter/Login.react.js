@@ -63,7 +63,7 @@ export default class GitterLogin extends Component {
           json: true
         }, (err, res, { access_token: token, token_type }) => {
           if (err) console.error(err)
-          console.log(token, token_type)
+          this.props.addTeam('gitter', { token })
         })
       }
     })

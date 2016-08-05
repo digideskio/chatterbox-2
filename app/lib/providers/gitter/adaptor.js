@@ -7,18 +7,28 @@ export default class GitterHandler extends EventEmitter {
     super()
 
     this._gitter = new GitterClient(token)
+    this._initEvents()
 
+    this._datastore = {
+      channels: {},
+      dms: {},
+      team: {},
+      users: {}
+    }
+  }
+
+  _initEvents() {
     this._gitter.currentUser()
-      .then((user) => {
-        const rooms = user.rooms()
-        const repos = user.repos()
-        const orgs = user.orgs()
-        const channels = user.channels()
-        console.log(user, rooms, repos, orgs, channels)
+      .then((user) => user.rooms())
+      .then(rooms => {
+        rooms.forEach(({ id }) => {
+
+        })
+        console.log(rooms)
       })
   }
 
-  _initGitterEvents(roomId) {
+  _initGitterEventsForRoom(roomId) {
     // this will be intresting
     this._gitter.rooms.find(roomId).then((room) => {
       var events = room.streaming().chatMessages()
