@@ -27,7 +27,7 @@
     "localforage": "^1.4.2",
     "lodash": "^4.13.1",
     "moment": "^2.14.1",
-    "node-gitter": "^1.2.11",
+    "node-gitter": "luigiplr/node-gitter",
     "node-uuid": "^1.4.7",
     "pretty-bytes": "^3.0.1",
     "qs": "^6.2.1",

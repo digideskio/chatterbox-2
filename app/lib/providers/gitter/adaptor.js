@@ -29,8 +29,7 @@ export default class GitterHandler extends EventEmitter {
       })
       .then(rooms => Promise.all(rooms.map(::this._parseRoom)))
       .then(() => {
-        console.info('all rooms parsed.')
-        console.log(this._gitter)
+        this._activeChannelorDMID = this._datastore.channels[0].id
         console.log(this._datastore)
         this.emit('connected', true)
       })
