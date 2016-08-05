@@ -3,8 +3,8 @@ import React, { PureComponent, PropTypes } from 'react'
 export default class Team extends PureComponent {
   static propTypes = {
     type: PropTypes.string.isRequired,
-    image: PropTypes.string.isRequired,
-    unreads: PropTypes.bool.isRequired,
+    image: PropTypes.string,
+    unreads: PropTypes.bool,
     pings: PropTypes.number,
     onClick: PropTypes.func.isRequired
   }

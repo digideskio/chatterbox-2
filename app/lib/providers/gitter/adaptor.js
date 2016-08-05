@@ -17,20 +17,22 @@ export default class GitterHandler extends EventEmitter {
       channels: {},
       dms: {},
       team: {},
-      users: {}
+      users: {},
+      user: {}
     }
   }
 
   _initEvents() {
     this._gitter.currentUser()
       .then((user) => {
+        this._datastore.user = santitizeUser(user)
         this.emit('authenticated')
         return user.rooms()
       })
       .then(rooms => Promise.all(rooms.map(::this._parseRoom)))
       .then(() => {
+        console.info('all rooms parsed.')
         this._activeChannelorDMID = this._datastore.channels[0].id
-        console.log(this._datastore)
         this.emit('connected', true)
       })
   }
@@ -75,6 +77,10 @@ export default class GitterHandler extends EventEmitter {
     })
   }
 
+  history = {
+    request: () => {}
+  }
+
   message = {
     send: (channelID, message) => {},
     edit: (channelID, messageID, editedMessage) => {},
@@ -89,11 +95,11 @@ export default class GitterHandler extends EventEmitter {
   }
 
   get channels() {
-
+    return this._datastore.channels
   }
 
   get dms() {
-
+    return this._datastore.dms
   }
 
   get team() {
@@ -106,11 +112,11 @@ export default class GitterHandler extends EventEmitter {
   }
 
   get users() {
-
+    return this._datastore.users
   }
 
   get user() {
-
+    return this._datastore.user
   }
 
   get _persistenceData() {

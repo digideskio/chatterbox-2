@@ -10,7 +10,7 @@ const logger = createLogger({ level: 'info', collapsed: true })
 const router = routerMiddleware(hashHistory)
 
 const enhancer = compose(
-  applyMiddleware(thunk, router, logger),
+  applyMiddleware(thunk, router),
   window.devToolsExtension ? window.devToolsExtension() : noop => noop
 )
 
