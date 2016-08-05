@@ -2,7 +2,6 @@ import React, { PropTypes, PureComponent } from 'react'
 import { Link } from 'react-router'
 import Modal from 'react-modal'
 
-import SlackLogin from './Slack'
 
 class Login extends PureComponent {
   static propTypes = {
