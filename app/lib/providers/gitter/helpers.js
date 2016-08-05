@@ -21,7 +21,7 @@ export function sanitizeRoomToDM({ user: { avatarUrlMedium, avatarUrlSmall, user
     handle: username,
     image: avatarUrlMedium || avatarUrlSmall,
     user: userID,
-    meta: { members: 'online', topic: displayName }
+    meta: { members: 'unknown', topic: displayName }
   }
 }
 
@@ -30,7 +30,7 @@ export function santitizeUser({ username, displayName, id, avatarUrlSmall, avata
     id,
     handle: username,
     name: displayName,
-    presence: 'online',
+    presence: 'unknown',
     images: [avatarUrlSmall, avatarUrlMedium],
     meta: {}
   }
