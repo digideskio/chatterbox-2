@@ -5,6 +5,7 @@ import { MESSAGES_ADD_HISTORY, MESSAGES_NEW_MESSAGE, MESSAGES_EDIT_MESSAGE, MESS
 const defaultState = {/*
   [teamId]: {
     [channelId]: {
+      lastMessageHash: ''
       isLoading: false,
       messages: []
     }
@@ -25,9 +26,10 @@ export default function messages(state = defaultState, { type, payload }) {
     case MESSAGES_ADD_HISTORY: {
       const newState = { ...state }
       const { team, channel, messages } = payload
-      _.update(newState, `${team}.${channel}`, ({messages: channelMessages = []} = {}) => ({
+      _.update(newState, `${team}.${channel}`, ({messages: channelMessages = []} = {}, lastMessageHash) => ({
         messages: [...messages, ...channelMessages],
-        isLoading: false
+        isLoading: false,
+        lastMessageHash
       }))
       return newState
     }
@@ -36,19 +38,31 @@ export default function messages(state = defaultState, { type, payload }) {
       const { team, channel, message } = payload
       _.update(newState, `${team}.${channel}`, ({messages: channelMessages = [], isLoading} = {}) => ({
         messages: [...channelMessages, message],
-        isLoading
+        isLoading,
+        lastMessageHash: message.key
       }))
+      return newState
+    }
+    case MESSAGES_MESSAGE_SENT: {
+      const newState = { ...state }
+      const { team, channel, message, sendingID } = payload
+      const oldMsgIndex = _.findIndex(_.get(newState, `${team}.${channel}.messages`, []), ['sendingID', sendingID])
+      _.set(newState, `${team}.${channel}.messages[${oldMsgIndex}]`, message)
       return newState
     }
     case MESSAGES_EDIT_MESSAGE: {
       const newState = { ...state }
-      const { team, channel, message, edit, sendingID } = payload
-      if(!sendingID) {
-        const { eventTimestamp, previousMessageTimestamp } = edit
-        message.edited = { timestamp: eventTimestamp }
-      }
-      const oldMsgIndex = _.findIndex(_.get(newState, `${team}.${channel}.messages`, []), [sendingID ? 'sendingID' : 'timestamp', sendingID || previousMessageTimestamp])
-      _.set(newState, `${team}.${channel}.messages[${oldMsgIndex}]`, message)
+      const { team, channel, message, edit: {eventTimestamp, previousMessageTimestamp} } = payload
+      const oldMsgIndex = _.findIndex(_.get(newState, `${team}.${channel}.messages`, []), ['timestamp', previousMessageTimestamp])
+      _.set(newState, `${team}.${channel}.messages[${oldMsgIndex}]`, {
+        ...message,
+        edited: { timestamp: eventTimestamp }
+      })
+      _.update(newState, `${team}.${channel}`, ({messages, isLoading} = {}) => ({
+        messages,
+        isLoading,
+        lastMessageHash: message.key
+      }))
       return newState
     }
     default:

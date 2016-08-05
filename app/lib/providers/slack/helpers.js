@@ -75,7 +75,7 @@ function santitizeMessage({ user, text, ts: timestamp, user_profile: userProfile
   }
 }
 
-export function parseMessage({ type, subtype, bot_id, channel = null, ...messageData }, overrideEvent = false) {
+export function parseMessage({ type, subtype, bot_id, channel = null, ...messageData }, dontEmit = false) {
   let isBot = Boolean(bot_id)
   let userProfileChecked = false
   switch (subtype ? `${type}:${subtype}` : type) {
@@ -97,7 +97,7 @@ export function parseMessage({ type, subtype, bot_id, channel = null, ...message
       }
 
       const msg = _.omitBy({ channel, isBot, ...santitizeMessage.bind(this)(messageData) }, _.isNil)
-      if (!overrideEvent) {
+      if (!dontEmit) {
         this.emit('message', msg)
       }
       return msg
@@ -106,8 +106,8 @@ export function parseMessage({ type, subtype, bot_id, channel = null, ...message
       const { message, event_ts: eventTimestamp, previous_message: { ts: previousMessageTimestamp } } = messageData
       const msg = { channel, message: santitizeMessage.bind(this)(message), edit: { eventTimestamp, previousMessageTimestamp } }
 
-      if (!overrideEvent) {
-        this.emit('message', msg)
+      if (!dontEmit) {
+        this.emit('message:changed', msg)
       }
       return msg
     }

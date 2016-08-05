@@ -27,8 +27,8 @@ export function addHistory(payload) {
   return { type: MESSAGES_ADD_HISTORY, payload }
 }
 
-export function messageSent(team, channel, timestamp) {
-  return { type: MESSAGES_MESSAGE_SENT, payload: {team, channel, timestamp} }
+export function messageSent(team, channel, message, sendingID) {
+  return { type: MESSAGES_MESSAGE_SENT, payload: {team, channel, sendingID, message} }
 }
 
 export function newMessage(payload) {
@@ -40,8 +40,7 @@ export function sendMessage(teamID, channelID, message) {
     const { teams: { [teamID]: Team } } = getState().teams
     const sendingID = uuid.v1()
     Team.message.send(channelID, message, sendingID).then((message) => {
-      dispatch(editMessage({channel: channelID, team: teamID, message, sendingID}))
-      console.log(message)
+      dispatch(messageSent(teamID, channelID, sendingID, message))
     }, console.error)
   }
 }
