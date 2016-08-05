@@ -51,13 +51,20 @@ export default class GitterLogin extends Component {
       }
       if (event.url.startsWith('http://localhost')) {
         const { code } = qs.parse(url.parse(event.url).query)
+
         webview.stop()
-        request.post('https://slack.com/api/oauth.access', {
-          form: { client_secret: this.client_secret, client_id: this.client_id, code, redirect_uri: this.redirect_uri },
+        request.post('https://gitter.im/login/oauth/token', {
+          form: {
+            client_secret: this.client_secret,
+            client_id: this.client_id,
+            code,
+            redirect_uri: this.redirect_uri,
+            grant_type: 'authorization_code'
+          },
           json: true
-        }, (err, res, { access_token: token }) => {
+        }, (err, res, { access_token: token, token_type }) => {
           if (err) console.error(err)
-          this.props.addTeam('slack', { token })
+          console.log(token, token_type)
         })
       }
     })
