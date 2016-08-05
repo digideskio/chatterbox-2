@@ -22,7 +22,7 @@ export default class GitterHandler extends EventEmitter {
       .then((user) => user.rooms())
       .then(rooms => {
         rooms.forEach(({ id }) => {
-
+          this._initGitterEventsForRoom(id)
         })
         console.log(rooms)
       })
@@ -31,7 +31,7 @@ export default class GitterHandler extends EventEmitter {
   _initGitterEventsForRoom(roomId) {
     // this will be intresting
     this._gitter.rooms.find(roomId).then((room) => {
-      var events = room.streaming().chatMessages()
+      const events = room.streaming().chatMessages()
 
       // The 'snapshot' event is emitted once, with the last messages in the room
       events.on('snapshot', function(snapshot) {
@@ -40,8 +40,7 @@ export default class GitterHandler extends EventEmitter {
 
       // The 'chatMessages' event is emitted on each new message
       events.on('chatMessages', function(message) {
-        console.log('A message was ' + message.operation)
-        console.log('Text: ', message.model.text)
+        console.log(message)
       })
     })
   }
