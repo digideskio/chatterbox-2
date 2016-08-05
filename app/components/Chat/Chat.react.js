@@ -1,11 +1,11 @@
-import React, { Component, PropTypes } from 'react'
+import React, { PureComponent, PropTypes } from 'react'
 import ReactCSSTransitionGroup from 'react-addons-css-transition-group'
 import _ from 'lodash'
 import Message from './Message/Message.react'
 import DaySeparator from './Message/DaySeparator.react'
 import Sender from './Sender.react'
 
-export default class Chat extends Component {
+export default class Chat extends PureComponent {
   static propTypes = {
     messages: PropTypes.array,
     users: PropTypes.object,
@@ -99,7 +99,10 @@ export default class Chat extends Component {
                   />
                 )
                 return (!prevTimestamp || new Date(Number(prevTimestamp)).getDay() !== new Date(Number(timestamp)).getDay()) ? (
-                  [<DaySeparator key={timestamp} timestamp={Number(timestamp)} />, messageEl]
+                  <div>
+                    <DaySeparator key={timestamp} timestamp={Number(timestamp)} />
+                    {messageEl}
+                  </div>
                 ) : messageEl
               })
             }

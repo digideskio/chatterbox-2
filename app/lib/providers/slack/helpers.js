@@ -63,7 +63,7 @@ function santitizeAttachments(attachments) {
   })
 }
 
-function santitizeMessage({ user, text, ts: timestamp, user_profile: userProfile = null, attachments = [] }) {
+function santitizeMessage({ user, text, ts: timestamp, user_profile: userProfile = null, attachments = [], edited = '' }) {
   return {
     attachments: santitizeAttachments.bind(this)(attachments),
     user,
@@ -71,45 +71,46 @@ function santitizeMessage({ user, text, ts: timestamp, user_profile: userProfile
     userProfile,
     timestamp,
     friendlyTimestamp: moment.unix(timestamp).format('h:mm a'),
-    key: crypto.createHash('md5').update(`${user}-${timestamp}-${text}`).digest('hex')
+    key: crypto.createHash('md5').update(JSON.stringify({user, text, timestamp, attachments, edited})).digest('hex')
   }
 }
 
-export function parseMessage({ type, subtype, bot_id, channel = null, ...messageData }, overrideEvent = false) {
+export function parseMessage({ type, subtype, bot_id, channel = null, isSending = null, ...messageData }, dontEmit = false) {
   let isBot = Boolean(bot_id)
   let userProfileChecked = false
   switch (subtype ? `${type}:${subtype}` : type) {
-    case 'message:bot_message':
-      (() => {
-        isBot = true
-        userProfileChecked = true
-        const { images, icons, name: handle, id } = this._slack.dataStore.bots[bot_id]
-        messageData.user_profile = { handle, id, image: _.last(_.filter((images || icons), (a, key) => key.includes('image'))) }
-      })()
+    case 'message:bot_message': {
+      isBot = true
+      userProfileChecked = true
+      const { images, icons, name: handle, id } = this._slack.dataStore.bots[bot_id]
+      messageData.user_profile = { handle, id, image: _.last(_.filter((images || icons), (a, key) => key.includes('image'))) }
+    }
     case 'message:file_share': // eslint-disable-line no-fallthrough
-    case 'message':
-      return (() => {
-        if (messageData.user_profile && !userProfileChecked) {
-          const { name: handle, real_name: name, ...user_profile } = messageData.user_profile
-          messageData.user_profile = {
-            image: _.last(_.filter(user_profile, (a, key) => key.includes('image') || key.includes('icon'))),
-            handle,
-            name
-          }
+    case 'message': {
+      if (messageData.user_profile && !userProfileChecked) {
+        const { name: handle, real_name: name, ...user_profile } = messageData.user_profile
+        messageData.user_profile = {
+          image: _.last(_.filter(user_profile, (a, key) => key.includes('image') || key.includes('icon'))),
+          handle,
+          name
         }
+      }
 
-        const msg = _.omitBy({ channel, isBot, ...santitizeMessage.bind(this)(messageData) }, _.isNil)
-        if (overrideEvent) return msg
-        else this.emit('message', msg)
-      })()
-    case 'message:message_changed':
-      return (() => {
-        const { message, event_ts: eventTimestamp, previous_message: { ts: previousMessageTimestamp } } = messageData
-        const msg = { channel, message: santitizeMessage.bind(this)(message), edit: { eventTimestamp, previousMessageTimestamp } }
+      const msg = _.omitBy({ channel, isBot, ...santitizeMessage.bind(this)(messageData), isSending }, _.isNil)
+      if (!dontEmit) {
+        this.emit('message', msg)
+      }
+      return msg
+    }
+    case 'message:message_changed': {
+      const { message, event_ts: eventTimestamp, previous_message: { ts: previousMessageTimestamp } } = messageData
+      const msg = { channel, message: santitizeMessage.bind(this)({...message, edited: eventTimestamp}), edit: { eventTimestamp }, previousMessageTimestamp }
 
-        if (overrideEvent) return msg
-        else this.emit('message:changed', msg)
-      })()
+      if (!dontEmit) {
+        this.emit('message:changed', msg)
+      }
+      return msg
+    }
     default:
       // console.info('Unable to parse message:', { type, subtype, ...messageData })
       return false

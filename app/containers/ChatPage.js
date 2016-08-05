@@ -12,8 +12,8 @@ function mapStateToProps({ settings, teams: { teams, activeTeamID }, messages: a
 
   const channelUsers = _.get(channels, `${activeChannelorDMID}.members`) || _.get(dms, `${activeChannelorDMID}.members`)
   const channel = _.get(channels, activeChannelorDMID) || _.get(dms, activeChannelorDMID) || {}
-  const { messages = [], isLoading } = _.get(allMessages, `${activeTeamID}.${activeChannelorDMID}`, {})
-  return { settings, users, channel, channelUsers, user, messages, team, isLoading }
+  const { messages = [], isLoading, lastMessageHash } = _.get(allMessages, `${activeTeamID}.${activeChannelorDMID}`, {})
+  return { settings, users, channel, channelUsers, user, messages, team, isLoading, lastMessageHash }
 }
 
 function mapDispatchToProps(dispatch) {

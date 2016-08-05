@@ -1,4 +1,5 @@
 import _ from 'lodash'
+import moment from 'moment'
 
 export const MESSAGES_ADD_HISTORY = 'MESSAGES_ADD_HISTORY'
 export const MESSAGES_SEND_MESSAGE = 'MESSAGES_SEND_MESSAGE'
@@ -32,8 +33,9 @@ export function newMessage(payload) {
 export function sendMessage(teamID, channelID, message) {
   return (dispatch, getState) => {
     const { teams: { [teamID]: Team } } = getState().teams
-    Team.message.send(channelID, message).then(() => {
-      console.info('it sent.')
+    const timeStamp = +moment().unix()
+    Team.message.send(channelID, message, timeStamp).then((message) => {
+      dispatch(editMessage({channel: channelID, team: teamID, message, previousMessageTimestamp: timeStamp}))
     }, console.error)
   }
 }

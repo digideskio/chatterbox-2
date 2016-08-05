@@ -9,7 +9,8 @@ export default class Message extends Component {
     timestamp: PropTypes.string,
     firstInChain: PropTypes.bool,
     user: PropTypes.shape({ image: PropTypes.string, name: PropTypes.string, handle: PropTypes.string }),
-    checkScroll: PropTypes.func.isRequired
+    checkScroll: PropTypes.func.isRequired,
+    isSending: PropTypes.bool
   }
 
   _handleClick() {
@@ -17,9 +18,9 @@ export default class Message extends Component {
   }
 
   render() {
-    const { timestamp, user, text, attachments, firstInChain, checkScroll } = this.props
+    const { timestamp, user, text, attachments, firstInChain, checkScroll, isSending } = this.props
     return (
-      <div onClick={::this._handleClick} className={classnames('message', {firstInChain})}>
+      <div onClick={::this._handleClick} className={classnames('message', {firstInChain}, {isSending})}>
         <div className='aside'>
           {
             firstInChain ? (
