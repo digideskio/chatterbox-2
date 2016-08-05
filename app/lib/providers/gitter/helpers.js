@@ -36,12 +36,23 @@ export function santitizeUser({ username, displayName, id, avatarUrlSmall, avata
   }
 }
 
-export function santitizeMessage({ text, sent, fromUser: { id: userID } }) {
+export function santitizeMessage({ text, sent, fromUser: { id: userID, ...user }, ...message }, users) {
+  let userProfile = null
   const parsedTime = moment(sent)
+
+  if (!users[userID]) {
+    userProfile = {
+      name: user.displayName,
+      handle: user.username,
+      id: userID,
+      image: user.avatarUrlMedium || user.avatarUrlSmall
+    }
+  }
   return {
     attachments: [],
     user: userID,
     text: text,
+    userProfile,
     timestamp: parsedTime.unix(),
     friendlyTimestamp: parsedTime.format('h:mm a'),
     key: crypto.createHash('md5').update(JSON.stringify({ userID, text, sent })).digest('hex')

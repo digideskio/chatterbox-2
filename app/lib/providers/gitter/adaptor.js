@@ -57,7 +57,7 @@ export default class GitterHandler extends EventEmitter {
             }
           })
 
-          this.emit('history', room.id, messages.map(santitizeMessage))
+          this.emit('history', room.id, messages.map(msg => santitizeMessage(msg, this._datastore.users)))
 
           return room
         })
