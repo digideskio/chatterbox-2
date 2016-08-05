@@ -57,7 +57,7 @@ export default class GitterHandler extends EventEmitter {
             }
           })
 
-          messages = messages.map(santitizeMessage)
+          this.emit('history', room.id, messages.map(santitizeMessage))
 
           return room
         })
@@ -104,7 +104,7 @@ export default class GitterHandler extends EventEmitter {
 
   get team() {
     return {
-      name: 'gitter',
+      name: 'Gitter',
       id: this._teamID,
       image: 'https://d1qb2nb5cznatu.cloudfront.net/startups/i/368944-d81438d134dc6c5567ffaab69861cb34-medium_jpg.jpg?buster=1404125976',
       type: 'gitter'
