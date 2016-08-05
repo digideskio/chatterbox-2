@@ -5,6 +5,9 @@
   margin-top: 3px;
   padding-right: 5px;
   word-break: break-word;
+  &.isSending {
+    opacity: 0.4;
+  }
   &.firstInChain {
     margin-top: 6px;
   }
