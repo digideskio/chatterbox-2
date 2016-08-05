@@ -56,22 +56,25 @@ class ProviderModal extends PureComponent {
     showLogin: PropTypes.func.isRequired
   }
 
-  render() {
-    const { provider, addTeam, showLogin } = this.props
-    let Provider = null
+  componentWillMount() {
+    const { provider } = this.props
     if (provider) {
       try {
-        Provider = require(`./${provider}/Login.react`)
+        this.Provider = require(`./${provider}/Login.react`)
       } catch (e) {
         console.error(e)
       }
     }
+  }
 
-    return Provider ? (
+  render() {
+    const { props: { addTeam, showLogin }, Provider } = this
+    if (!Provider) return null
+    return (
       <Modal isOpen className='modal-login' onRequestClose={showLogin}>
         <Provider addTeam={addTeam} />
       </Modal>
-    ) : null
+    )
   }
 }
 
