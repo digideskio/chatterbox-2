@@ -1,5 +1,6 @@
 import { EventEmitter } from 'events'
 import GitterClient from 'node-gitter'
+import { sanitizeRoomToChannel, sanitizeRoomToDM } from './helpers'
 
 
 export default class GitterHandler extends EventEmitter {
@@ -21,7 +22,17 @@ export default class GitterHandler extends EventEmitter {
     this._gitter.currentUser()
       .then((user) => user.rooms())
       .then(rooms => {
-        rooms.forEach(({ id }) => {
+        rooms.forEach(({ githubType, id, ...room }) => {
+          /*
+                    switch (githubType) {
+                      case 'ONETOONE':
+                        this._datastore.dms[id] = sanitizeRoomToDM({ id, ...room })
+                        break
+                      case 'REPO':
+                        this._datastore.channels[id] = sanitizeRoomToChannel({ id, ...room })
+                        break
+                    }
+                    */
           this._initGitterEventsForRoom(id)
         })
         console.log(rooms)
@@ -29,17 +40,21 @@ export default class GitterHandler extends EventEmitter {
   }
 
   _initGitterEventsForRoom(roomId) {
-    // this will be intresting
     this._gitter.rooms.find(roomId).then((room) => {
+      Promise.all([room.users(), room.chatMessages()]).then(([users, chatMessages]) => {
+        console.log(users, chatMessages)
+      }, console.error)
+
+
       const events = room.streaming().chatMessages()
 
       // The 'snapshot' event is emitted once, with the last messages in the room
-      events.on('snapshot', function(snapshot) {
+      events.on('snapshot', (snapshot) => {
         console.log(snapshot.length + ' messages in the snapshot')
       })
 
       // The 'chatMessages' event is emitted on each new message
-      events.on('chatMessages', function(message) {
+      events.on('chatMessages', (message) => {
         console.log(message)
       })
     })
