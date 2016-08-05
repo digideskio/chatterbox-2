@@ -1,6 +1,7 @@
 import React, { Component, PropTypes } from 'react'
 import classnames from 'classnames'
 import url from 'url'
+import _ from 'lodash'
 import qs from 'qs'
 import { shell } from 'electron'
 import request from 'request'
@@ -55,11 +56,9 @@ export default class GitterLogin extends Component {
         webview.stop()
         request.post('https://gitter.im/login/oauth/token', {
           form: {
-            client_secret: this.client_secret,
-            client_id: this.client_id,
             code,
-            redirect_uri: this.redirect_uri,
-            grant_type: 'authorization_code'
+            grant_type: 'authorization_code',
+            ..._.pick(this, ['client_secret', 'client_id', 'redirect_uri'])
           },
           json: true
         }, (err, res, { access_token: token, token_type }) => {
