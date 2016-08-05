@@ -63,7 +63,7 @@ function santitizeAttachments(attachments) {
   })
 }
 
-function santitizeMessage({ user, text, ts: timestamp, user_profile: userProfile = null, attachments = [] }) {
+function santitizeMessage({ user, text, ts: timestamp, user_profile: userProfile = null, attachments = [], edited = '' }) {
   return {
     attachments: santitizeAttachments.bind(this)(attachments),
     user,
@@ -71,11 +71,11 @@ function santitizeMessage({ user, text, ts: timestamp, user_profile: userProfile
     userProfile,
     timestamp,
     friendlyTimestamp: moment.unix(timestamp).format('h:mm a'),
-    key: crypto.createHash('md5').update(`${user}-${timestamp}-${text}`).digest('hex')
+    key: crypto.createHash('md5').update(JSON.stringify({user, text, timestamp, attachments, edited})).digest('hex')
   }
 }
 
-export function parseMessage({ type, subtype, bot_id, channel = null, ...messageData }, dontEmit = false) {
+export function parseMessage({ type, subtype, bot_id, channel = null, isSending = null, ...messageData }, dontEmit = false) {
   let isBot = Boolean(bot_id)
   let userProfileChecked = false
   switch (subtype ? `${type}:${subtype}` : type) {
@@ -96,7 +96,7 @@ export function parseMessage({ type, subtype, bot_id, channel = null, ...message
         }
       }
 
-      const msg = _.omitBy({ channel, isBot, ...santitizeMessage.bind(this)(messageData) }, _.isNil)
+      const msg = _.omitBy({ channel, isBot, ...santitizeMessage.bind(this)(messageData), isSending }, _.isNil)
       if (!dontEmit) {
         this.emit('message', msg)
       }
@@ -104,7 +104,7 @@ export function parseMessage({ type, subtype, bot_id, channel = null, ...message
     }
     case 'message:message_changed': {
       const { message, event_ts: eventTimestamp, previous_message: { ts: previousMessageTimestamp } } = messageData
-      const msg = { channel, message: santitizeMessage.bind(this)(message), edit: { eventTimestamp, previousMessageTimestamp } }
+      const msg = { channel, message: santitizeMessage.bind(this)({...message, edited: eventTimestamp}), edit: { eventTimestamp }, previousMessageTimestamp }
 
       if (!dontEmit) {
         this.emit('message:changed', msg)

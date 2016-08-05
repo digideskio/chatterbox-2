@@ -1,6 +1,5 @@
 import { EventEmitter } from 'events'
 import _ from 'lodash'
-import moment from 'moment'
 import { WebClient, RtmClient, MemoryDataStore, CLIENT_EVENTS, RTM_EVENTS } from '@slack/client'
 import { santitizeUser, parseMessage } from './helpers'
 
@@ -54,12 +53,9 @@ export default class SlackHandler extends EventEmitter {
   }
 
   message = {
-    send: (channelID, text, sendingID, custom = false) => {
+    send: (channelID, text, timestamp) => {
       const { id: userID } = this.user
-      this.emit('message', {
-        ...parseMessage.bind(this)({ type: 'message', text, ts: +moment().unix(), user: userID, channel: channelID }, true),
-        sendingID
-      })
+      this.emit('message', parseMessage.bind(this)({ type: 'message', text, ts: timestamp, user: userID, channel: channelID, isSending: true }, true))
 
       return this._slack.sendMessage(text, channelID).then(m => parseMessage.bind(this)(m, true))
     },

@@ -1,6 +1,6 @@
 import _ from 'lodash'
 
-import { MESSAGES_ADD_HISTORY, MESSAGES_NEW_MESSAGE, MESSAGES_EDIT_MESSAGE, MESSAGES_HISTORY_LOADING, MESSAGES_MESSAGE_SENT } from 'actions/messages'
+import { MESSAGES_ADD_HISTORY, MESSAGES_NEW_MESSAGE, MESSAGES_EDIT_MESSAGE, MESSAGES_HISTORY_LOADING } from 'actions/messages'
 
 const defaultState = {/*
   [teamId]: {
@@ -43,26 +43,20 @@ export default function messages(state = defaultState, { type, payload }) {
       }))
       return newState
     }
-    case MESSAGES_MESSAGE_SENT: {
-      const newState = { ...state }
-      const { team, channel, message, sendingID } = payload
-      const oldMsgIndex = _.findIndex(_.get(newState, `${team}.${channel}.messages`, []), ['sendingID', sendingID])
-      _.set(newState, `${team}.${channel}.messages[${oldMsgIndex}]`, message)
-      return newState
-    }
     case MESSAGES_EDIT_MESSAGE: {
       const newState = { ...state }
-      const { team, channel, message, edit: {eventTimestamp, previousMessageTimestamp} } = payload
+      const { team, channel, message, edit, previousMessageTimestamp } = payload
       const oldMsgIndex = _.findIndex(_.get(newState, `${team}.${channel}.messages`, []), ['timestamp', previousMessageTimestamp])
-      _.set(newState, `${team}.${channel}.messages[${oldMsgIndex}]`, {
-        ...message,
-        edited: { timestamp: eventTimestamp }
-      })
+      if (edit) {
+        message.edited = { timestamp: edit.eventTimestamp }
+      }
+      _.set(newState, `${team}.${channel}.messages[${oldMsgIndex}]`, message)
       _.update(newState, `${team}.${channel}`, ({messages, isLoading} = {}) => ({
         messages,
         isLoading,
         lastMessageHash: message.key
       }))
+      console.log(_.get(newState, `${team}.${channel}`))
       return newState
     }
     default:
