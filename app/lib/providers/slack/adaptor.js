@@ -125,7 +125,9 @@ export default class SlackHandler extends EventEmitter {
   get users() {
     const users = {}
     _.forEach(this._slack.dataStore.users, (user) => {
-      if (!_.get(user, 'deleted', false)) users[user.id] = santitizeUser(user)
+      if (!_.get(user, 'deleted', false)) {
+        users[user.id] = santitizeUser(user)
+      }
     })
     return users
   }

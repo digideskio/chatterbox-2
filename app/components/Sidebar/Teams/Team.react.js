@@ -1,15 +1,30 @@
-import React from 'react'
+import React, { PureComponent, PropTypes } from 'react'
 
-export default ({ image, unreads, pings, id, onClick }) => { // eslint-disable-line react/prop-types
-  const onClickHandler = () => onClick(id)
-  return (
-    <div onClick={onClickHandler} className='team' style={{backgroundImage: `url(${image})`}}>
-      {
-        unreads ? <div className='new_message' /> : null
-      }
-      {
-        pings ? <div className='unread_counter'>{pings}</div> : null
-      }
-    </div>
-  )
+export default class Team extends PureComponent {
+  static propTypes = {
+    type: PropTypes.string.isRequired,
+    image: PropTypes.string,
+    unreads: PropTypes.bool,
+    pings: PropTypes.number,
+    onClick: PropTypes.func.isRequired
+  }
+
+  handleClick() {
+    this.props.onClick(this.props.id)
+  }
+
+  render() {
+    const { unreads, pings, type, image } = this.props
+    return (
+      <div onClick={::this.handleClick} className='team' style={{backgroundImage: `url(${image})`}}>
+        {
+          unreads ? <div className='new_message' /> : null
+        }
+        {
+          pings ? <div className='unread_counter'>{pings}</div> : null
+        }
+        <img src={`images/logins/${type}/icon.svg`} className='providerIcon' />
+      </div>
+    )
+  }
 }

@@ -55,21 +55,34 @@ export default class Chat extends PureComponent {
     }
   }
 
+  get channelMeta() {
+    const { members, meta = {} } = _.get(this.props, 'channel', {})
+    let channelMeta = []
+    if (members) {
+      channelMeta.push(
+        <span className='meta' key='members'>
+          {_.isArray(members) ? members.length : members} Members
+        </span>
+      )
+    }
+
+    _.forEach(meta, value => channelMeta.push(
+      <div key={value}>
+        <span className='spacer'>|</span>
+        <span className='meta'>{value}</span>
+      </div>
+    ))
+
+    return channelMeta
+  }
+
   render() {
     return (
       <div className='chat'>
         <header>
           <div className='info'>
             <span className='channel'>{this.props.channel.name}</span>
-            <span className='meta'>{_.get(this.props, 'channel.meta.members') || `${_.get(this.props, 'channelUsers.length')} Members`}</span>
-            {
-              _.get(this.props, 'channel.meta.topic') ? (
-                <div>
-                  <span className='spacer'>|</span>
-                  <span className='meta'>{this.props.channel.meta.topic}</span>
-                </div>
-              ) : null
-            }
+            {this.channelMeta}
           </div>
         </header>
         <ReactCSSTransitionGroup

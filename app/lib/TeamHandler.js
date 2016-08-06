@@ -4,7 +4,7 @@ import Database from 'lib/database'
 import { addHistory, newMessage, editMessage, historyIsLoading } from 'actions/messages'
 
 export default function createTeamHandler(provider) {
-  const Provider = require(`./providers/${provider}/adaptor.js`)
+  const Provider = require(`./providers/${provider}/adaptor`)
 
   return class Team extends Provider {
     constructor(providerOpts, dispatch, firstLoad = false) {
@@ -17,13 +17,15 @@ export default function createTeamHandler(provider) {
     _historyRequestQueue = queue(({ channel_or_dm_id, args }, next) => {
       this._dispatch(historyIsLoading(this.team.id, channel_or_dm_id))
       this._getHistoryByID({ channel_or_dm_id, ...args })
-        .then(messages => this._dispatch(addHistory({ messages, channel: channel_or_dm_id, team: this.team.id })))
+        .then(messages => this.emit('history', channel_or_dm_id, messages))
         .then(() => process.nextTick(next))
         .catch(next) // yes we should deal with any errors here later
     })
 
     initHistory() {
-      const { [this.initialActiveChannelorDMID]: { id: mainChannelID }, ...channels } = this.channels
+      const {
+        [this.initialActiveChannelorDMID]: { id: mainChannelID }, ...channels
+      } = this.channels
 
       this._historyRequestQueue.push({ channel_or_dm_id: mainChannelID })
       _.forEach({
@@ -57,8 +59,13 @@ export default function createTeamHandler(provider) {
         }
       })
 
-      this.on('connected', () => {
-        this.initHistory()
+      this.on('history', (channel, messages) => {
+        this._dispatch(addHistory({ messages, channel, team: this.team.id }))
+      })
+
+      this.on('connected', (bypassDefualtHistoryFetch = false) => {
+        if (!bypassDefualtHistoryFetch) this.initHistory()
+        console.log(this)
         console.log(`Connected to ${this.team.type} team: ${this.team.name} via ${this.user.handle}`)
       })
 

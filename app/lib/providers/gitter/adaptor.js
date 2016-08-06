@@ -1,5 +1,8 @@
 import { EventEmitter } from 'events'
+import uuid from 'node-uuid'
+import _ from 'lodash'
 import GitterClient from 'node-gitter'
+import { sanitizeRoomToChannel, sanitizeRoomToDM, santitizeUser, santitizeMessage, parseMessage } from './helpers'
 
 
 export default class GitterHandler extends EventEmitter {
@@ -7,37 +10,90 @@ export default class GitterHandler extends EventEmitter {
     super()
 
     this._gitter = new GitterClient(token)
+    this._initEvents()
 
+    this._teamID = uuid.v1()
+    this._datastore = {
+      channels: {},
+      dms: {},
+      team: {},
+      users: {},
+      user: {}
+    }
+  }
+
+  _initEvents() {
     this._gitter.currentUser()
       .then((user) => {
-        const rooms = user.rooms()
-        const repos = user.repos()
-        const orgs = user.orgs()
-        const channels = user.channels()
-        console.log(user, rooms, repos, orgs, channels)
+        this._datastore.user = santitizeUser(user)
+        this.emit('authenticated')
+        return user.rooms()
+      })
+      .then(rooms => Promise.all(rooms.map(::this._parseRoom)))
+      .then(() => {
+        console.info('all rooms parsed.')
+        this._activeChannelorDMID = Object.keys(this._datastore.channels)[0]
+        this.emit('connected', true)
       })
   }
 
-  _initGitterEvents(roomId) {
-    // this will be intresting
-    this._gitter.rooms.find(roomId).then((room) => {
-      var events = room.streaming().chatMessages()
+  _parseRoom({ id: roomId }) {
+    return new Promise(resolve => {
+      this._gitter.rooms.find(roomId)
+        .then(room => Promise.all([room.users(), room.chatMessages()]).then(data => [room, ...data]))
+        .then(([room, users = [], messages = []]) => {
+          switch (room.githubType) {
+            case 'ONETOONE':
+              this._datastore.dms[room.id] = sanitizeRoomToDM(room)
+              break
+            case 'REPO_CHANNEL':
+            case 'REPO':
+              this._datastore.channels[room.id] = sanitizeRoomToChannel(room)
+              break
+          }
 
-      // The 'snapshot' event is emitted once, with the last messages in the room
-      events.on('snapshot', function(snapshot) {
-        console.log(snapshot.length + ' messages in the snapshot')
-      })
+          users.forEach(({ id, ...user }) => {
+            if (!this._datastore.users[id]) {
+              this._datastore.users[id] = santitizeUser({ id, ...user })
+            }
+          })
 
-      // The 'chatMessages' event is emitted on each new message
-      events.on('chatMessages', function(message) {
-        console.log('A message was ' + message.operation)
-        console.log('Text: ', message.model.text)
-      })
+          this.emit('history', room.id, messages.map(msg => santitizeMessage(msg, this._datastore.users)))
+
+          return room
+        })
+        .then(::this._initRoomEvents)
+        .then(resolve)
+        .catch(err => {
+          console.error(err)
+          resolve()
+        })
     })
   }
 
+  _initRoomEvents(room) {
+    const channelID = room.id
+    const events = room.streaming()
+    events.chatMessages().on('chatMessages', (message) => {
+      parseMessage.bind(this)({channelID, ...message})
+    })
+  }
+
+  history = {
+    request: () => {}
+  }
+
   message = {
-    send: (channelID, message) => {},
+    send: (channelID, text, timestamp) => {
+      const { id: userID } = this.user
+      return new Promise((resolve) => {
+        this._gitter.rooms.find(channelID).then(room => {
+          room.send(text).then(message => {
+            //  resolve(santitizeMessage.bind(this)(message, true))
+          })
+        })
+      })
+    },
     edit: (channelID, messageID, editedMessage) => {},
     remove: (channelID, messageID) => {}
   }
@@ -50,26 +106,34 @@ export default class GitterHandler extends EventEmitter {
   }
 
   get channels() {
-
+    return this._datastore.channels
   }
 
   get dms() {
-
+    return this._datastore.dms
   }
 
   get team() {
-
+    return {
+      name: 'Gitter',
+      id: this._teamID,
+      image: 'https://d1qb2nb5cznatu.cloudfront.net/startups/i/368944-d81438d134dc6c5567ffaab69861cb34-medium_jpg.jpg?buster=1404125976',
+      type: 'gitter'
+    }
   }
 
   get users() {
-
+    return this._datastore.users
   }
 
   get user() {
-
+    return this._datastore.user
   }
 
   get _persistenceData() {
-
+    return {
+      ..._.pick(this.team, 'name', 'id', 'type'),
+      args: { token: this._gitter.client.token }
+    }
   }
 }

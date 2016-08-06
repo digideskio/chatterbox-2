@@ -56,7 +56,6 @@ export default function messages(state = defaultState, { type, payload }) {
         isLoading,
         lastMessageHash: message.key
       }))
-      console.log(_.get(newState, `${team}.${channel}`))
       return newState
     }
     default:

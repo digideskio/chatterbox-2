@@ -49,7 +49,7 @@ export default class SlackLogin extends Component {
     webview.addEventListener('dom-ready', () => {
       if (!this.mounted) return
 
-      webview.insertCSS(require('!raw!styles/webview_overrides/slack.css'))
+      webview.insertCSS(require('!raw!sass!styles/webview_overrides/slack.scss'))
         // webview.openDevTools()
 
       if (!checking) {

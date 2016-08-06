@@ -9,8 +9,8 @@ const DEFAULT_STATE = {
     error: null
   },
   providers: {
-    'slack': {name: 'Slack', icon: 'images/logins/slack-icon.svg'},
-    'irc': {name: 'IRC'}
+    slack: { name: 'Slack', icon: 'images/logins/slack/icon.svg' },
+    gitter: { name: 'Gitter', icon: 'images/logins/gitter/icon.svg' }
   }
 }
 
