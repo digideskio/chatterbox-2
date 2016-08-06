@@ -71,7 +71,7 @@ function santitizeMessage({ user, text, ts: timestamp, user_profile: userProfile
     userProfile,
     timestamp,
     friendlyTimestamp: moment.unix(timestamp).format('h:mm a'),
-    key: crypto.createHash('md5').update(JSON.stringify({user, text, timestamp, attachments, edited})).digest('hex')
+    key: crypto.createHash('md5').update(JSON.stringify({ user, text, timestamp, attachments, edited })).digest('hex')
   }
 }
 
@@ -79,38 +79,49 @@ export function parseMessage({ type, subtype, bot_id, channel = null, isSending 
   let isBot = Boolean(bot_id)
   let userProfileChecked = false
   switch (subtype ? `${type}:${subtype}` : type) {
-    case 'message:bot_message': {
-      isBot = true
-      userProfileChecked = true
-      const { images, icons, name: handle, id } = this._slack.dataStore.bots[bot_id]
-      messageData.user_profile = { handle, id, image: _.last(_.filter((images || icons), (a, key) => key.includes('image'))) }
-    }
+    case 'message:bot_message':
+      {
+        isBot = true
+        userProfileChecked = true
+        const { images, icons, name: handle, id } = this._slack.dataStore.bots[bot_id]
+        messageData.user_profile = { handle, id, image: _.last(_.filter((images || icons), (a, key) => key.includes('image'))) }
+      }
     case 'message:file_share': // eslint-disable-line no-fallthrough
-    case 'message': {
-      if (messageData.user_profile && !userProfileChecked) {
-        const { name: handle, real_name: name, ...user_profile } = messageData.user_profile
-        messageData.user_profile = {
-          image: _.last(_.filter(user_profile, (a, key) => key.includes('image') || key.includes('icon'))),
-          handle,
-          name
+    case 'message':
+      {
+        if (messageData.user_profile && !userProfileChecked) {
+          const { name: handle, real_name: name, ...user_profile } = messageData.user_profile
+          messageData.user_profile = {
+            image: _.last(_.filter(user_profile, (a, key) => key.includes('image') || key.includes('icon'))),
+            handle,
+            name
+          }
         }
-      }
 
-      const msg = _.omitBy({ channel, isBot, ...santitizeMessage.bind(this)(messageData), isSending }, _.isNil)
-      if (!dontEmit) {
-        this.emit('message', msg)
+        const msg = _.omitBy({ channel, isBot, ...santitizeMessage.bind(this)(messageData), isSending }, _.isNil)
+        if (!dontEmit) {
+          this.emit('message', msg)
+        }
+        return msg
       }
-      return msg
-    }
-    case 'message:message_changed': {
-      const { message, event_ts: eventTimestamp, previous_message: { ts: previousMessageTimestamp } } = messageData
-      const msg = { channel, message: santitizeMessage.bind(this)({...message, edited: eventTimestamp}), edit: { eventTimestamp }, previousMessageTimestamp }
+    case 'message:message_changed':
+      {
+        const { message, event_ts: eventTimestamp, previous_message: { ts: previousMessageTimestamp } } = messageData
+        const msg = {
+          channel,
+          message: santitizeMessage.bind(this)({
+            ...message,
+            edited: eventTimestamp
+          }),
+          edit: { eventTimestamp },
+          previousMessageTimestamp
+        }
 
-      if (!dontEmit) {
-        this.emit('message:changed', msg)
+        if (!dontEmit) {
+          this.emit('message:changed', msg)
+        }
+        return msg
       }
-      return msg
-    }
     default:
       // console.info('Unable to parse message:', { type, subtype, ...messageData })
       return false
@@ -162,7 +173,7 @@ function formatText(text) {
           let split = match.split('|')
           let label = split.length === 2 ? split[1] : split[0]
           let url = split[0]
-          if (!url.match(/^https?:\/\//)) return match
+          if (!url.match(/^(https?:\/\/)|(mailto:)/)) return match
 
           messageReplacementDict[replacement] = <ChatInlineLink url={url} label={label} />
           return replacement
