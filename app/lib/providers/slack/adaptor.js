@@ -70,6 +70,7 @@ export default class SlackHandler extends EventEmitter {
     return new Promise((resolve, reject) => {
       let method = 'channels'
       if (channel_or_dm_id.startsWith('D')) method = 'im'
+      if (channel_or_dm_id.startsWith('G')) method = 'groups'
       this._slack._webClient[method].history(channel_or_dm_id, { inclusive, count, latest, oldest, unreads: true }, (a, { has_more, messages = [], ok, unread_count_display }) => {
         if (!ok) return reject()
         const santitizedMessages = messages.map(m => parseMessage.bind(this)(m, true)).filter(Boolean).reverse()
@@ -81,10 +82,10 @@ export default class SlackHandler extends EventEmitter {
   get channels() {
     const channels = {}
     const { users } = this
-    _.forEach(this._slack.dataStore.channels, ({ is_archived, is_member: isMember, name, is_general: main, id, members, topic, purpose }) => {
-      if (is_archived) return
+    _.forEach(_.assign({}, this._slack.dataStore.channels, this._slack.dataStore.groups), ({ is_archived, is_open, is_member: isMember, name, is_general: main, id, members, topic, purpose }) => {
+      if (is_archived || (!is_open && id.charAt(0) == 'G')) return
       channels[id] = ({
-        isMember,
+        isMember: id.charAt(0) == 'G' ? true : isMember,
         name: `#${name}`,
         id,
         main,
