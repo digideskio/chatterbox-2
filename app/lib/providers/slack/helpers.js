@@ -107,7 +107,15 @@ export function parseMessage({ type, subtype, bot_id, channel = null, isSending 
     case 'message:message_changed':
       {
         const { message, event_ts: eventTimestamp, previous_message: { ts: previousMessageTimestamp } } = messageData
-        const msg = { channel, message: santitizeMessage.bind(this)({...message, edited: eventTimestamp }), edit: { eventTimestamp }, previousMessageTimestamp }
+        const msg = {
+          channel,
+          message: santitizeMessage.bind(this)({
+            ...message,
+            edited: eventTimestamp
+          }),
+          edit: { eventTimestamp },
+          previousMessageTimestamp
+        }
 
         if (!dontEmit) {
           this.emit('message:changed', msg)
