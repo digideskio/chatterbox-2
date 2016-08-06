@@ -58,3 +58,17 @@ export function santitizeMessage({ text, sent, fromUser: { id: userID, ...user }
     key: crypto.createHash('md5').update(JSON.stringify({ userID, text, sent })).digest('hex')
   }
 }
+
+export function parseMessage({ operation, model, channelID }, dontEmit = false) {
+  switch (operation) {
+    case 'create': {
+      const message = {channel: channelID, ...santitizeMessage(model, this._datastore.users)}
+      if (!dontEmit) {
+        this.emit('message', message)
+      }
+      return message
+    }
+    default:
+      return false
+  }
+}

@@ -2,7 +2,7 @@ import { EventEmitter } from 'events'
 import uuid from 'node-uuid'
 import _ from 'lodash'
 import GitterClient from 'node-gitter'
-import { sanitizeRoomToChannel, sanitizeRoomToDM, santitizeUser, santitizeMessage } from './helpers'
+import { sanitizeRoomToChannel, sanitizeRoomToDM, santitizeUser, santitizeMessage, parseMessage } from './helpers'
 
 
 export default class GitterHandler extends EventEmitter {
@@ -72,9 +72,10 @@ export default class GitterHandler extends EventEmitter {
   }
 
   _initRoomEvents(room) {
+    const channelID = room.id
     const events = room.streaming()
     events.chatMessages().on('chatMessages', (message) => {
-      console.log(message)
+      parseMessage.bind(this)({channelID, ...message})
     })
   }
 
