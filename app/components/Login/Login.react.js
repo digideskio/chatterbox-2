@@ -11,11 +11,17 @@ class Login extends PureComponent {
   }
 
   render() {
-    const { providers, routeParams, showLogin, addTeam } = this.props
+    const { providers, routeParams: { provider }, showLogin, addTeam } = this.props
     return (
       <div className='login'>
         <ProviderList providers={providers} />
-        <ProviderModal provider={routeParams.provider} addTeam={addTeam} showLogin={showLogin} />
+        {provider ? (
+          <ProviderModal
+            provider={provider}
+            addTeam={addTeam}
+            showLogin={showLogin}
+          />
+        ) : null}
       </div>
     )
   }
