@@ -82,7 +82,13 @@ export default class GitterHandler extends EventEmitter {
   }
 
   message = {
-    send: (channelID, message) => {},
+    send: (channelID, message) => {
+      return new Promise((resolve) => {
+        this._gitter.rooms.find(roomId).then(room => {
+          console.log(room)
+        })
+      })
+    },
     edit: (channelID, messageID, editedMessage) => {},
     remove: (channelID, messageID) => {}
   }
