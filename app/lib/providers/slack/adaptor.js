@@ -82,7 +82,7 @@ export default class SlackHandler extends EventEmitter {
   get channels() {
     const channels = {}
     const { users } = this
-    _.forEach({...this._slack.dataStore.channels, ...this._slack.dataStore.groups }, ({ is_archived, is_open, is_member: isMember, name, is_general: main, id, members, topic, purpose }) => {
+    _.forEach({ ...this._slack.dataStore.channels, ...this._slack.dataStore.groups }, ({ is_archived, is_open, is_member: isMember, name, is_general: main, id, members, topic, purpose }) => {
       if (is_archived || (!is_open && id.startsWith('G'))) return
       channels[id] = ({
         isMember: id.startsWith('G') || isMember,
