@@ -46,6 +46,7 @@ export default class GitterHandler extends EventEmitter {
             case 'ONETOONE':
               this._datastore.dms[room.id] = sanitizeRoomToDM(room)
               break
+            case 'REPO_CHANNEL':
             case 'REPO':
               this._datastore.channels[room.id] = sanitizeRoomToChannel(room)
               break
@@ -82,10 +83,13 @@ export default class GitterHandler extends EventEmitter {
   }
 
   message = {
-    send: (channelID, message) => {
+    send: (channelID, text, timestamp) => {
+      const { id: userID } = this.user
       return new Promise((resolve) => {
-        this._gitter.rooms.find(roomId).then(room => {
-          console.log(room)
+        this._gitter.rooms.find(channelID).then(room => {
+          room.send(text).then(message => {
+            //  resolve(santitizeMessage.bind(this)(message, true))
+          })
         })
       })
     },
