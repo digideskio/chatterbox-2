@@ -7,15 +7,17 @@ export default class Channel extends Component {
     active: PropTypes.bool,
     name: PropTypes.string,
     missedPings: PropTypes.oneOfType([PropTypes.number, PropTypes.bool]),
-    onClick: PropTypes.func.isRequired
+    onClick: PropTypes.func.isRequired,
+    isPrivate: PropTypes.bool.isRequired
   }
 
   handleOnClick = () => this.props.onClick(this.props.id)
 
   render() {
-    const { missedPings, active, name } = this.props
+    const { missedPings, active, name, isPrivate } = this.props
     return (
       <div onClick={this.handleOnClick} className={classnames('channel', {active}, {attention: missedPings})}>
+        {isPrivate ? <i className='ion-locked privateIcon' /> : null}
         <p>{name}</p>
         {
           missedPings ? <span className='missed_pings'>{missedPings}</span> : null
