@@ -45,7 +45,8 @@
     height: calc(100% - 109px);
     padding-left: 18px;
     overflow: auto;
-    &::-webkit-scrollbar-thumb, &::-webkit-scrollbar-track {
+    &::-webkit-scrollbar-thumb,
+    &::-webkit-scrollbar-track {
       visibility: hidden;
     }
     &:hover::-webkit-scrollbar-track {
@@ -91,6 +92,13 @@
     cursor: pointer;
     border-radius: 3px;
     transition: background-color 100ms ease-in-out;
+    .privateIcon {
+      color: gray;
+      margin-right: 3px;
+      position: relative;
+      font-size: 12px;
+      vertical-align: text-top;
+    }
     p {
       padding: 0;
       margin: 0;
