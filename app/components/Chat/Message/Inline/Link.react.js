@@ -24,9 +24,9 @@ class InlineLink extends Component {
   }
 
   handleHover() {
-    if (url.includes('mailto:')) return
     this.setState({ popOverOpen: true })
     const { url, linkPreviews: { loaded, loading }, loadPreview } = this.props
+    if (!url || (url && url.includes('mailto:'))) return
     if (!loaded[url] && !loading.includes(url)) {
       console.log('REQUESTING URL', url)
       loadPreview(url)
