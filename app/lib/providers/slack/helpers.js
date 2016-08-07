@@ -68,6 +68,7 @@ function santitizeMessage({ user, text, ts: timestamp, user_profile: userProfile
     attachments: santitizeAttachments.bind(this)(attachments),
     user,
     text: formatText.bind(this)(text),
+    notificationText: text,
     userProfile,
     timestamp,
     friendlyTimestamp: moment.unix(timestamp).format('h:mm a'),

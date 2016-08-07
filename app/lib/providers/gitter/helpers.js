@@ -52,6 +52,7 @@ export function santitizeMessage({ text, sent, fromUser: { id: userID, ...user }
     attachments: [],
     user: userID,
     text: text,
+    notificationText: text,
     userProfile,
     timestamp: parsedTime.unix(),
     friendlyTimestamp: parsedTime.format('h:mm a'),

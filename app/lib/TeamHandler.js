@@ -70,9 +70,9 @@ export default function createTeamHandler(provider) {
         console.log(`Connected to ${this.team.type} team: ${this.team.name} via ${this.user.handle}`)
       })
 
-      this.on('message', ({ channel, ...message }) => {
+      this.on('message', ({ channel, notificationText, ...message }) => {
         this._dispatch(newMessage({ channel, message, team: this.team.id }))
-        this._dispatch(notifyNewMessage(this.team.id, channel, message))
+        this._dispatch(notifyNewMessage(this.team.id, channel, message.user, notificationText))
       })
 
       this.on('message:changed', ({ channel, ...editData }) => {

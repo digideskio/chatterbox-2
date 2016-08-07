@@ -39,8 +39,9 @@ export default {
   ],
   externals: [
     'electron', 'fs', 'tls', 'net', 'os', 'process', 'url', 'crypto', 'child_process',
-    'request', 'ws'
+    'request', 'ws', 'es6-promise'
   ],
+  target: 'node',
   node: {
     __filename: true,
     __dirname: true

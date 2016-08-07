@@ -1,9 +1,9 @@
 import notifier from 'node-notifier'
 import { remote } from 'electron'
 import { EventEmitter } from 'events'
-import { join } from 'path'
+import { resolve } from 'path'
 
-const defualtIcon = join(__dirname, '../images/temp_logo.png')
+const defualtIcon = resolve(__dirname, '../images/temp_logo.png')
 
 export default class Notification extends EventEmitter {
   constructor({ title, message, icon = defualtIcon }, settings, evenIfFocused = false) {
