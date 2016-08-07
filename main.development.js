@@ -81,15 +81,9 @@ app.on('ready', async() => {
 function initTray(appIcon) {
   trayInstance = new Tray(appIcon)
 
-  let contextMenu = Menu.buildFromTemplate([{
-      type: 'separator'
-    },
-    {
-      label: 'Quit',
-      click() {
-        app.quit()
-      }
-    }
+  let contextMenu = Menu.buildFromTemplate([
+    { type: 'separator' },
+    { label: 'Quit', click: app.quit }
   ])
   trayInstance.setToolTip('Chatterbox')
   trayInstance.setContextMenu(contextMenu)
