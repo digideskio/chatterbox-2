@@ -4,9 +4,9 @@ import Notification from 'lib/notification'
 export function notifyNewMessage(team, channel, message) {
   return (dispatch, getState) => {
     const { teams: { activeTeamID }, teams } = getState()
-
+    console.log('NOTIFYING')
     const notifier = new Notification({
-      title: `New message from TEST`,
+      title: 'New message from TEST',
       message: 'lalalala'
     })
   }

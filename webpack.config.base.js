@@ -3,12 +3,12 @@ import path from 'path'
 export default {
   module: {
     loaders: [{
-      test: /\.jsx?$/,
-      loaders: ['babel-loader'],
-      exclude: /node_modules/
+      test: /\.(js|jsx)$/,
+      exclude: /node_modules/,
+      loader: 'babel'
     }, {
       test: /\.json$/,
-      loader: 'json-loader'
+      loader: 'json'
     }]
   },
   output: {

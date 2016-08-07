@@ -1,4 +1,4 @@
-import { notify } from 'node-notifier'
+import notifier from 'node-notifier'
 import { remote } from 'electron'
 import { EventEmitter } from 'events'
 import { join } from 'path'
@@ -10,9 +10,11 @@ export default class Notification extends EventEmitter {
     super()
       // if (remote.getCurrentWindow().isFocused() && !evenIfFocused) return
 
-    this.notifier = notify({ title, message, icon: void 0, sound: true, wait: true }, ::this._handleClick)
-    this.notifier.once('click', ::this._handleClick)
-    this.notifier.once('timeout', ::this._handleTimeout)
+    this._notifier = notifier.notify({ title, message, icon, sound: true, wait: true }, (err, la) => {
+      console.log(err, la)
+    })
+    this._notifier.once('click', ::this._handleClick)
+    this._notifier.once('timeout', ::this._handleTimeout)
   }
 
   _handleClick() {
@@ -26,7 +28,7 @@ export default class Notification extends EventEmitter {
   }
 
   _cleanUp() {
-    this.notifier.removeAllListeners()
+    this._notifier.removeAllListeners()
     this.removeAllListeners()
   }
 }
