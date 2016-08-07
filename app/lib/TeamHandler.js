@@ -2,6 +2,7 @@ import _ from 'lodash'
 import { queue } from 'async'
 import Database from 'lib/database'
 import { addHistory, newMessage, editMessage, historyIsLoading } from 'actions/messages'
+import { notifyNewMessage } from 'actions/notifications'
 
 export default function createTeamHandler(provider) {
   const Provider = require(`./providers/${provider}/adaptor`)
@@ -71,6 +72,7 @@ export default function createTeamHandler(provider) {
 
       this.on('message', ({ channel, ...message }) => {
         this._dispatch(newMessage({ channel, message, team: this.team.id }))
+        this.dispatch(notifyNewMessage(this.team.id, channel, message))
       })
 
       this.on('message:changed', ({ channel, ...editData }) => {
