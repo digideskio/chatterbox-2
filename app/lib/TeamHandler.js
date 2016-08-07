@@ -72,7 +72,7 @@ export default function createTeamHandler(provider) {
 
       this.on('message', ({ channel, ...message }) => {
         this._dispatch(newMessage({ channel, message, team: this.team.id }))
-        this.dispatch(notifyNewMessage(this.team.id, channel, message))
+        this._dispatch(notifyNewMessage(this.team.id, channel, message))
       })
 
       this.on('message:changed', ({ channel, ...editData }) => {
