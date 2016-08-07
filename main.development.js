@@ -1,7 +1,8 @@
-import { app, BrowserWindow, Menu, screen } from 'electron'
+import { app, BrowserWindow, Menu, screen, Tray } from 'electron'
 import { join } from 'path'
 import windowStateKeeper from 'electron-window-state'
 let mainWindow = null
+let trayInstance = null
 
 if (process.env.NODE_ENV === 'development') {
   require('electron-debug')() // eslint-disable-line global-require
@@ -31,19 +32,28 @@ app.on('ready', async() => {
     defaultHeight: workAreaSize.height * 0.7
   })
 
+  const appIcon = join(__dirname, './app/images/temp_logo.png')
+
   mainWindow = new BrowserWindow({
     ...mainWindowState,
     show: false,
-    frame: true,
     center: true,
     minWidth: 1060,
     minHeight: 600,
-    icon: join(__dirname, './app/images/temp_logo.png')
+    icon: appIcon,
+    titleBarStyle: 'hidden'
   })
 
   mainWindow.setMenu(null)
 
   manage(mainWindow)
+
+  initTray(appIcon)
+
+  trayInstance.on('click', () => {
+    mainWindow.show()
+    mainWindow.focus()
+  })
 
   mainWindow.loadURL(`file://${__dirname}/app/app.html`)
 
@@ -66,3 +76,21 @@ app.on('ready', async() => {
     })
   }
 })
+
+
+function initTray(appIcon) {
+  trayInstance = new Tray(appIcon)
+
+  let contextMenu = Menu.buildFromTemplate([{
+      type: 'separator'
+    },
+    {
+      label: 'Quit',
+      click() {
+        app.quit()
+      }
+    }
+  ])
+  trayInstance.setToolTip('Chatterbox')
+  trayInstance.setContextMenu(contextMenu)
+}
