@@ -40,7 +40,7 @@ export default class SlackHandler extends EventEmitter {
       this.emit('catastrophic_failure')
     })
 
-    this._slack.on(CLIENT_EVENTS.RTM.RTM_CONNECTION_OPENED, () => {
+    this._slack.once(CLIENT_EVENTS.RTM.RTM_CONNECTION_OPENED, () => {
       this._canSend = true
       const { channels } = this
       this._activeChannelorDMID = channels[_.findKey(channels, 'main')].id

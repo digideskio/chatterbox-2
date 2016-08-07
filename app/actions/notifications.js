@@ -2,6 +2,7 @@ import { push as locationPush } from 'react-router-redux'
 import Notification from 'lib/notification'
 import { remote } from 'electron'
 import request from 'request'
+import _ from 'lodash'
 import path from 'path'
 import mkdirp from 'mkdirp'
 import fs from 'fs'
@@ -28,12 +29,7 @@ export function notifyNewMessage(teamID, channelID, userID, notificationText) {
       }
     } = getState()
     const isDM = Boolean(dms[channelID])
-    if (!isDM) {
-      const {
-        [channelID]: { name: channelName }
-      } = channels
-    }
-    const titleRest = isDM ? `from ${userHandle}` : `in ${channelName}`
+    const titleRest = isDM ? `from ${userHandle}` : `in ${_.get(channels, `${channelID}.name`, 'ERR_NO_NAME')}`
 
     new Promise((resolve, reject) => {
       if (teamImage) {
