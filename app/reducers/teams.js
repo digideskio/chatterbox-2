@@ -3,7 +3,18 @@ import { combineReducers } from 'redux'
 import { TEAMS_ACTIVE_TEAM_CHANGE, TEAMS_ACTIVE_CHANNEL_OR_DM_CHANGE, TEAMS_TEAM_ADD } from 'actions/teams'
 
 const DEFAULT_STATE = {
-  teams: {},
+  teams: {
+    /*
+    [teamID]: {
+     team: {},
+     channels: {},
+     dms: {},
+     users: {},
+     user: {},
+     activeChannelorDMID: ''
+    }
+     */
+  },
   activeTeamID: null
 }
 

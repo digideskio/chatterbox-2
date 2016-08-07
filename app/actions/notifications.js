@@ -13,23 +13,30 @@ mkdirp(teamIconTemp)
 
 export function notifyNewMessage(teamID, channelID, userID, notificationText) {
   return (dispatch, getState) => {
-    const {
-      teams: {
-        activeTeamID,
+      const {
         teams: {
-          [teamID]: {
-            team: { image: teamImage, name: teamName },
-            users: {
-              [userID]: { handle: userHandle } = {}
-            },
-            dms,
-            channels
+          activeTeamID,
+          teams: {
+            [teamID]: {
+              team: { image: teamImage, name: teamName },
+              users: {
+                [userID]: { handle: userHandle } = {}
+              },
+              user: { id: selfID },
+              dms,
+              channels,
+              activeChannelorDMID
+            }
           }
         }
+      } = getState()
+
+      if (userID === selfID || activeTeamID === teamID && activeChannelorDMID === channelID && remote.getCurrentWindow().isFocused()) {
+        return // no need for notification as we are reading this. or we are the sender.
       }
-    } = getState()
-    const isDM = Boolean(dms[channelID])
-    const titleRest = isDM ? `from ${userHandle}` : `in ${_.get(channels, `${channelID}.name`, 'ERR_NO_NAME')}`
+
+      const isDM = Boolean(dms[channelID])
+      const titleRest = isDM ? `from ${userHandle}` : `in ${_.get(channels, `${channelID}.name`, 'ERR_NO_NAME')}`
 
     new Promise((resolve, reject) => {
       if (teamImage) {
