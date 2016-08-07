@@ -1,4 +1,5 @@
 import { app, BrowserWindow, Menu, screen } from 'electron'
+import { join } from 'path'
 import windowStateKeeper from 'electron-window-state'
 let mainWindow = null
 
@@ -36,7 +37,8 @@ app.on('ready', async() => {
     frame: true,
     center: true,
     minWidth: 1060,
-    minHeight: 600
+    minHeight: 600,
+    icon: join(__dirname, './app/images/temp_logo.png')
   })
 
   mainWindow.setMenu(null)

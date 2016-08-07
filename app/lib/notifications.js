@@ -1,9 +1,11 @@
 import { notify } from 'node-notifier'
 import { EventEmitter } from 'events'
+import { join } from 'path'
 
+const defualtIcon = join(__dirname, '../images/temp_logo.png')
 
 export default class Notification extends EventEmitter {
-  constructor({ title, message, icon }, settings) {
+  constructor({ title, message, icon = defualtIcon }, settings) {
     super()
 
     this.notifier = notify({ title, message, icon, sound: true, wait: true }, ::this._handleClick)
