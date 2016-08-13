@@ -66,12 +66,14 @@ export default class Chat extends PureComponent {
       )
     }
 
-    _.forEach(meta, value => channelMeta.push(
-      <div key={value}>
-        <span className='spacer'>|</span>
-        <span className='meta'>{value}</span>
-      </div>
-    ))
+    if (meta.topic) {
+      channelMeta.push(
+        <div key='topic'>
+          <span className='spacer'>|</span>
+          <span className='meta'>{meta.topic}</span>
+        </div>
+      )
+    }
 
     return channelMeta
   }
