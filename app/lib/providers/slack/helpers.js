@@ -23,7 +23,7 @@ export function santitizeUser({ tz: timezone, id, deleted, profile, name: handle
 
 function santitizeAttachments(attachments) {
   return attachments.map((rawAttachment) => {
-    const { title, text, pretext, color, fields, ...attachment } = rawAttachment
+    const { title, text, pretext, color, fields, mrkdwn_in = [], ...attachment } = rawAttachment
     return {
       original: { title, text, pretext, color, fields, ...attachment },
       images: {
@@ -55,9 +55,12 @@ function santitizeAttachments(attachments) {
       service: attachment.service_name,
       borderColor: color ? `#${color}` : undefined,
       title: formatText.bind(this)(title),
-      pretext: formatText.bind(this)(pretext),
-      text: formatText.bind(this)(text),
-      fields,
+      pretext: mrkdwn_in.includes('pretext') ? formatText.bind(this)(pretext) : pretext,
+      text: mrkdwn_in.includes('text') ? formatText.bind(this)(text) : text,
+      fields: mrkdwn_in.includes('fields') ? _.map(fields, field => {
+        field.value = formatText.bind(this)(field.value)
+        return field
+      }) : fields,
       key: crypto.createHash('md5').update(JSON.stringify(rawAttachment)).digest('hex')
     }
   })

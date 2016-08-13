@@ -7,6 +7,7 @@ import Image from './Attachments/Image.react'
 import Video from './Attachments/Video.react'
 import Text from './Attachments/Text.react'
 import Author from './Attachments/Author.react'
+import Fields from './Attachments/Fields.react'
 
 /* var attachments = [{
   author: '',
@@ -60,7 +61,7 @@ export default class Attachments extends Component {
         <div className={classnames('attachment-container', {withThumb: images.thumb})}>
           {renderSidebar ? <div className='attachment-sidebar' style={{borderColor}} /> : null}
 
-          {(author || text || service) ? (
+          {(author || text || service || fields || video) ? (
             <div className='attachment-body'>
               {author ? (
                 <Author
@@ -71,6 +72,7 @@ export default class Attachments extends Component {
                 />
               ) : null}
               {text ? <Text isPretext={false} text={text} /> : null}
+              {fields ? <Fields data={fields} /> : null}
               {video ? (
                 <Video
                   url={video.url}
