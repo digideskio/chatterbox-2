@@ -6,6 +6,7 @@ import Modal from 'react-modal'
 class Login extends PureComponent {
   static propTypes = {
     providers: PropTypes.object.isRequired,
+    routeParams: PropTypes.object.isRequired,
     showLogin: PropTypes.func.isRequired,
     addTeam: PropTypes.func.isRequired
   }

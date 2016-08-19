@@ -2,6 +2,7 @@ import React, { PureComponent, PropTypes } from 'react'
 
 export default class Team extends PureComponent {
   static propTypes = {
+    id: PropTypes.string.isRequired,
     type: PropTypes.string.isRequired,
     image: PropTypes.string,
     unreads: PropTypes.bool,
