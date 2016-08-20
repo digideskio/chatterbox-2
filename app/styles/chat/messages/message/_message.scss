@@ -1,9 +1,8 @@
 .message {
   -webkit-user-select: text;
   display: flex;
+  padding: 3px 5px 3px 0;
   transition: background-color 50ms ease-in-out, opacity 40ms ease-in-out;
-  margin-top: 3px;
-  padding-right: 5px;
   word-break: break-word;
   &.isSending {
     opacity: 0.4;
@@ -22,6 +21,8 @@
   .body {
     display: inline-block;
     flex: 1;
+    font-size: 15px;
+    text-rendering: optimizeLegibility;
     .info {
       display: block;
       margin-bottom: 5px;
@@ -37,7 +38,6 @@
           color: #afbcc5;
         }
         &.user {
-          font-size: 15px;
           font-weight: 900;
           color: #2a2f33;
         }
@@ -46,7 +46,6 @@
     .text {
       margin: 0;
       display: block;
-      font-size: 15px;
       line-height: 20px;
       white-space: pre-wrap;
       @import 'inline/all';

@@ -48,7 +48,7 @@
   }
 
   .channelsContainer {
-    height: calc(100% - 109px);
+    height: calc(100% - 90px);
     padding-left: 12px;
     overflow: auto;
     &::-webkit-scrollbar-thumb,
@@ -70,7 +70,7 @@
   .dms {
     display: block;
     margin-right: 3px;
-    margin-bottom: 25px;
+    margin-bottom: 20px;
 
     .title {
       text-transform: capitalize;
@@ -97,9 +97,6 @@
     }
     &.active {
       background-color: rgba(255, 255, 255, 0.12);
-      p {
-        color: rgba(255, 255, 255, 0.85);
-      }
     }
 
     .privateIcon {
@@ -122,6 +119,9 @@
       overflow: hidden;
       text-overflow: ellipsis;
       width: 145px;
+    }
+    &.active p {
+      color: rgba(255, 255, 255, 0.85);
     }
     &.attention p {
       font-size: 14px;
@@ -158,6 +158,11 @@
       display: inline-block;
       background-position: center;
       background-size: contain;
+      opacity: .48;
+    }
+    &.online .image,
+    &:hover .image {
+      opacity: 1;
     }
 
     .status {
@@ -168,16 +173,16 @@
       left: 27px;
       bottom: 5px;
       border-radius: 50%;
-      &.online {
-        background-color: #7ed320;
-      }
+    }
+    &.online .status {
+      background-color: #7ed320;
     }
 
     .name {
       display: inline-block;
       font-size: 14px;
       line-height: 32px;
-      color: rgba(255, 255, 255, 0.58);
+      color: rgba(255, 255, 255, 0.48);
       font-weight: 400;
       letter-spacing: 0.5px;
       margin-left: 8px;
@@ -186,6 +191,9 @@
       overflow: hidden;
       text-overflow: ellipsis;
       width: 145px;
+    }
+    &.online .name {
+      color: rgba(255, 255, 255, 0.58);
     }
     &.active .name {
       color: rgba(255, 255, 255, 0.85);

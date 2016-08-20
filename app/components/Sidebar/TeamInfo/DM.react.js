@@ -17,9 +17,10 @@ export default class DM extends Component {
 
   render() {
     const { image, active, handle, presence } = this.props
+    const classes = classnames('dm channel', { active, online: presence === 'online' })
     return (
-      <div onClick={this.handleOnClick} className={classnames('dm channel', { active })}>
-        <div className={classnames('status', {online: presence === 'online'})} />
+      <div onClick={this.handleOnClick} className={classes}>
+        <div className='status' />
         <div className='image' style={{backgroundImage: `url(${image})`}} />
         <div className='name'>{handle}</div>
       </div>
