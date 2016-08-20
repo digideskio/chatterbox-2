@@ -8,9 +8,9 @@
   box-sizing: border-box;
   .team {
     display: block;
-    padding-top: 25px;
+    padding-top: 20px;
     padding-left: 18px;
-    margin-bottom: 35px;
+    margin-bottom: 25px;
     .name {
       font-size: 18px;
       margin-bottom: 2px;
@@ -22,6 +22,7 @@
       width: 10px;
       height: 10px;
       border-radius: 50%;
+      margin-right: 3px;
       display: inline-block;
       &.online {
         background-color: #7fd421;
@@ -61,12 +62,12 @@
   }
   .channels {
     display: block;
-    margin-bottom: 30px;
+    margin-bottom: 25px;
     margin-right: 3px;
   }
   .dms {
     display: block;
-    margin-bottom: 30px;
+    margin-bottom: 25px;
     margin-right: 3px;
     margin-bottom: 20px;
   }
@@ -77,7 +78,7 @@
     font-weight: 400;
     letter-spacing: 0.5px;
     color: rgba(255, 255, 255, 0.58);
-    margin-bottom: 6px;
+    margin-bottom: 5px;
   }
   .channels .title span,
   .dms .title span {
@@ -88,9 +89,9 @@
     &:hover {
       background-color: rgba(255, 255, 255, 0.06);
     }
-    padding: 4px 0 5px 3px;
+    padding: 4px 0 4px 8px;
     cursor: pointer;
-    border-radius: 3px;
+    border-radius: 5px;
     transition: background-color 100ms ease-in-out;
     .privateIcon {
       color: gray;

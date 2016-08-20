@@ -41,7 +41,7 @@ export default class Teams extends Component {
             />
           ))
         }
-        <div className='ion-ios-plus-empty add' onClick={::this.handleLoginClick} />
+        <div className='ion-ios-plus-empty add' onClick={::this.handleLoginClick} title='Add new team' />
       </div>
     )
   }

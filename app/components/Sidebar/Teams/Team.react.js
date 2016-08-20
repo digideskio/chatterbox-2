@@ -4,6 +4,7 @@ export default class Team extends PureComponent {
   static propTypes = {
     id: PropTypes.string.isRequired,
     type: PropTypes.string.isRequired,
+    name: PropTypes.string,
     image: PropTypes.string,
     unreads: PropTypes.bool,
     pings: PropTypes.number,
@@ -15,9 +16,9 @@ export default class Team extends PureComponent {
   }
 
   render() {
-    const { unreads, pings, type, image } = this.props
+    const { unreads, pings, type, name, image } = this.props
     return (
-      <div onClick={::this.handleClick} className='team' style={{backgroundImage: `url(${image})`}}>
+      <div onClick={::this.handleClick} className='team' style={{backgroundImage: `url(${image})`}} title={name}>
         {
           unreads ? <div className='new_message' /> : null
         }

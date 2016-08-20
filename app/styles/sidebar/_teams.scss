@@ -12,7 +12,7 @@
   .team {
     width: 45px;
     height: 45px;
-    border-radius: 50%;
+    border-radius: 5px;
     font-size: 50px;
     cursor: pointer;
     background-position: center;
@@ -22,19 +22,18 @@
     &.selected {
       position: absolute;
       top: 0;
-      border: 2px solid white;
       width: 55px;
       height: 55px;
       cursor: default;
     }
 
     .providerIcon {
-      max-height: 25px;
-      max-width: 25px;
+      max-height: 20px;
+      max-width: 20px;
       position: relative;
       bottom: -5px;
       border-radius: 5px;
-      left: 25px;
+      left: 35px;
     }
 
     .new_message {
@@ -63,16 +62,21 @@
   }
 
   .add {
-    width: 45px;
-    height: 45px;
+    width: 35px;
+    height: 35px;
+    line-height: 35px;
+    font-size: 35px;
     border-radius: 50%;
     margin-top: 15px;
+    margin-bottom: 20px;
     color: #8e898b;
     border: #8e898b solid 2px;
-    font-size: 35px;
-    line-height: 45px;
     text-align: center;
-    margin-bottom: 25px;
     cursor: pointer;
+    opacity: .25;
+
+    &:hover {
+      opacity: 1;
+    }
   }
 }
