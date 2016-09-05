@@ -64,7 +64,7 @@
     "babel-register": "^6.9.0",
     "concurrently": "^2.1.0",
     "cross-env": "^2.0.0",
-    "css-loader": "^0.23.1",
+    "css-loader": "^0.25.0",
     "css-modules-require-hook": "^4.0.0",
     "del": "^2.2.0",
     "depcheck": "^0.6.4",
