@@ -2,7 +2,7 @@ import { bindActionCreators } from 'redux'
 import { connect } from 'react-redux'
 import _ from 'lodash'
 
-import Chat from 'components/Chat'
+import Chat from 'components/chat'
 import * as SettingsActions from 'actions/settings'
 import * as MessageActions from 'actions/messages'
 import * as TeamsActions from 'actions/teams'

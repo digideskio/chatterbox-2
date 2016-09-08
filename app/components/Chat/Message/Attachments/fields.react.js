@@ -1,20 +1,15 @@
 import React from 'react'
-import _ from 'lodash'
 import classnames from 'classnames'
-import uuid from 'node-uuid'
 
 export default ({ data: fields }) => { // eslint-disable-line react/prop-types
-  console.info('FIELDS', fields)
   return (
     <div className='fields'>
-      {_.map(fields, (field, i) => {
-        return (
-          <div key={uuid.v1()} className={classnames('field', {short: field.short})}>
-            <h3>{field.title || ''}</h3>
-            <p>{field.value || ''}</p>
-          </div>
-        )
-      })}
+      {fields.map(({short, value, title}, i) => (
+        <div key={title} className={classnames('field', {short})}>
+          <h3>{title || ''}</h3>
+          <p>{value || ''}</p>
+        </div>
+      ))}
     </div>
   )
 }

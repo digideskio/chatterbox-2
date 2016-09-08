@@ -1,8 +1,8 @@
 import React, { Component, PropTypes } from 'react'
 import Dragula from 'react-dragula'
 import classnames from 'classnames'
-import DM from './DM.react'
-import Channel from './Channel.react'
+import DM from './dm.react'
+import Channel from './channel.react'
 
 export default class TeamInfo extends Component {
 

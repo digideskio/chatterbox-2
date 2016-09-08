@@ -1,10 +1,13 @@
 import React, { Component, PropTypes } from 'react'
-import { bindActionCreators } from 'redux'
 import { connect } from 'react-redux'
 import * as TeamsActions from 'actions/teams'
 
+function mapStateToProps({ settings, teams: { teams, activeTeamID } }) {
+  return { settings, team: teams[activeTeamID] }
+}
 
-class InlineChannel extends Component {
+@connect(mapStateToProps, TeamsActions)
+export default class InlineChannel extends Component {
   static propTypes = {
     name: PropTypes.string,
     id: PropTypes.string,
@@ -25,14 +28,3 @@ class InlineChannel extends Component {
     )
   }
 }
-
-
-function mapStateToProps({ settings, teams: { teams, activeTeamID } }) {
-  return { settings, team: teams[activeTeamID] }
-}
-
-function mapDispatchToProps(dispatch) {
-  return bindActionCreators(TeamsActions, dispatch)
-}
-
-export default connect(mapStateToProps, mapDispatchToProps)(InlineChannel)

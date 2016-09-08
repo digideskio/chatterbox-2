@@ -19,12 +19,8 @@ export default class Team extends PureComponent {
     const { unreads, pings, type, name, image } = this.props
     return (
       <div onClick={::this.handleClick} className='team' style={{backgroundImage: `url(${image})`}} title={name}>
-        {
-          unreads ? <div className='new_message' /> : null
-        }
-        {
-          pings ? <div className='unread_counter'>{pings}</div> : null
-        }
+        {unreads ? <div className='new_message' /> : null}
+        {pings ? <div className='unread_counter'>{pings}</div> : null}
         <img src={`images/logins/${type}/icon.svg`} className='providerIcon' />
       </div>
     )

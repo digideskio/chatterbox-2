@@ -1,5 +1,5 @@
 import React, { Component, PropTypes } from 'react'
-import Sidebar from './Sidebar'
+import Sidebar from './sidebar'
 
 export default class App extends Component {
   static contextTypes = {

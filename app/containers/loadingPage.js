@@ -1,6 +1,6 @@
 import { bindActionCreators } from 'redux'
 import { connect } from 'react-redux'
-import Loading from 'components/Loading.react'
+import Loading from 'components/loading.react'
 import * as LoadingActions from 'actions/loading'
 
 function mapStateToProps({ settings, loading, teams }) {

@@ -1,6 +1,6 @@
 import React, { Component, PropTypes } from 'react'
 import _ from 'lodash'
-import Team from './Team.react'
+import Team from './team.react'
 
 export default class Teams extends Component {
   static propTypes = {

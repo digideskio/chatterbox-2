@@ -1,6 +1,6 @@
 import React from 'react'
-import TeamInfo from './TeamInfo'
-import Teams from './Teams'
+import TeamInfo from './teamInfo'
+import Teams from './teams'
 
 export default () => (
   <div className='app-sidebar'>

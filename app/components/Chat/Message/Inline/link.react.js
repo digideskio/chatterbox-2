@@ -1,10 +1,8 @@
 import React, { Component, PropTypes } from 'react'
-// import path from 'path'
 import { bindActionCreators } from 'redux'
 import { connect } from 'react-redux'
 import { shell } from 'electron'
 import * as LinkPreviewsActions from 'actions/linkPreviews'
-
 
 class InlineLink extends Component {
   static propTypes = {

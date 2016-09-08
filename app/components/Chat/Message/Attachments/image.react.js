@@ -1,7 +1,7 @@
 import React from 'react'
 import { extractImageDimentions } from './helpers'
 import ImageLoader from 'react-imageloader'
-import Togglable from './Togglable.react'
+import Togglable from './togglable.react'
 
 export default ({ url, width, height }) => { // eslint-disable-line react/prop-types
   const { width: parsedWidth, height: parsedHeight } = extractImageDimentions(width, height)

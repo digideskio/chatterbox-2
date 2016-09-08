@@ -2,12 +2,7 @@ import React, { Component, PropTypes } from 'react'
 import classnames from 'classnames'
 import _ from 'lodash'
 
-import ThumbImage from './Attachments/ThumbImage.react'
-import Image from './Attachments/Image.react'
-import Video from './Attachments/Video.react'
-import Text from './Attachments/Text.react'
-import Author from './Attachments/Author.react'
-import Fields from './Attachments/Fields.react'
+import { ThumbImage, Image, Video, Author, Fields, Text } from './attachments'
 
 /* var attachments = [{
   author: '',

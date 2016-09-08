@@ -1,2 +1,2 @@
-import TeamInfo from './TeamInfo.react'
+import TeamInfo from './teamInfo.react'
 export default TeamInfo

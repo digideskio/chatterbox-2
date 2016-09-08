@@ -67,7 +67,7 @@ class ProviderModal extends PureComponent {
     const { provider } = this.props
     if (provider) {
       try {
-        this.Provider = require(`./${provider}/Login.react`)
+        this.Provider = require(`./${provider}/login.react`)
       } catch (e) {
         console.error(e)
       }

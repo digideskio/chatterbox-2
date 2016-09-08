@@ -1,7 +1,7 @@
 import { bindActionCreators } from 'redux'
 import { connect } from 'react-redux'
 
-import Teams from 'components/Sidebar/Teams'
+import Teams from 'components/sidebar/teams'
 import * as SettingsActions from 'actions/settings'
 import * as TeamsActions from 'actions/teams'
 import { showLogin } from 'actions/login'

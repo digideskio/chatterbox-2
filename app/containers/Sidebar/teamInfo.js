@@ -1,15 +1,15 @@
 import { bindActionCreators } from 'redux'
 import { connect } from 'react-redux'
-import _ from 'lodash'
+import { pickBy } from 'lodash'
 
-import TeamInfo from 'components/Sidebar/TeamInfo'
+import TeamInfo from 'components/sidebar/teamInfo'
 import * as SettingsActions from 'actions/settings'
 import * as TeamsActions from 'actions/teams'
 
 const mapStateToProps = ({ settings, teams: { teams, activeTeamID }, messages }) => {
   const { activeChannelorDMID, user, channels, dms, team } = (teams[activeTeamID] || {})
-  const joinedChannels = _.pickBy(channels, 'isMember')
-  const joinedDMs = _.pickBy(dms, 'isOpen')
+  const joinedChannels = pickBy(channels, 'isMember')
+  const joinedDMs = pickBy(dms, 'isOpen')
 
   return {
     channels: joinedChannels,

@@ -1,2 +1,2 @@
-import Login from './Login.react'
+import Login from './login.react'
 export default Login

@@ -4,7 +4,12 @@ import { connect } from 'react-redux'
 import classnames from 'classnames'
 import * as TeamsActions from 'actions/teams'
 
-class InlineUser extends Component {
+function mapStateToProps({ settings }) {
+  return { settings }
+}
+
+@connect(mapStateToProps)
+export default class InlineUser extends Component {
   static propTypes = {
     isPing: PropTypes.bool,
     name: PropTypes.string,
@@ -25,14 +30,3 @@ class InlineUser extends Component {
     )
   }
 }
-
-
-function mapStateToProps({ settings }) {
-  return { settings }
-}
-
-function mapDispatchToProps(dispatch) {
-  return bindActionCreators(TeamsActions, dispatch)
-}
-
-export default connect(mapStateToProps, mapDispatchToProps)(InlineUser)
