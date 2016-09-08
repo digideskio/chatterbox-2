@@ -1,15 +1,22 @@
 {
-  "presets": ["es2015", "stage-0", "react"],
-  "plugins": ["add-module-exports"],
+  "presets": ["react", "es2015", "stage-0"],
+  "plugins": [
+    "transform-runtime",
+    "syntax-async-functions",
+    "transform-regenerator",
+    "add-module-exports",
+    "transform-decorators-legacy",
+    "transform-react-display-name"
+  ],
   "env": {
-  	"production": {
-  		"presets": ["react-optimize"],
-  		"plugins": [
-  			"babel-plugin-transform-remove-console",
-  			"babel-plugin-transform-remove-debugger",
-  			"babel-plugin-dev-expression"
-  		]
-  	},
+    "production": {
+      "presets": ["react-optimize"],
+      "plugins": [
+        "babel-plugin-transform-remove-console",
+        "babel-plugin-transform-remove-debugger",
+        "babel-plugin-dev-expression"
+      ]
+    },
     "development": {
       "presets": ["react-hmre"]
     },
