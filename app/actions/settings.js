@@ -7,9 +7,9 @@ export const SETTINGS_RESET = 'SETTINGS_RESET'
 
 export function changeSetting(setting, value) {
   return (dispatch) => {
-    Database.settings.change(setting, value).then(() => {
+    Database.settings.change(setting, value).then(() =>
       dispatch({ type: SETTINGS_CHANGE, setting, value })
-    })
+    )
   }
 }
 

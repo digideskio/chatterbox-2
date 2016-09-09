@@ -9,13 +9,14 @@ export const MESSAGES_REMOVE_MESSAGE = 'MESSAGES_REMOVE_MESSAGE'
 export const MESSAGES_HISTORY_LOADING = 'MESSAGES_HISTORY_LOADING'
 
 export function historyIsLoading(teamID, channelID) {
-  return {type: MESSAGES_HISTORY_LOADING, payload: {channelID, teamID}}
+  return { type: MESSAGES_HISTORY_LOADING, payload: { channelID, teamID } }
 }
 
 export function requestHistory(startTimestamp, endTimestamp, channelID, teamID, amount = 100) {
   return (dispatch, getState) => {
     if (!_.get(getState().messages, `${teamID}.${channelID}.isLoading`, false)) {
-      const { teams: { [teamID]: { history: { request: requestHistory } } } } = getState().teams
+      const { teams: {
+          [teamID]: { history: { request: requestHistory } } } } = getState().teams
       dispatch(historyIsLoading(teamID, channelID))
       requestHistory(startTimestamp, endTimestamp, channelID, amount)
     }
@@ -32,10 +33,11 @@ export function newMessage(payload) {
 
 export function sendMessage(teamID, channelID, message) {
   return (dispatch, getState) => {
-    const { teams: { [teamID]: Team } } = getState().teams
+    const { teams: {
+        [teamID]: Team } } = getState().teams
     const timeStamp = +moment().unix()
     Team.message.send(channelID, message, timeStamp).then((message) => {
-      dispatch(editMessage({channel: channelID, team: teamID, message, previousMessageTimestamp: timeStamp}))
+      dispatch(editMessage({ channel: channelID, team: teamID, message, previousMessageTimestamp: timeStamp }))
     }, console.error)
   }
 }

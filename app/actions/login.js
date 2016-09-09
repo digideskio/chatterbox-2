@@ -4,6 +4,8 @@ import * as TeamsActions from './teams'
 import createTeamHandler from 'lib/teamHandler'
 
 export const LOGIN_TEAM_ADD = 'LOGIN_TEAM_ADD'
+export const LOGIN_TEAM_ADD_SUCCESS = 'LOGIN_TEAM_ADD_SUCCESS'
+export const LOGIN_TEAM_ADD_FAIL = 'LOGIN_TEAM_ADD_FAIL'
 export const LOGIN_PROVIDER_ERROR = 'LOGIN_PROVIDER_ERROR'
 export const LOGIN_PROVIDER_CHANGE = 'LOGIN_PROVIDER_CHANGE'
 
@@ -15,10 +17,19 @@ export function showLogin() {
 }
 
 export function addTeam(provider, opts = {}) {
-  return (dispatch, getState) => {
-    const TeamHandler = createTeamHandler(provider)
-    const Team = new TeamHandler(opts, dispatch, true)
-    Team.once('connected', () => dispatch(TeamsActions.addTeam(Team)))
+  return {
+    types: [LOGIN_TEAM_ADD, LOGIN_TEAM_ADD_SUCCESS, LOGIN_TEAM_ADD_FAIL],
+    promise: (dispatch, getState) => new Promise((resolve, reject) => {
+      const TeamHandler = createTeamHandler(provider)
+      const Team = new TeamHandler(opts, dispatch, true)
+      Team.once('connected', () => {
+        resolve(Team)
+        dispatch(TeamsActions.addTeam(Team))
+      })
+      Team.once('failed', () => {
+        reject(Team)
+      })
+    })
   }
 }
 
