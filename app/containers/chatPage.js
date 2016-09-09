@@ -1,27 +1,38 @@
-import { bindActionCreators } from 'redux'
+import React, { PureComponent, PropTypes } from 'react'
+import ReactCSSTransitionGroup from 'react-addons-css-transition-group'
+import { Sender, Messages, Header } from 'components/chat'
 import { connect } from 'react-redux'
-import _ from 'lodash'
 
-import Chat from 'components/chat'
-import * as SettingsActions from 'actions/settings'
-import * as MessageActions from 'actions/messages'
-import * as TeamsActions from 'actions/teams'
-
-function mapStateToProps({ settings, teams: { teams, activeTeamID }, messages: allMessages }) {
-  const { activeChannelorDMID, users, user, channels, dms, team } = (teams[activeTeamID] || {})
-
-  const channelUsers = _.get(channels, `${activeChannelorDMID}.members`) || _.get(dms, `${activeChannelorDMID}.members`)
-  const channel = _.get(channels, activeChannelorDMID) || _.get(dms, activeChannelorDMID) || {}
-  const { messages = [], isLoading, lastMessageHash } = _.get(allMessages, `${activeTeamID}.${activeChannelorDMID}`, {})
-  return { settings, users, channel, channelUsers, user, messages, team, isLoading, lastMessageHash }
+function mapStateToProps({ teams: { teams, activeTeamID } }) {
+  const { activeChannelorDMID } = (teams[activeTeamID] || {})
+  return { activeChannelorDMID }
 }
 
-function mapDispatchToProps(dispatch) {
-  return bindActionCreators({
-    ...TeamsActions,
-    ...SettingsActions,
-    ...MessageActions
-  }, dispatch)
-}
+@connect(mapStateToProps)
+export default class Chat extends PureComponent {
+  static propTypes = {
+    activeChannelorDMID: PropTypes.string
+  }
 
-export default connect(mapStateToProps, mapDispatchToProps)(Chat)
+  render() {
+    const { activeChannelorDMID } = this.props
+    return (
+      <div className='chat'>
+        <Header activeChannelorDMID={activeChannelorDMID} />
+        <ReactCSSTransitionGroup
+          component='div'
+          className='messages'
+          key={activeChannelorDMID}
+          transitionName='fade'
+          transitionAppear
+          transitionEnterTimeout={50}
+          transitionAppearTimeout={50}
+          transitionLeaveTimeout={50}
+        >
+          <Messages activeChannelorDMID={activeChannelorDMID} />
+        </ReactCSSTransitionGroup>
+        <Sender activeChannelorDMID={activeChannelorDMID} />
+      </div>
+    )
+  }
+}
