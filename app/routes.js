@@ -1,9 +1,6 @@
 import React from 'react'
 import { Route, IndexRoute } from 'react-router'
-import App from 'containers/App'
-import LoadingPage from 'containers/LoadingPage'
-import ChatPage from 'containers/ChatPage'
-import LoginPage from 'containers/LoginPage'
+import { App, LoadingPage, ChatPage, LoginPage } from 'containers'
 
 export default (
   <Route path='/' component={App}>

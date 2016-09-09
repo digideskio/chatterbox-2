@@ -5,7 +5,6 @@ import qs from 'qs'
 import { shell } from 'electron'
 import request from 'request'
 
-
 export default class SlackLogin extends Component {
   static propTypes = {
     addTeam: PropTypes.func.isRequired
@@ -49,8 +48,8 @@ export default class SlackLogin extends Component {
     webview.addEventListener('dom-ready', () => {
       if (!this.mounted) return
 
-      webview.insertCSS(require('!raw!sass!styles/webview_overrides/slack.scss'))
-        // webview.openDevTools()
+      // webview.insertCSS(require('!raw!sass!styles/webview_overrides/slack.scss'))
+      // webview.openDevTools()
 
       if (!checking) {
         checking = true
@@ -64,7 +63,7 @@ export default class SlackLogin extends Component {
 
     webview.addEventListener('will-navigate', (event) => {
       if (!this.mounted) return
-
+      console.log(event)
       if (event.url.endsWith('/forgot')) {
         webview.stop()
         shell.openExternal(event.url)

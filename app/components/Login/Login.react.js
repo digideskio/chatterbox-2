@@ -2,8 +2,7 @@ import React, { PropTypes, PureComponent } from 'react'
 import { Link } from 'react-router'
 import Modal from 'react-modal'
 
-
-class Login extends PureComponent {
+export default class Login extends PureComponent {
   static propTypes = {
     providers: PropTypes.object.isRequired,
     routeParams: PropTypes.object.isRequired,
@@ -55,7 +54,6 @@ class ProviderList extends PureComponent {
   }
 }
 
-
 class ProviderModal extends PureComponent {
   static propTypes = {
     provider: PropTypes.string.isRequired,
@@ -84,6 +82,3 @@ class ProviderModal extends PureComponent {
     )
   }
 }
-
-
-export default Login
