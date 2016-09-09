@@ -22,29 +22,23 @@ export default class Message extends Component {
     return (
       <div onClick={::this._handleClick} className={classnames('message', {firstInChain}, {isSending})}>
         <div className='aside'>
-          {
-            firstInChain ? (
-              <div style={{backgroundImage: `url(${user.image})`}} className='profile_pic' />
+          {firstInChain ? (
+            <div style={{backgroundImage: `url(${user.image})`}} className='profile_pic' />
             ) : (
-              <span className='time'>{timestamp}</span>
-            )
-          }
+            <span className='time'>{timestamp}</span>
+          )}
         </div>
         <div className='body'>
-          {
-            firstInChain ? (
-              <div className='info'>
-                <span className='user'>{user.handle}</span>
-                <span className='time'>{timestamp}</span>
-              </div>
-            ) : null
-          }
+          {firstInChain ? (
+            <div className='info'>
+              <span className='user'>{user.handle}</span>
+              <span className='time'>{timestamp}</span>
+            </div>
+          ) : null}
           {text ? (<div className='text'>{text}</div>) : null}
-          {
-            attachments && attachments.length > 0 ? (
-              <Attachments checkScroll={checkScroll} attachments={attachments} />
-            ) : null
-          }
+          {attachments && attachments.length > 0 ? (
+            <Attachments checkScroll={checkScroll} attachments={attachments} />
+          ) : null}
         </div>
       </div>
     )

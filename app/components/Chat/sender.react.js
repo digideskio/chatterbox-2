@@ -1,10 +1,17 @@
-import React, { Component, PropTypes } from 'react'
+import React, { PureComponent, PropTypes } from 'react'
 import { bindActionCreators } from 'redux'
 import { connect } from 'react-redux'
 import * as MessageActions from 'actions/messages'
-import _ from 'lodash'
+import { last, get } from 'lodash'
 
-class Sender extends Component {
+function mapStateToProps({ settings, teams: { teams, activeTeamID }, messages: allMessages }) {
+  const { activeChannelorDMID, users, team: { id: teamID } = {} } = (teams[activeTeamID] || {})
+  const lastMessage = last(get(allMessages, `${activeTeamID}.${activeChannelorDMID}`, []))
+  return { users, activeChannelorDMID, teamID, lastMessage }
+}
+
+@connect(mapStateToProps, MessageActions)
+export default class Sender extends PureComponent {
   static propTypes = {
     sendMessage: PropTypes.func,
     isTyping: PropTypes.string,
@@ -33,16 +40,3 @@ class Sender extends Component {
     )
   }
 }
-
-
-function mapStateToProps({ settings, teams: { teams, activeTeamID }, messages: allMessages }) {
-  const { activeChannelorDMID, users, team: { id: teamID } = {} } = (teams[activeTeamID] || {})
-  const lastMessage = _.last(_.get(allMessages, `${activeTeamID}.${activeChannelorDMID}`, []))
-  return { users, activeChannelorDMID, teamID, lastMessage }
-}
-
-function mapDispatchToProps(dispatch) {
-  return bindActionCreators(MessageActions, dispatch)
-}
-
-export default connect(mapStateToProps, mapDispatchToProps)(Sender)

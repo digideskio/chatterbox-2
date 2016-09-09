@@ -1,10 +1,14 @@
 import React, { Component, PropTypes } from 'react'
-import { bindActionCreators } from 'redux'
 import { connect } from 'react-redux'
 import { shell } from 'electron'
 import * as LinkPreviewsActions from 'actions/linkPreviews'
 
-class InlineLink extends Component {
+function mapStateToProps({ settings, linkPreviews }) {
+  return { settings, linkPreviews }
+}
+
+@connect(mapStateToProps, LinkPreviewsActions)
+export default class InlineLink extends Component {
   static propTypes = {
     url: PropTypes.string,
     label: PropTypes.string,
@@ -52,14 +56,3 @@ class InlineLink extends Component {
     )
   }
 }
-
-
-function mapStateToProps({ settings, linkPreviews }) {
-  return { settings, linkPreviews }
-}
-
-function mapDispatchToProps(dispatch) {
-  return bindActionCreators(LinkPreviewsActions, dispatch)
-}
-
-export default connect(mapStateToProps, mapDispatchToProps)(InlineLink)

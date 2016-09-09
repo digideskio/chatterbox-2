@@ -1,29 +1,23 @@
-import React, { PureComponent, PropTypes } from 'react'
+import React from 'react'
 import moment from 'moment'
 
-export default class DaySeparator extends PureComponent {
-  static propTypes = {
-    timestamp: PropTypes.number.isRequired
-  }
+function parsedTimetamp(timestamp) {
+  return moment().calendar(timestamp, {
+    sameDay: '[Today]',
+    nextDay: '[Tomorrow]',
+    nextWeek: 'dddd',
+    lastDay: '[Yesterday]',
+    lastWeek: '[Last] dddd',
+    sameElse: '[Today]'
+  })
+}
 
-  get parsedTime() {
-    return moment().calendar(this.props.timestamp, {
-      sameDay: '[Today]',
-      nextDay: '[Tomorrow]',
-      nextWeek: 'dddd',
-      lastDay: '[Yesterday]',
-      lastWeek: '[Last] dddd',
-      sameElse: '[Today]'
-    })
-  }
-
-  render() {
-    return (
-      <div className='daySeparator'>
-        <div />
-        <span>{this.parsedTime}</span>
-        <div />
-      </div>
-    )
-  }
+export default function DaySeparator({ timestamp }) {
+  return (
+    <div className='daySeparator'>
+      <div />
+      <span>{parsedTimetamp(timestamp)}</span>
+      <div />
+    </div>
+  )
 }
