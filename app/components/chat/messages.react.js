@@ -1,17 +1,17 @@
 import React, { PropTypes, PureComponent } from 'react'
 import { connect } from 'react-redux'
 import Message, { DaySeparator } from './message'
-import { last } from 'lodash'
+import { last, get } from 'lodash'
 
 function mapStateToProps({ teams: { teams, activeTeamID }, messages }, { activeChannelorDMID }) {
   const { users } = (teams[activeTeamID] || {})
-  return { users, messages: messages[activeTeamID][activeChannelorDMID] }
+  return { users, messages: get(messages, `${activeTeamID}.${activeChannelorDMID}`, []) }
 }
 
 @connect(mapStateToProps)
 export default class Messages extends PureComponent {
   static propTypes = {
-    users: PropTypes.array.isRequired,
+    users: PropTypes.object.isRequired,
     messages: PropTypes.array
   }
 

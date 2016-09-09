@@ -18,7 +18,7 @@ export default class Chat extends PureComponent {
     const { activeChannelorDMID } = this.props
     return (
       <div className='chat'>
-        <Header activeChannelorDMID={activeChannelorDMID} />
+        {activeChannelorDMID ? <Header activeChannelorDMID={activeChannelorDMID} /> : null}
         <ReactCSSTransitionGroup
           component='div'
           className='messages'
@@ -29,9 +29,9 @@ export default class Chat extends PureComponent {
           transitionAppearTimeout={50}
           transitionLeaveTimeout={50}
         >
-          <Messages activeChannelorDMID={activeChannelorDMID} />
+          {activeChannelorDMID ? <Messages activeChannelorDMID={activeChannelorDMID} /> : null}
         </ReactCSSTransitionGroup>
-        <Sender activeChannelorDMID={activeChannelorDMID} />
+        {activeChannelorDMID ? <Sender activeChannelorDMID={activeChannelorDMID} /> : null}
       </div>
     )
   }

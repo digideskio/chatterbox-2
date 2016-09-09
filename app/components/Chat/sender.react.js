@@ -1,24 +1,19 @@
 import React, { PureComponent, PropTypes } from 'react'
 import { bindActionCreators } from 'redux'
 import { connect } from 'react-redux'
-import * as MessageActions from 'actions/messages'
-import { last, get } from 'lodash'
+import { sendMessage } from 'actions/messages'
 
-function mapStateToProps({ settings, teams: { teams, activeTeamID }, messages: allMessages }) {
-  const { activeChannelorDMID, users, team: { id: teamID } = {} } = (teams[activeTeamID] || {})
-  const lastMessage = last(get(allMessages, `${activeTeamID}.${activeChannelorDMID}`, []))
-  return { users, activeChannelorDMID, teamID, lastMessage }
+function mapStateToProps({ settings, teams: { teams, activeTeamID }, messages: allMessages }, { activeChannelorDMID }) {
+  const { team: { id: teamID } } = teams[activeTeamID]
+  return { activeChannelorDMID, teamID }
 }
 
-@connect(mapStateToProps, MessageActions)
+@connect(mapStateToProps, { sendMessage })
 export default class Sender extends PureComponent {
   static propTypes = {
-    sendMessage: PropTypes.func,
-    isTyping: PropTypes.string,
+    sendMessage: PropTypes.func.isRequired,
     activeChannelorDMID: PropTypes.string,
-    teamID: PropTypes.string,
-    users: PropTypes.object,
-    lastMessage: PropTypes.object
+    teamID: PropTypes.string
   }
 
   handleKeyPress(event) {
