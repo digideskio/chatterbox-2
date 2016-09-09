@@ -1,15 +1,11 @@
 import React, { PropTypes, PureComponent } from 'react'
 import { connect } from 'react-redux'
-import { isArray, get } from 'lodash'
+import { isArray } from 'lodash'
 
 function mapStateToProps({ teams: { teams, activeTeamID } }, { activeChannelorDMID }) {
   const { channels, dms } = teams[activeTeamID]
   const { members, meta, name } = (channels[activeChannelorDMID] || dms[activeChannelorDMID])
-  return {
-    meta,
-    members,
-    name
-  }
+  return { meta, members, name }
 }
 
 @connect(mapStateToProps)
@@ -21,7 +17,7 @@ export default class Header extends PureComponent {
   }
 
   get channelMeta() {
-    const { members, meta = {} } = get(this.props, 'channel', {})
+    const { members, meta = {} } = this.props
     let channelMeta = []
     if (members) {
       channelMeta.push(
