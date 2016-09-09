@@ -2,13 +2,13 @@ import React, { Component, PropTypes } from 'react'
 import Sidebar from './sidebar'
 
 export default class App extends Component {
-  static contextTypes = {
-    router: PropTypes.object.isRequired
-  }
-
   static propTypes = {
     children: PropTypes.element.isRequired,
     location: PropTypes.shape({ pathname: PropTypes.string.isRequired })
+  }
+
+  static contextTypes = {
+    router: PropTypes.object.isRequired
   }
 
   componentWillMount() {

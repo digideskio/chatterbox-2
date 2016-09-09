@@ -1,58 +1,28 @@
 import React, { PropTypes, PureComponent } from 'react'
 import { connect } from 'react-redux'
 import Message, { DaySeparator } from './message'
-import { isArray, last } from 'lodash'
+import { last } from 'lodash'
 
-function mapStateToProps({ settings, teams: { teams, activeTeamID }, messages: allMessages }, { activeChannelorDMID }) {
-  const { users, user, channels, dms, team } = (teams[activeTeamID] || {})
-  const { members, meta } = (channels[activeChannelorDMID] || dms[activeChannelorDMID])
-  const { messages = [], isLoading, lastMessageHash } = allMessages[activeTeamID][activeChannelorDMID]
-  return {
-    settings,
-    users,
-    meta,
-    members,
-    user,
-    messages,
-    team,
-    isLoading,
-    lastMessageHash
-  }
+function mapStateToProps({ teams: { teams, activeTeamID }, messages }, { activeChannelorDMID }) {
+  const { users } = (teams[activeTeamID] || {})
+  return { users, messages: messages[activeTeamID][activeChannelorDMID] }
 }
 
 @connect(mapStateToProps)
 export default class Messages extends PureComponent {
   static propTypes = {
-
+    users: PropTypes.array.isRequired,
+    messages: PropTypes.array
   }
 
-  get channelMeta() {
-    const { members, meta } = this.props
-    let channelMeta = []
-    if (members) {
-      channelMeta.push(
-        <span className='meta' key='members'>
-          {isArray(members) ? members.length : members} Members
-        </span>
-      )
-    }
-
-    if (meta.topic) {
-      channelMeta.push(
-        <div key='topic'>
-          <span className='spacer'>|</span>
-          <span className='meta'>{meta.topic}</span>
-        </div>
-      )
-    }
-
-    return channelMeta
+  static defaultProps = {
+    messages: []
   }
 
   render() {
     const { messages, users } = this.props
     return (
-      <section ref='messagesContainer' className='animation-wrapper'>
+      <section className='animation-wrapper'>
         {
           messages.map(({key, text, user, timestamp, friendlyTimestamp, ...message}, idx) => {
             const {user: prevUser, timestamp: prevTimestamp} = messages[idx - 1] || {}

@@ -1,6 +1,18 @@
 import React, { PropTypes, PureComponent } from 'react'
+import { connect } from 'react-redux'
 import { isArray, get } from 'lodash'
 
+function mapStateToProps({ teams: { teams, activeTeamID } }, { activeChannelorDMID }) {
+  const { channels, dms } = teams[activeTeamID]
+  const { members, meta, name } = (channels[activeChannelorDMID] || dms[activeChannelorDMID])
+  return {
+    meta,
+    members,
+    name
+  }
+}
+
+@connect(mapStateToProps)
 export default class Header extends PureComponent {
   static propTypes = {
     name: PropTypes.string,
@@ -32,10 +44,11 @@ export default class Header extends PureComponent {
   }
 
   render() {
+    const { name } = this.props
     return (
       <header>
         <div className='info'>
-          <span className='channel'>{this.props.name}</span>
+          <span className='channel'>{name}</span>
           {this.channelMeta}
         </div>
       </header>
