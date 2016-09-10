@@ -1,6 +1,6 @@
 import React from 'react'
-import TeamInfo from './teamInfo'
-import Teams from './teams'
+import TeamInfo from 'components/sidebar/teamInfo'
+import Teams from 'components/sidebar/teams'
 
 export default function() {
   return (

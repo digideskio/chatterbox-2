@@ -1,11 +1,19 @@
 import React, { Component, PropTypes } from 'react'
+import { changeActiveTeamChannelOrDM } from 'actions/teams'
+import { connect } from 'react-redux'
 import Dragula from 'react-dragula'
 import classnames from 'classnames'
 import DM from './dm.react'
 import Channel from './channel.react'
 
-export default class TeamInfo extends Component {
 
+function mapStateToProps({ teams: { teams, activeTeamID } }) {
+  const { dms, team, user, channels, activeChannelorDMID } = (teams[activeTeamID] || {})
+  return { dms, team, user, channels, activeChannelorDMID }
+}
+
+@connect(mapStateToProps, { changeActiveTeamChannelOrDM })
+export default class TeamInfo extends Component {
   static propTypes = {
     activeChannelorDMID: PropTypes.string,
     changeActiveTeamChannelOrDM: PropTypes.func,
@@ -16,7 +24,7 @@ export default class TeamInfo extends Component {
   }
 
   static defaultProps = {
-    channels: [],
+    channels: {},
     team: {},
     user: {}
   }

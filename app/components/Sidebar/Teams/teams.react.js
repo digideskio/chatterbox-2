@@ -1,7 +1,15 @@
 import React, { Component, PropTypes } from 'react'
+import { connect } from 'react-redux'
+import { changeActiveTeam } from 'actions/teams'
+import { showLogin } from 'actions/login'
 import _ from 'lodash'
 import Team from './team.react'
 
+function mapStateToProps({ teams: { teams, activeTeamID } }) {
+  return { teams, team: teams[activeTeamID] }
+}
+
+@connect(mapStateToProps, { changeActiveTeam, showLogin })
 export default class Teams extends Component {
   static propTypes = {
     changeActiveTeam: PropTypes.func.isRequired,
@@ -17,8 +25,9 @@ export default class Teams extends Component {
   }
 
   handleProviderClick(id) {
-    if (this.props.team.id !== id) {
-      this.props.changeActiveTeam(id)
+    const { team, changeActiveTeam } = this.props
+    if (team.id !== id) {
+      changeActiveTeam(id)
     }
   }
 
@@ -27,17 +36,17 @@ export default class Teams extends Component {
   }
 
   render() {
-    if (!this.props.show) return null
+    const { team, teams } = this.props
 
     return (
       <div className='teams'>
-        {this.props.team.team ? <div className='selected team' style={{backgroundImage: `url(${this.props.team.team.image})`}} /> : null}
+        {team.team ? <div className='selected team' style={{backgroundImage: `url(${team.team.image})`}} /> : null}
         {
-          Object.keys(this.props.teams).map(team => (
+          Object.keys(teams).map(team => (
             <Team
               key={team}
               onClick={::this.handleProviderClick}
-              {..._.get(this.props.teams, `${team}.team`, {})}
+              {..._.get(teams, `${team}.team`, {})}
             />
           ))
         }
