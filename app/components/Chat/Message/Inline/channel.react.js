@@ -21,9 +21,10 @@ export default class InlineChannel extends Component {
   }
 
   render() {
+    const { name } = this.props
     return (
       <span onClick={::this.handleClick} className='channel'>
-        {this.props.name}
+        {name}
       </span>
     )
   }

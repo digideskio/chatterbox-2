@@ -39,6 +39,7 @@ export default class InlineLink extends Component {
 
   render() {
     const { url, label, linkPreviews: { loaded } } = this.props
+    const { popOverOpen } = this.state
     return (
       <span
         onClick={::this.handleClick}
@@ -46,11 +47,9 @@ export default class InlineLink extends Component {
         onMouseLeave={this.handleHoverOut}
         className='link'
       >
-        {
-          this.state.popOverOpen && loaded[url] ? (
-            <div className='popover' style={{backgroundImage: `url(data:image/png;base64,${loaded[url]})`}} />
-          ) : null
-        }
+        {popOverOpen && loaded[url] ? (
+          <div className='popover' style={{backgroundImage: `url(data:image/png;base64,${loaded[url]})`}} />
+        ) : null}
         {label || url}
       </span>
     )

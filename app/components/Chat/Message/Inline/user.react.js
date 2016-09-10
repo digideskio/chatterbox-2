@@ -21,10 +21,10 @@ export default class InlineUser extends Component {
   }
 
   render() {
-    const { isPing } = this.props
+    const { isPing, handle } = this.props
     return (
       <span className={classnames('user', {isPing})}>
-        @{this.props.handle}
+        @{handle}
       </span>
     )
   }
