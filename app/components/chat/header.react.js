@@ -4,7 +4,7 @@ import { isArray } from 'lodash'
 
 function mapStateToProps({ teams: { teams, activeTeamID } }, { activeChannelorDMID }) {
   const { channels, dms } = teams[activeTeamID]
-  const { members, meta, name } = (channels[activeChannelorDMID] || dms[activeChannelorDMID])
+  const { members, meta, name } = (channels[activeChannelorDMID] || dms[activeChannelorDMID] || {})
   return { meta, members, name }
 }
 

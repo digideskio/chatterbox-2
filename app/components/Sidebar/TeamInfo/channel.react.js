@@ -16,7 +16,8 @@ export default class Channel extends PureComponent {
     name: PropTypes.string,
     missedPings: PropTypes.oneOfType([PropTypes.number, PropTypes.bool]),
     changeActiveTeamChannelOrDM: PropTypes.func.isRequired,
-    isPrivate: PropTypes.bool.isRequired
+    isPrivate: PropTypes.bool.isRequired,
+    teamID: PropTypes.string
   }
 
   handleOnClick() {
@@ -24,11 +25,10 @@ export default class Channel extends PureComponent {
     changeActiveTeamChannelOrDM(id, teamID)
   }
 
-
   render() {
     const { missedPings, active, name, isPrivate } = this.props
     return (
-      <div onClick={this.handleOnClick} className={classnames('channel', {active}, {attention: missedPings})}>
+      <div onClick={::this.handleOnClick} className={classnames('channel', {active}, {attention: missedPings})}>
         {isPrivate ? <i className='ion-locked privateIcon' /> : null}
         <p>{name}</p>
         {

@@ -18,7 +18,8 @@ export default class DM extends Component {
     active: PropTypes.bool,
     name: PropTypes.string,
     missedPings: PropTypes.oneOfType([PropTypes.number, PropTypes.bool]),
-    changeActiveTeamChannelOrDM: PropTypes.func.isRequired
+    changeActiveTeamChannelOrDM: PropTypes.func.isRequired,
+    teamID: PropTypes.string
   }
 
   handleOnClick() {

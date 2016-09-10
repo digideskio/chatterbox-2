@@ -1,56 +1,36 @@
-import React, { Component, PropTypes } from 'react'
+import React, { PureComponent, PropTypes } from 'react'
 import { connect } from 'react-redux'
-import { changeActiveTeam } from 'actions/teams'
 import { showLogin } from 'actions/login'
-import { get } from 'lodash'
 import Team from './team.react'
 
-function mapStateToProps({ teams: { teams, activeTeamID } }) {
-  return { teams, team: teams[activeTeamID] }
+function mapStateToProps({ teams: { teams = {}, activeTeamID } }) {
+  const { team: { image } = {} } = (teams[activeTeamID] || {})
+  return { teams: Object.keys(teams), image }
 }
 
-@connect(mapStateToProps, { changeActiveTeam, showLogin })
-export default class Teams extends Component {
+@connect(mapStateToProps, { showLogin })
+export default class Teams extends PureComponent {
   static propTypes = {
-    changeActiveTeam: PropTypes.func.isRequired,
     showLogin: PropTypes.func.isRequired,
-    teams: PropTypes.object,
-    team: PropTypes.object,
-    show: PropTypes.bool
+    teams: PropTypes.array,
+    image: PropTypes.string
   }
 
   static defaultProps = {
-    teams: [],
-    team: {}
+    teams: []
   }
 
-  handleProviderClick(id) {
-    const { team, changeActiveTeam } = this.props
-    if (team.id !== id) {
-      changeActiveTeam(id)
-    }
-  }
-
-  handleLoginClick() {
-    this.props.showLogin()
+  componentDidUpdate() {
+    console.log('Teams did update')
   }
 
   render() {
-    const { team, teams } = this.props
-
+    const { image, teams, showLogin } = this.props
     return (
       <div className='teams'>
-        {team.team ? <div className='selected team' style={{backgroundImage: `url(${team.team.image})`}} /> : null}
-        {
-          Object.keys(teams).map(team => (
-            <Team
-              key={team}
-              onClick={::this.handleProviderClick}
-              {...get(teams, `${team}.team`, {})}
-            />
-          ))
-        }
-        <div className='ion-ios-plus-empty add' onClick={::this.handleLoginClick} title='Add new team' />
+        {image ? <div className='selected team' style={{backgroundImage: `url(${image})`}} /> : null}
+        {teams.map(id => <Team key={id} id={id} />)}
+        <div className='ion-ios-plus-empty add' onClick={showLogin} title='Add new team' />
       </div>
     )
   }

@@ -15,8 +15,7 @@ export function historyIsLoading(teamID, channelID) {
 export function requestHistory(startTimestamp, endTimestamp, channelID, teamID, amount = 100) {
   return (dispatch, getState) => {
     if (!_.get(getState().messages, `${teamID}.${channelID}.isLoading`, false)) {
-      const { teams: {
-          [teamID]: { history: { request: requestHistory } } } } = getState().teams
+      const { history: { request: requestHistory } } = getState().teams.teams[teamID]
       dispatch(historyIsLoading(teamID, channelID))
       requestHistory(startTimestamp, endTimestamp, channelID, amount)
     }
@@ -33,8 +32,11 @@ export function newMessage(payload) {
 
 export function sendMessage(teamID, channelID, message) {
   return (dispatch, getState) => {
-    const { teams: {
-        [teamID]: Team } } = getState().teams
+    const {
+      teams: {
+        [teamID]: Team
+      }
+    } = getState().teams
     const timeStamp = +moment().unix()
     Team.message.send(channelID, message, timeStamp).then((message) => {
       dispatch(editMessage({ channel: channelID, team: teamID, message, previousMessageTimestamp: timeStamp }))

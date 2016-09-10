@@ -1,4 +1,4 @@
-import _ from 'lodash'
+import { forEach, pickBy } from 'lodash'
 import { queue } from 'async'
 import Database from 'lib/database'
 import { addHistory, newMessage, editMessage, historyIsLoading } from 'actions/messages'
@@ -28,9 +28,9 @@ export default function createTeamHandler(provider) {
       } = this.channels
 
       this._historyRequestQueue.push({ channel_or_dm_id: mainChannelID })
-      _.forEach({
-        ..._.pickBy(channels, ({ isMember }) => isMember),
-        ..._.pickBy(this.dms, ({ isOpen }) => isOpen)
+      forEach({
+        ...pickBy(channels, ({ isMember }) => isMember),
+        ...pickBy(this.dms, ({ isOpen }) => isOpen)
       }, ({ id }) => this._historyRequestQueue.push({ channel_or_dm_id: id }))
     }
 
@@ -65,7 +65,6 @@ export default function createTeamHandler(provider) {
 
       this.on('connected', (bypassDefualtHistoryFetch = false) => {
         if (!bypassDefualtHistoryFetch) this.initHistory()
-        console.log(this)
         console.log(`Connected to ${this.team.type} team: ${this.team.name} via ${this.user.handle}`)
       })
 

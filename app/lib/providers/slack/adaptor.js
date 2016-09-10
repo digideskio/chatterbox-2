@@ -3,7 +3,6 @@ import _ from 'lodash'
 import { WebClient, RtmClient, MemoryDataStore, CLIENT_EVENTS, RTM_EVENTS } from '@slack/client'
 import { santitizeUser, parseMessage } from './helpers'
 
-
 export default class SlackHandler extends EventEmitter {
   constructor({ token }) {
     super()
@@ -17,7 +16,7 @@ export default class SlackHandler extends EventEmitter {
 
     this._slack.on(CLIENT_EVENTS.RTM.AUTHENTICATED, () => {
       this._connected = true
-      this._slack._webClient = new WebClient(this._slack._token)
+      this._slack._webClient = new WebClient(token)
       this.emit('authenticated')
     })
 
