@@ -1,20 +1,15 @@
 import Database from 'lib/database'
 
-import { SETTINGS_CHANGE, SETTINGS_RESET, SETTINGS_SET } from 'actions/settings'
+import { SETTINGS_CHANGE, SETTINGS_RESET } from 'actions/settings'
 
-const DEFAULT_STATE = {
-  loaded: 0,
-  ...Database.settings.defaults
-}
+const DEFAULT_STATE = Database.settings.defaults
 
-export default function settings(state = DEFAULT_STATE, { type, ...action }) {
+export default function settings(state = Database.settings.defaults, { type, payload }) {
   switch (type) {
     case SETTINGS_CHANGE:
-      return { ...state, [action.setting]: action.value }
-    case SETTINGS_SET:
-      return Object.assign({}, state, action)
+      return { ...state, ...payload }
     case SETTINGS_RESET:
-      return Object.assign({}, DEFAULT_STATE, { loaded: 100 })
+      return DEFAULT_STATE
     default:
       return state
   }

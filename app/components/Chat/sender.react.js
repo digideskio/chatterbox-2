@@ -1,5 +1,4 @@
 import React, { PureComponent, PropTypes } from 'react'
-import { bindActionCreators } from 'redux'
 import { connect } from 'react-redux'
 import { sendMessage } from 'actions/messages'
 

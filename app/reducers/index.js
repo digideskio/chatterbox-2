@@ -8,13 +8,12 @@ import messages from './messages'
 import login from './login'
 import linkPreviews from './linkPreviews'
 
-
 export default combineReducers({
+  routing,
   linkPreviews,
   teams,
   login,
   messages,
   settings,
-  loading,
-  routing
+  loading
 })

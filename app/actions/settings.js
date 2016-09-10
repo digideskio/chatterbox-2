@@ -1,4 +1,5 @@
 import Database from 'lib/database'
+import { loadTeams } from 'actions/teams'
 import { setLoadedPercent } from './loading'
 
 export const SETTINGS_LOAD = 'SETTINGS_LOAD'
@@ -21,17 +22,16 @@ export function loadSettings() {
       })
       loader.once('finnished', () => {
         resolve()
+        dispatch(loadTeams())
       })
     })
   }
 }
 
 export function changeSetting(setting, value) {
-  return (dispatch) => {
-    Database.settings.change(setting, value).then(() =>
-      dispatch({ type: SETTINGS_CHANGE, setting, value })
-    )
-  }
+  return dispatch => Database.settings.change(setting, value).then(() =>
+    dispatch({ type: SETTINGS_CHANGE, setting, value })
+  )
 }
 
 export function setSetting(setting, value) {

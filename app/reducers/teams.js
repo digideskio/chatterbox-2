@@ -1,9 +1,14 @@
 import { combineReducers } from 'redux'
+import { without } from 'lodash'
 
 import {
   TEAMS_ACTIVE_TEAM_CHANGE,
   TEAMS_ACTIVE_CHANNEL_OR_DM_CHANGE,
-  TEAMS_TEAM_ADD
+  TEAMS_TEAM_ADD,
+
+  TEAMS_LOAD,
+  TEAMS_LOAD_SUCCESS,
+  TEAMS_LOAD_FAIL
 } from 'actions/teams'
 
 const DEFAULT_STATE = {
@@ -13,36 +18,34 @@ const DEFAULT_STATE = {
 }
 
 function loading(state = DEFAULT_STATE.loading, { type, payload }) {
-  return state
-}
-
-function teams(state = DEFAULT_STATE.teams, { type, payload }) {
-  switch (action.type) {
-    case TEAMS_TEAM_ADD:
-      return {...state, [action.team.team.id]: action.team }
-    case TEAMS_ACTIVE_CHANNEL_OR_DM_CHANGE:
-      const { team, teams } = extractTeamFromTeams(action.team, state)
-      team.activeChannelorDMID = action.channel_or_dm_id
-      return {...teams, [action.team]: team }
+  switch (type) {
+    case TEAMS_LOAD:
+      return payload ? [...state, payload] : state
+    case TEAMS_LOAD_FAIL:
+    case TEAMS_LOAD_SUCCESS:
+      return without(state, payload)
     default:
       return state
   }
 }
 
-function activeTeamID(state = DEFAULT_STATE.activeTeamID, { type, action }) {
-  if (action.type === TEAMS_ACTIVE_TEAM_CHANGE) {
-    return action.team
+function teams(state = DEFAULT_STATE.teams, { type, payload }) {
+  switch (type) {
+    case TEAMS_TEAM_ADD:
+      return {...state, [payload.id]: payload.team }
+    case TEAMS_ACTIVE_CHANNEL_OR_DM_CHANGE:
+      return {...state, [payload.team]: payload.activeChannelorDMID }
+    default:
+      return state
+  }
+}
+
+function activeTeamID(state = DEFAULT_STATE.activeTeamID, { type, payload }) {
+  if (type === TEAMS_ACTIVE_TEAM_CHANGE) {
+    return payload
   }
   return state
 }
-
-function extractTeamFromTeams(teamID, allTeams) {
-  const {
-    [teamID]: team, ...teams
-  } = allTeams
-  return { team, teams }
-}
-
 
 export default combineReducers({
   loading,

@@ -1,26 +1,31 @@
 import React, { Component, PropTypes } from 'react'
+import { connect } from 'react-redux'
+import { loadSettings } from 'actions/settings'
 
+@connect(({ loading }) => loading, { loadSettings })
 export default class Loading extends Component {
+  static propTypes = {
+    task: PropTypes.string.isRequired,
+    percent: PropTypes.number.isRequired,
+    loadSettings: PropTypes.func.isRequired
+  }
+
   static contextTypes = {
     router: PropTypes.object.isRequired
   }
 
-  static propTypes = {
-    settings: PropTypes.object.isRequired,
-    load: PropTypes.func.isRequired,
-    task: PropTypes.string.isRequired,
-    loaded: PropTypes.number.isRequired
-  }
-
   state = {
-    dots: '',
-    hasStartedLoading: []
+    dots: ''
   }
 
   componentDidMount() {
     this.mounted = true
-    this.dotDotDotInterval = setInterval(() => this.mounted && this.setState({ dots: this.state.dots.length > 2 ? '' : `${this.state.dots}.` }), 1000)
-    this.props.load()
+    this.dotDotDotInterval = setInterval(() => {
+      if (this.mounted) {
+        this.setState({ dots: this.state.dots.length > 2 ? '' : `${this.state.dots}.` })
+      }
+    }, 1000)
+    this.props.loadSettings()
   }
 
   componentWillUnmount() {
@@ -29,16 +34,17 @@ export default class Loading extends Component {
   }
 
   render() {
+    const { state: { dots }, props: { task, percent } } = this
     return (
       <div className='loading'>
         <img className='gif' src='images/buildbox.gif' />
         <div className='info'>
           <div className='title'>
-            {this.props.task}
-            <span>{this.state.dots}</span>
+            {task}
+            <span>{dots}</span>
           </div>
           <div className='progress_bar'>
-            <div style={{width: `${this.props.loaded}%`}} />
+            <div style={{width: `${percent}%`}} />
           </div>
         </div>
       </div>

@@ -9,7 +9,7 @@ import configureStore from './store'
 import 'styles/vender/normalize.css'
 import 'styles/app.scss'
 
-const store = configureStore()
+const store = configureStore(hashHistory)
 const history = syncHistoryWithStore(hashHistory, store)
 
 render(

@@ -4,7 +4,8 @@ import { routerMiddleware } from 'react-router-redux'
 
 const __DEVELOPMENT__ = process.env.NODE_ENV !== 'production'
 
-export default function createStore(history, data) {
+export default function createStore(history) {
+  // Sync dispatched route actions to the history
   const reduxRouterMiddleware = routerMiddleware(history)
   const middleware = [clientPromiseMiddleware(), reduxRouterMiddleware]
 
@@ -13,6 +14,7 @@ export default function createStore(history, data) {
     const { persistState } = require('redux-devtools')
     finalCreateStore = compose(
       applyMiddleware(...middleware),
+      window.devToolsExtension(),
       persistState(window.location.href.match(/[?&]debug_session=([^&]+)\b/))
     )(_createStore)
   } else {
@@ -20,7 +22,7 @@ export default function createStore(history, data) {
   }
 
   const reducer = require('../reducers')
-  const store = finalCreateStore(reducer, data)
+  const store = finalCreateStore(reducer)
 
   if (__DEVELOPMENT__ && module.hot) {
     module.hot.accept('../reducers', () => {
