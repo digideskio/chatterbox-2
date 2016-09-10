@@ -1,5 +1,4 @@
 import React, { Component, PropTypes } from 'react'
-import { changeActiveTeamChannelOrDM } from 'actions/teams'
 import { connect } from 'react-redux'
 import Dragula from 'react-dragula'
 import classnames from 'classnames'
@@ -7,17 +6,15 @@ import DM from './dm.react'
 import Channel from './channel.react'
 
 function mapStateToProps({ teams: { teams, activeTeamID } }) {
-  const { dms, team, user, channels, activeChannelorDMID } = (teams[activeTeamID] || {})
-  return { dms, team, user, channels, activeChannelorDMID }
+  const { dms = {}, team, user, channels = {} } = (teams[activeTeamID] || {})
+  return { dms: Object.keys(dms), team, user, channels: Object.keys(channels) }
 }
 
-@connect(mapStateToProps, { changeActiveTeamChannelOrDM })
+@connect(mapStateToProps)
 export default class TeamInfo extends Component {
   static propTypes = {
-    activeChannelorDMID: PropTypes.string,
-    changeActiveTeamChannelOrDM: PropTypes.func,
-    channels: PropTypes.object,
-    dms: PropTypes.object,
+    channels: PropTypes.array,
+    dms: PropTypes.array,
     team: PropTypes.object,
     user: PropTypes.object
   }
@@ -28,8 +25,6 @@ export default class TeamInfo extends Component {
     user: {}
   }
 
-  handleChannelorDMClick = (channel_or_dm_id) => this.props.changeActiveTeamChannelOrDM(channel_or_dm_id, this.props.team.id)
-
   dragulaDecorator = componentBackingInstance => {
     if (componentBackingInstance) {
       const options = {}
@@ -38,40 +33,33 @@ export default class TeamInfo extends Component {
   }
 
   render() {
-    if (!this.props.team.id) return null
+    const { team: { id, name }, user: { handle, presence }, channels, dms } = this.props
+    if (!id) return null
 
     return (
       <div className='teamInfo'>
         <div className='team'>
-          <div className='name'>{this.props.team.name}</div>
-          <div className={classnames('status', this.props.user.presence)} />
-          <span className='handle'>{this.props.user.handle}</span>
+          <div className='name'>{name}</div>
+          <div className={classnames('status', presence)} />
+          <span className='handle'>{handle}</span>
         </div>
         <div className='channelsContainer'>
           <div className='channels'>
             <div className='title'>
               CHANNELS
-              <span>({Object.keys(this.props.channels).length})</span>
+              <span>({Object.keys(channels).length})</span>
             </div>
             <div ref={this.dragulaDecorator}>
-              {
-                Object.keys(this.props.channels).map(channelID => (
-                  <Channel active={this.props.activeChannelorDMID === channelID} onClick={this.handleChannelorDMClick} select={::this.props.changeActiveTeamChannelOrDM} key={channelID} {...this.props.channels[channelID]} />
-                ))
-              }
+              {channels.map(id => <Channel id={id} key={id} />)}
             </div>
           </div>
           <div className='dms'>
             <div className='title'>
               DIRECT MESSAGES
-              <span>({Object.keys(this.props.dms).length})</span>
+              <span>({Object.keys(dms).length})</span>
             </div>
             <div ref={this.dragulaDecorator}>
-              {
-                Object.keys(this.props.dms).map(DMID => (
-                  <DM active={this.props.activeChannelorDMID === DMID} onClick={this.handleChannelorDMClick} select={::this.props.changeActiveTeamChannelOrDM} key={DMID} {...this.props.dms[DMID]} />
-                ))
-              }
+              {dms.map(id => <DM id={id} key={id} />)}
             </div>
           </div>
         </div>
