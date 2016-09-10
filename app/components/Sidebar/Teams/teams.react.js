@@ -2,7 +2,7 @@ import React, { Component, PropTypes } from 'react'
 import { connect } from 'react-redux'
 import { changeActiveTeam } from 'actions/teams'
 import { showLogin } from 'actions/login'
-import _ from 'lodash'
+import { get } from 'lodash'
 import Team from './team.react'
 
 function mapStateToProps({ teams: { teams, activeTeamID } }) {
@@ -46,7 +46,7 @@ export default class Teams extends Component {
             <Team
               key={team}
               onClick={::this.handleProviderClick}
-              {..._.get(teams, `${team}.team`, {})}
+              {...get(teams, `${team}.team`, {})}
             />
           ))
         }

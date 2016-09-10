@@ -6,7 +6,6 @@ import classnames from 'classnames'
 import DM from './dm.react'
 import Channel from './channel.react'
 
-
 function mapStateToProps({ teams: { teams, activeTeamID } }) {
   const { dms, team, user, channels, activeChannelorDMID } = (teams[activeTeamID] || {})
   return { dms, team, user, channels, activeChannelorDMID }

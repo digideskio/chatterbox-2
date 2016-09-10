@@ -4,8 +4,8 @@ import { Sender, Messages, Header } from 'components/chat'
 import { connect } from 'react-redux'
 
 function mapStateToProps({ teams: { teams, activeTeamID } }) {
-  const { activeChannelorDMID } = (teams[activeTeamID] || {})
-  return { activeChannelorDMID }
+  const { activeChannelorDMID, initialActiveChannelorDMID } = (teams[activeTeamID] || {})
+  return { activeChannelorDMID: activeChannelorDMID || initialActiveChannelorDMID }
 }
 
 @connect(mapStateToProps)
