@@ -34,7 +34,7 @@
     "react": "^15.3.1",
     "react-addons-css-transition-group": "^15.3.1",
     "react-dom": "^15.3.1",
-    "react-dragula": "^1.1.16",
+    "react-dragula": "^1.1.17",
     "react-imageloader": "^2.1.0",
     "react-modal": "^1.4.0",
     "react-player": "^0.9.0",
